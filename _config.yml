@@ -1,7 +1,8 @@
 # ----------- CONFIGURABLE START -----------
 title:            "Scribble"
 description:      "Such theme, very cool."
-url:              http://scribble.muan.co # Site url, without a slash at the end.
+url:              https://guerbai.github.io
+# url:              http://localhost:4000
 signoff:          "muan" # Your name
 facebook_appid:   # APP ID for like button, remove from /_includes/share.html if unwanted.
 google_analytics: # Set tracking, remove from /javascripts/basic.js if unwanted.
