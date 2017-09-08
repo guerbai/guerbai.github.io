@@ -24,7 +24,7 @@ sass:
 
 # Other Params
 include:            [ "robots.txt" ]
-gems:
+plugins:
   - jekyll-sitemap
 
 
