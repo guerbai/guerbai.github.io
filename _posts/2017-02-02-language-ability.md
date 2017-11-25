@@ -84,4 +84,4 @@ def foo(n):
 
 ![](http://osriq34d5.bkt.clouddn.com//17-7-9/31501511.jpg)
 
-  [1]: https://en.wikipedia.org/wiki/Scope_(computer_science)
+[1]: https://en.wikipedia.org/wiki/Scope_(computer_science)
