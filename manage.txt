@@ -1,0 +1,9 @@
+# tag:
+
+# i18n:
+read-list: 阅读
+
+---
+# maupassant theme:
+menu: 首页、阅读、归档、关于、RSS
+widgets: 搜索、标签、最近文章
