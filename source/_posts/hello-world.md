@@ -1,6 +1,8 @@
 ---
 title: Hello World222
-tags: hexo test
+tags: 
+- hexo 
+- test
 categories:
 - web
 ---

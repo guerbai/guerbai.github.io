@@ -7,5 +7,5 @@ public/
 .deploy*/
 themes
 package-lock.json
-source/_draft/*.md
-source/_draft/*.html
+source/_drafts/*.md
+source/_drafts/*.html
