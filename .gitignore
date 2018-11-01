@@ -7,3 +7,6 @@ public/
 .deploy*/
 themes
 package-lock.json
+source/_drafts/*.md
+source/_drafts/*.html
+.vscode/
