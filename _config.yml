@@ -84,8 +84,8 @@ theme: yilia
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  # repo: git@github.com:guerbai/guerbai.github.io.git
-  # branch: master
+  repo: https://github.com/guerbai/guerbai.github.io
+  branch: master
 
 plugin:
 - hexo-generator-feed
