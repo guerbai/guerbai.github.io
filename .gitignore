@@ -10,4 +10,3 @@ package-lock.json
 source/_drafts/*.md
 source/_drafts/*.html
 .vscode/
-package.json
