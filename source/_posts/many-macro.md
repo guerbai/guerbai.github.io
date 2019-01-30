@@ -1,5 +1,5 @@
 ---
-title: 几种宏的展示
+title: 几种宏的描述与展示
 date: 2018.07.22 00:12
 tags:
 - 折腾
@@ -59,14 +59,14 @@ Wiki中对Scheme的宏系统有如下一段较为晦涩的描述：
 
 我们知道python有个可以同时迭代两个list的函数为zip，使用方法为：
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-892e8be10ab6e765.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://ws1.sinaimg.cn/large/0073xHwmgy1fxee152ejtj30f80coq4c.jpg)
 
 python zip展示
 </div>
 
 而Scheme本身是没有zip这种语法的：
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-4716a6dc12d08515.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://ws1.sinaimg.cn/large/0073xHwmgy1fxee14nwm0j30gg034aab.jpg)
 
 Scheme无zip
 </div>
@@ -83,7 +83,7 @@ Scheme无zip
 
 效果如下：
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-cda72b33c542e13d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/11528373-cda72b33c542e13d.png)
 
 zip效果
 </div>
@@ -100,7 +100,7 @@ syntax hi = function (ctx) {
 hi
 ```
 它需要经过特殊的编译，不能直接使用node运行，需要先编译，再用node运行：
-sjs hello.js后输出为console.log('hello, world!')，这是编译后成生的js代码，再用node去运行它就了了。
+sjs hello.js后输出为console.log('hello, world!')，这是编译后成生的js代码，再用node去运行它就行了。
 
 这里就很明显了，并不是简单定义了一个函数一样的东西，因为使用它时，hi后面并没有括号，而的确是定义了自己的语法。
 
@@ -134,18 +134,18 @@ console.log(bb8);
 假设，在word中经常要键入自己的邮箱，并改变字体大小、颜色，现将这个操作使用宏记录下来，可以对自己的一连串操作进行复用。
 
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-9bc5eb0671d9dee0.gif?imageMogr2/auto-orient/strip)
+![](https://upload-images.jianshu.io/upload_images/11528373-9bc5eb0671d9dee0.gif)
 
 使用Word录制宏
 </div>
 
 ### Vim
 做为一个写代码的，Vim最起码要知道怎么退出吧。
-作为编辑器之神，它当然也提供了这种方式，使用它常常可以使编辑效率大增，而我在实际工作中，便常常使用它的宏录制功能，来帮我完成一些无聊的批量处理工作。
+作为编辑器之神，它当然也提供了宏的支持，使用它常常可以使编辑效率大增，而我在实际工作中，便常常使用它的宏录制功能，来帮我完成一些无聊的批量处理工作。
 
 这里举两个例子，其一是生成数字1到100，每个一行，当然不是每行每行输入了，接下来是表演时间：
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-33a9f36ad8967499.gif?imageMogr2/auto-orient/strip)
+![](https://upload-images.jianshu.io/upload_images/11528373-33a9f36ad8967499.gif)
 
 生成1-100的数字
 </div>
@@ -153,7 +153,7 @@ console.log(bb8);
 那现在，需要将它们转为python的list，且每个都变为字符串格式，操作如下：
 
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-5d20bf413049ae2d.gif?imageMogr2/auto-orient/strip)
+![](https://upload-images.jianshu.io/upload_images/11528373-5d20bf413049ae2d.gif)
 
 生成num_list
 </div>
@@ -166,7 +166,7 @@ console.log(bb8);
 Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制的宏生成一段elisp函数，存放在配置里，这样不用每次用的时候都去录制。
 
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-5c1e6139e85287d0.gif?imageMogr2/auto-orient/strip)
+![](https://upload-images.jianshu.io/upload_images/11528373-5c1e6139e85287d0.gif)
 
 使用Emacs定义宏，并生成elisp配置代码
 </div>
@@ -178,7 +178,7 @@ Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制
 宏病毒常见于微软的Office产品中，上面介绍了在Word中录制宏，其实它的本质是生成一段VBA代码，这相当于提供了VBA的编程接口，那么，在这段代码中编入恶意代码运行，便成为病毒。
 
 <div align=center>
-![](https://upload-images.jianshu.io/upload_images/11528373-596f03cc05147aee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/11528373-596f03cc05147aee.png)
 
 生成的VB代码
 </div>
@@ -190,7 +190,7 @@ Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制
 
 ### 游戏中的宏
 在去年大热了很久的吃鸡游戏中，外挂、鼠标宏等不公平游戏行为，被广大玩家深恶痛绝。那么鼠标宏是什么呢？
-我们知道在游戏中，有些操作是有一定难度的，比如盲僧的回旋踢，不一定每次都秀到的(有时候会把自己秀到...)，那么设想一下，把这段操作操作一次记录到鼠标和键盘中，每次Q中人，按一个按键触发之前录制好的这一系统操作，成功率就会大大提高。
+我们知道在游戏中，有些操作是有一定难度的，比如盲僧的回旋踢，不一定是每次都能秀到的(有时候会把自己秀到...)，那么设想一下，把这段操作操作一次记录到鼠标和键盘中，每次Q中人，按一个按键触发之前录制好的这一系统操作，成功率就会大大提高。
 同样，比如打lol要挂机，但站在泉水里一动不动，会被系统发现并惩罚，那么可以将鼠标来来回回点的操作录制成一个宏，然后肯定还有方式让它一直触发，这样，就可以利用鼠标宏挂机而躲过系统惩罚。
 
 甚至，在wow这样的游戏中，由于有些操作太过于复杂，游戏本身提供了操作控制的宏录制功能(看到这个点我真的是惊了！)，例如同时激活2种以上的法术，施法的同时用游戏中的聊天系统发送信息等等，有很大的发挥空间。
@@ -198,7 +198,8 @@ Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制
 **但是**，这些都是歪门邪道，<头号玩家>告诉我们，玩儿游戏过程中那种最纯粹的投入与快乐才是最真实最重要的，利用鼠标宏、键盘宏进行不公平游戏无疑很严重地毁掉了这种纯粹，即使可能获得一时的心里上的不健康的愉悦，但最终毁掉的还是自己的、队友的、对方的很多人的游戏体验，更是毁掉你喜爱的游戏的生存时间与社区生态。
 
 ***
-总结，以及回顾各种语言及软件的用法耗费了我比较大的精力，但限于自己水平及阅历的有限，我知道自己的表述并没有展露出神奇的宏的全貌以及全部的典型用法。希望大家多多交流和指正。
+总结，以及回顾各种语言及软件的用法耗费了我比较大的精力，但限于自己水平及阅历的有限，我知道自己的表述并没有展露出神奇的宏的全貌以及全部的典型用法。
+希望多多交流和指正。
 
 **参考**
 [维基百科：宏](https://zh.wikipedia.org/wiki/%E5%B7%A8%E9%9B%86)
