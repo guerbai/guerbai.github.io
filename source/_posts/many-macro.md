@@ -1,0 +1,207 @@
+---
+title: 几种宏的展示
+date: 2018.07.22 00:12
+tags:
+- 折腾
+---
+
+作为一名编程人员，或者是一个游戏玩家，再或者是一个大学生在上大一计算机课的时候，可能会有不少人像我一样会(可能并非出于本愿)接触到“宏”这个东西，然后感觉一脸茫然，觉得它属于高阶知识，不好理解，不知所然。
+就单看这个字，宏，给人感觉上就是比较抽象的太过于技术化，不像“一致性”这样的技术圈词语，有其自解释性。同时，由于它在不同的领域出现并且发挥着不同的作用，便更加让人一头雾水。
+
+<!--more-->
+
+这篇相当于一个总结和笔记，记录我所遇到过的宏，并进行一些展示，希望对“宏”这个“高阶功能”有一个全局的认识和把握。
+
+## 宏是什么
+Wiki百科中说，宏是一种批量处理的称谓，是一种抽象，这种机制通常暗示着将*小命令或动作*(name of a macro)转化为一系列指令。
+它的用途在于自动化频繁使用的序列或者是获得一种更强大的抽象能力。
+
+这种描述很容易让人联想起*函数*，在这一点上，我认为宏与函数在抽象、可复用的思想上是相似的，但却绝不是同一种东西，而这种不同，由于各编程语言对宏的支持程度差别很大，那么这个答案在各情景下也是不同的。
+在下面的各种语言中，我会分别解释这两种事物的差异。
+
+## 编程语言对宏的支持
+### C语言中的宏
+在C语言与C++中可以使用宏(在大一上C语言课程时应该都接触过)，但这种支持只是很浅而片面的，使用方式很有限。
+
+在Gnu文档里有一个解释得比较清晰而简单的关于C语言中宏的定义：
+> A macro is a fragment of code which has been given a name. Whenever the name is used, it is replaced by the contents of the macro. 
+
+给一块儿代码起一个名字，当这个名字被调用时，这个名字会被替换为之前定义的那一块儿代码。
+
+那么，在C语言中，宏与函数有何不同呢？
+首先，函数的使用方式称为*调用*，是基于调用栈运行的；而如上描述，宏则是基于一种*字符串的替换*。
+宏往往是在编译时会被处理，而函数则是在运行时。
+
+在C中，使用`#define`来定义一个宏，如`#define TWO 2`，即用TWO来代替2。那么，C的预处理器会将代码中所有独立的TWO替换为2，这种替换文本的过程称为*宏展开*，这种展开不进行计算，它只是按照指令进行文字替换操作。
+
+上面这种定义常量的方式称为Object-like macros，使用它就像使用一个数据对象，此外，C中还有另一种常见的宏，像函数一样被使用的function-like macros，这种区分主要是基于使用场景上的。
+
+比如可以定义一个求平方的宏`#define SQUARE (X) (X) * (X) `，在写程序时可以在需要求平方的地方像使用函数一样使用它`SQUARE(a)`。
+这一堆奇怪的括号也说明了它的使用方式是替换，若不加括号，在替换过程中可能会出现一些意想不到的情况，比如使用`SQUARE(x+2)`，则会变成`x+2*x+2`，又根据运算符的优先级问题，肯定得不到原本想要的结果。
+
+此外，C语言还规定，#define一个宏不能超过一行，可以说这种支持真的是很有限，无法让人感到宏的强大与乐趣。
+
+### Scheme语言中的宏
+不像C语言对宏的唯唯诺诺、施展不开拳脚的支持，Scheme作为Lisp的一个著名方言，可以说是对宏支持得最全面、彻底的语言(之一？)了。
+有人说正是宏的存在，使得Lisp是另一种语言(其他所有的算另一种)，这不禁让人想起了才高八斗的形容。
+
+在Scheme中，宏不再仅仅是一种简单的预处理阶段的文本替换(现在看起来多捞哦)，在这里它可以做到很神奇的事情，玩出很多花来，从而给lisp提供了生成语法、对代码进行元编程的能力。
+
+lisp语言中数据与代码都是s-expression，宏与函数在scheme中的区别也在于此，首先，宏不会像函数一样，会展开它收到的参数表达式，只有在这种前提下，宏才能完成它的功能，返回一个s-expression(即动态生成代码)，而该表达式会被解释器立即执行，这相比之下，函数则是直接返回一个值，两者相去甚远，显然宏的抽象级别更高一些。
+
+Wiki中对Scheme的宏系统有如下一段较为晦涩的描述：
+> ...宏的行为如同是函数对自身程序文本的变形，并且可以应用全部语言来表达这种变形。一个C宏可以定义一段语法的替换，然而一个Lisp的宏却可以控制一节代码的计算。
+...
+获得了控制代码的执行顺序（见[惰性计算](https://zh.wikipedia.org/wiki/%E6%83%B0%E6%80%A7%E8%AE%A1%E7%AE%97 "惰性计算")和[非限制函数](https://zh.wikipedia.org/w/index.php?title=%E9%9D%9E%E9%99%90%E5%88%B6%E5%87%BD%E6%95%B0&action=edit&redlink=1 "非限制函数（页面不存在）")）的能力，使得新创建的语法结构与语言内建的语法结构不可区分。例如，一种Lisp方言有cond而没有if，就可以使用宏由前者定义后者。
+
+
+在这里介绍一下，如何用macro给Scheme自定义语法。
+
+我们知道python有个可以同时迭代两个list的函数为zip，使用方法为：
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-892e8be10ab6e765.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+python zip展示
+</div>
+
+而Scheme本身是没有zip这种语法的：
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-4716a6dc12d08515.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+Scheme无zip
+</div>
+
+那现在我们定义一个zip的宏，来实现这个语法并且试用一下：
+```Scheme
+(define-syntax zip
+  (syntax-rules ()
+    ((_ ((variables lists) ...)
+        body ...)
+     (for-each (lambda (variables ...) body ...) lists ...))))
+```
+上面define-syntax显然是一个关键字，zip表示这个宏的名字，body为使用宏时传入的参数，for-each为Scheme中可以对list进行迭代的函数。
+
+效果如下：
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-cda72b33c542e13d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+zip效果
+</div>
+
+### SweetJS
+对，你没有看错，JS也可以通过某种方式来实现对宏的支持，这又一次证实了Atwood's Law(any application that can be written in JavaScript, will eventually be written in JavaScript.)，想象力真是无限的。
+
+有一个包叫[Sweet.js](https://www.sweetjs.org/)，它给JS提供了如上所示的像Scheme一样定义语法的功能。
+它的hello world是这样的：
+```JavaScript
+syntax hi = function (ctx) {
+  return #`console.log('hello, world!')`;
+};
+hi
+```
+它需要经过特殊的编译，不能直接使用node运行，需要先编译，再用node运行：
+sjs hello.js后输出为console.log('hello, world!')，这是编译后成生的js代码，再用node去运行它就了了。
+
+这里就很明显了，并不是简单定义了一个函数一样的东西，因为使用它时，hi后面并没有括号，而的确是定义了自己的语法。
+
+我们还可以用它来实现一个自己的let语法：
+```javsScript
+syntax mylet = function (ctx) {
+  let ident = ctx.next().value;
+  ctx.next(); // eat `=`
+  let init = ctx.expand('expr').value;
+  return #`
+    (function (${ident}) {
+      ${ctx} // <2>
+    }(${init}))
+  `
+};
+
+mylet bb8 = 233;
+console.log(bb8);
+```
+运行sjs mylet.js > my_let.js，将编译后生成的代码存入另一个文件，另一个文件内容为：
+```JavaScript
+(function (bb8_5) {
+  console.log(bb8_5);
+})(233);
+```
+此时，再用node my_let.js来运行，即可得到233这个结果，可以说是够神奇了吧。
+
+## 编辑器宏
+编辑器宏与上面的在感观上是迥然不同的，它是对你的操作进行记录，然后将一系列动作进行重放。
+### Word中的宏
+假设，在word中经常要键入自己的邮箱，并改变字体大小、颜色，现将这个操作使用宏记录下来，可以对自己的一连串操作进行复用。
+
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-9bc5eb0671d9dee0.gif?imageMogr2/auto-orient/strip)
+
+使用Word录制宏
+</div>
+
+### Vim
+做为一个写代码的，Vim最起码要知道怎么退出吧。
+作为编辑器之神，它当然也提供了这种方式，使用它常常可以使编辑效率大增，而我在实际工作中，便常常使用它的宏录制功能，来帮我完成一些无聊的批量处理工作。
+
+这里举两个例子，其一是生成数字1到100，每个一行，当然不是每行每行输入了，接下来是表演时间：
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-33a9f36ad8967499.gif?imageMogr2/auto-orient/strip)
+
+生成1-100的数字
+</div>
+
+那现在，需要将它们转为python的list，且每个都变为字符串格式，操作如下：
+
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-5d20bf413049ae2d.gif?imageMogr2/auto-orient/strip)
+
+生成num_list
+</div>
+
+在vim normal模式下，按qa开始录制宏，表示把宏录到a这个寄存器里，一番操作之后，按q结束。
+第一次调用宏要使用@a，可触发，之后使用@@可以触发上次运行的宏，在前面加数字98表示运行98次，这样整个下来操作就会有丶厉害了。
+
+### Emacs中的宏
+刚说过了编辑器之神，现在是神的编辑器了。
+Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制的宏生成一段elisp函数，存放在配置里，这样不用每次用的时候都去录制。
+
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-5c1e6139e85287d0.gif?imageMogr2/auto-orient/strip)
+
+使用Emacs定义宏，并生成elisp配置代码
+</div>
+
+全是通过elisp函数来操作的，使用Emacs与Vim还是有着很大的区别的。
+
+## 其他
+### 宏病毒
+宏病毒常见于微软的Office产品中，上面介绍了在Word中录制宏，其实它的本质是生成一段VBA代码，这相当于提供了VBA的编程接口，那么，在这段代码中编入恶意代码运行，便成为病毒。
+
+<div align=center>
+![](https://upload-images.jianshu.io/upload_images/11528373-596f03cc05147aee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+生成的VB代码
+</div>
+
+此外，同样是微软的Outlook由于拥有scripting特性，更是成为了宏病毒的重灾区。
+该特性使得宏病毒能够获得Outlook用户地址簿中存储的联系人地址，通过向这些地址发送E-mail将病毒体广泛传播。
+
+关于宏病毒的判断、防范与清除在长时间的实践中积累了一定的经验，具体的可以进一步去网上冲浪获取。
+
+### 游戏中的宏
+在去年大热了很久的吃鸡游戏中，外挂、鼠标宏等不公平游戏行为，被广大玩家深恶痛绝。那么鼠标宏是什么呢？
+我们知道在游戏中，有些操作是有一定难度的，比如盲僧的回旋踢，不一定每次都秀到的(有时候会把自己秀到...)，那么设想一下，把这段操作操作一次记录到鼠标和键盘中，每次Q中人，按一个按键触发之前录制好的这一系统操作，成功率就会大大提高。
+同样，比如打lol要挂机，但站在泉水里一动不动，会被系统发现并惩罚，那么可以将鼠标来来回回点的操作录制成一个宏，然后肯定还有方式让它一直触发，这样，就可以利用鼠标宏挂机而躲过系统惩罚。
+
+甚至，在wow这样的游戏中，由于有些操作太过于复杂，游戏本身提供了操作控制的宏录制功能(看到这个点我真的是惊了！)，例如同时激活2种以上的法术，施法的同时用游戏中的聊天系统发送信息等等，有很大的发挥空间。
+
+**但是**，这些都是歪门邪道，<头号玩家>告诉我们，玩儿游戏过程中那种最纯粹的投入与快乐才是最真实最重要的，利用鼠标宏、键盘宏进行不公平游戏无疑很严重地毁掉了这种纯粹，即使可能获得一时的心里上的不健康的愉悦，但最终毁掉的还是自己的、队友的、对方的很多人的游戏体验，更是毁掉你喜爱的游戏的生存时间与社区生态。
+
+***
+总结，以及回顾各种语言及软件的用法耗费了我比较大的精力，但限于自己水平及阅历的有限，我知道自己的表述并没有展露出神奇的宏的全貌以及全部的典型用法。希望大家多多交流和指正。
+
+**参考**
+[维基百科：宏](https://zh.wikipedia.org/wiki/%E5%B7%A8%E9%9B%86)
+[How to save a keyboard macro as a Lisp function?](https://emacs.stackexchange.com/questions/70/how-to-save-a-keyboard-macro-as-a-lisp-function)
+[Scheme Programming/Looping](https://en.wikibooks.org/wiki/Scheme_Programming/Looping)
+[鼠标宏是什么](https://www.zhihu.com/question/50712432)
