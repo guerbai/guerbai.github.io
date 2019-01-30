@@ -10,6 +10,10 @@ tags:
 
 ## 同源下可Ajax成功
 
+先是第一版，一个简单的flask程序。自己请求自己，不会有什么问题。
+打开浏览器输入：`http://127.0.0.1:4000` 会返回字符串回去，交给浏览器，其解析运行其中的javascript代码，发出ajax请求，至同服务下的/get_data路由，得到数据后渲染至页面。
+代码如下：
+
 ```Python
 # -*- coding: utf-8 -*-
 from flask import Flask
@@ -70,9 +74,8 @@ if __name__ == '__main__':
     app.run(port=4000)
 ```
 
-先是第一版，一个简单的flask程序。
-打开浏览器输入：`http://127.0.0.1:4000` 会返回字符串回去，交给浏览器，其解析运行其中的javascript代码，发出ajax请求，至同服务下的/get_data路由，得到数据后渲染至页面。
 结果为：
+
 ![](https://ws1.sinaimg.cn/large/0073xHwmgy1fxee2ic69wj30f404ejrf.jpg)
 
 此处需要注意的是，若127.0.0.1换成localhost则该请求会被同源政策禁止。
