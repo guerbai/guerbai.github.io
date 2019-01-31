@@ -2,7 +2,7 @@
 title: 你见过Python的GIL吗
 date: 2018.10.19 23:46
 tags:
-- Python
+- python
 - 并发
 ---
 
