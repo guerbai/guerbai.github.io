@@ -97,6 +97,7 @@ user-artist文件的统计数据如下：
 
 # 其他
 
+-   [fma](https://arxiv.org/abs/1612.01840): music audio大型数据集，917 GiB and 343 days of Creative Commons-licensed audio from 106,574 tracks from 16,341 artists and 14,854 albums, arranged in a hierarchical taxonomy of 161 genres。
 -   [Pitchfork reviews](https://www.kaggle.com/nolanbconaway/pitchfork-data/home): [Pitchfork](https://pitchfork.com/)是一家在线音乐杂志，有人爬取了自1999年以来的18000份音乐评论文章放到Kaggle上用于分析和学习。 格式为sqlite文件，主要提供信息为文章的id、标题、artist、文章链接、评分、作者、发布时间等。
 -   [50 Years of Pop Music Lyrics](https://github.com/walkerkq/musiclyrics): 1964到2015Billboard每年的Year-End Hot100歌曲的歌词。
 -   [MetroLyrics](https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics/home): 从MetroLyrics爬取的38万首歌词，csv格式，字段有song title，artist，genre，lyric。
