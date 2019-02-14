@@ -95,7 +95,7 @@ user-artist文件的统计数据如下：
 比较独特的是还有Lastfm直接提供的与此歌曲相似的歌曲列表以及相似度值。
 
 
-# 其他
+# 其他数据集
 
 -   [fma](https://arxiv.org/abs/1612.01840): music audio大型数据集，917 GiB and 343 days of Creative Commons-licensed audio from 106,574 tracks from 16,341 artists and 14,854 albums, arranged in a hierarchical taxonomy of 161 genres。
 -   [Pitchfork reviews](https://www.kaggle.com/nolanbconaway/pitchfork-data/home): [Pitchfork](https://pitchfork.com/)是一家在线音乐杂志，有人爬取了自1999年以来的18000份音乐评论文章放到Kaggle上用于分析和学习。 格式为sqlite文件，主要提供信息为文章的id、标题、artist、文章链接、评分、作者、发布时间等。
@@ -104,3 +104,15 @@ user-artist文件的统计数据如下：
 -   [kkbox](https://www.kaggle.com/c/kkbox-music-recommendation-challenge): WSDM 2018比赛使用的数据集，[kkbox](https://www.kkbox.com/intl/)作为一家亚洲音乐服务商，提供了很多亚洲歌曲信息，这点是以上其他所不具有的。
 -   [Spotify Song Attributes](https://www.kaggle.com/geomack/spotifyclassification/home): 作者调用spotify的api获取了2017首歌的数据并尝试获取训练一个模型来预测自己是否喜欢一首歌。
 
+
+## API
+
+根据一些官方或民间的API，可以根据自己的需求生成自定义的数据集。
+
+- [last.fm API](https://www.last.fm/api)
+- [echonest API](http://developer.echonest.com/)
+- [Spotify API](https://developer.spotify.com/documentation/web-api/)
+- [The Echo Nest / Spotify APIs work together](http://static.echonest.com/enspex/)
+- [music brain API](https://musicbrainz.org/doc/Developer_Resources)
+- [云音乐API](https://github.com/yanunon/NeteaseCloudMusic/wiki/网易云音乐API分析)
+- [Quora: What is the best, most complete API or database for searching music data?](https://www.quora.com/What-is-the-best-most-complete-API-or-database-for-searching-music-data)
