@@ -11,6 +11,5 @@ source/_drafts/*.md
 source/_drafts/*.html
 .vscode/
 .sass-cache/
-_posts/
 _site/
 Gemfile.lock
