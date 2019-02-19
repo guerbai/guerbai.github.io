@@ -1,4 +1,3 @@
-
 ---
 title: 基于邻域的协同过滤
 date: 2019-02-16 14:57:00
@@ -61,7 +60,7 @@ book_id_index_series = pd.Series(range(book_count), index=['book_001', 'book_002
 import numpy as np
 
 def construct_user_item_matrix(df):
-    user_item_matrix = np.zeros((user_count, user_count), dtype=np.int8)
+    user_item_matrix = np.zeros((user_count, book_count), dtype=np.int8)
     for row in df.itertuples():
         user_id = row[1]
         book_id = row[2]
