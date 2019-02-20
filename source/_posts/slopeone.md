@@ -15,6 +15,10 @@ Slope One是一种基于物品的协同过滤算法，在2005年的paper《Slope
 首先依然是加载数据和生成用户物品关系矩阵如下。
 
 ```python
+import pandas as pd
+import numpy as np
+
+
 data_url = 'https://gist.githubusercontent.com/guerbai/3f4964350678c84d359e3536a08f6d3a/raw/f62f26d9ac24d434b1a0be3b5aec57c8a08e7741/user_book_ratings.txt'
 df = pd.read_csv(data_url, sep = ',', header = None, names = ['user_id', 'book_id', 'rating'])
 user_count = df['user_id'].unique().shape[0]
@@ -23,12 +27,12 @@ user_id_index_series = pd.Series(range(user_count), index=['user_001', 'user_002
 item_id_index_series = pd.Series(range(item_count), index=['book_001', 'book_002', 'book_003', 'book_004', 'book_005', 'book_006'])
 
 def construct_user_item_matrix(df):
-    user_item_matrix = np.zeros((user_count, book_count), dtype=np.int8)
+    user_item_matrix = np.zeros((user_count, item_count), dtype=np.int8)
     for row in df.itertuples():
         user_id = row[1]
         book_id = row[2]
         rating = row[3]
-        user_item_matrix[user_id_index_series[user_id], book_id_index_series[book_id]] = rating
+        user_item_matrix[user_id_index_series[user_id], item_id_index_series[book_id]] = rating
     return user_item_matrix
 
 user_item_matrix = construct_user_item_matrix(df)
@@ -56,10 +60,6 @@ print (user_item_matrix)
 
 
 ```python
-import numpy as np
-import pandas as pd
-
-
 def compute_differential(ratings):
     item_count = ratings.shape[1]
     differential_matrix = np.zeros((item_count, item_count))
@@ -81,16 +81,16 @@ def compute_differential(ratings):
             differential_matrix[j][i] = -differential_matrix[i][j]
     return differential_matrix, weight_matrix
 
-differencial_matrix, weight_matrix = compute_differential(user_book_matrix)
+differential_matrix, weight_matrix = compute_differential(user_item_matrix)
 
-print ('differencial_matrix')
-print (differencial_matrix)
+print ('differential_matrix')
+print (differential_matrix)
 print ('-----')
 print ('weight_matrix')
 print (weight_matrix)
 ```
 
-    differencial_matrix
+    differential_matrix
     [[ 0.   1.   0.   1.   0.   0. ]
      [-1.   0.   0.   0.  -2.  -1. ]
      [-0.   0.   0.   0.   0.5 -3. ]
@@ -113,7 +113,7 @@ print (weight_matrix)
 
 比如要为index为1的用户`user_002`预测其对index为3的物品`item_004`的评分，计算过程如下：    
 先取出该用户看过的所有书，index分别为`[0, 2, 4]`;    
-以index为0的物品`item_001`开始，查`differencial_matrix[3][0]`值为-1，表示`item_004`平均上比`item_001`低1分，以该用户对`item_001`的评分为5为基准，`5+(-1)=4`，则利用`item_001`可对`item_004`做出的评分判断为4分，查`weight_matrix`表知道同时评分过这两个物品的用户只有一个，置信度不够高，使用`4*1=4`，这便是加权的含义；    
+以index为0的物品`item_001`开始，查`differential_matrix[3][0]`值为-1，表示`item_004`平均上比`item_001`低1分，以该用户对`item_001`的评分为5为基准，`5+(-1)=4`，则利用`item_001`可对`item_004`做出的评分判断为4分，查`weight_matrix`表知道同时评分过这两个物品的用户只有一个，置信度不够高，使用`4*1=4`，这便是加权的含义；    
 但这还没完，再根据index为2、4的item分别做上一步，并将得到的值加和为15，作为分子，分母为每次计算的人数之和，即加权平均，为4；    
 最后得此次预测评分为`15/4=3.75`。    
 
@@ -121,20 +121,20 @@ print (weight_matrix)
 
 
 ```python
-def predict(ratings, differencial_matrix, weight_matrix, user_index, item_index):
+def predict(ratings, differential_matrix, weight_matrix, user_index, item_index):
     if ratings[user_index][item_index] != 0: return ratings[user_index][item_index]
     fenzi = 0
     fenmu = 0
     for rated_item_index in ratings[user_index].nonzero()[0]:
         fenzi += weight_matrix[item_index][rated_item_index] * \
-            (differencial_matrix[item_index][rated_item_index] + ratings[user_index][rated_item_index])
+            (differential_matrix[item_index][rated_item_index] + ratings[user_index][rated_item_index])
         fenmu += weight_matrix[rated_item_index][item_index]
     return round(fenzi/fenmu, 2)
 ```
 
 
 ```python
-predict(user_book_matrix, book_differencial, weight_matrix, 1, 3)
+predict(user_book_matrix, book_differential, weight_matrix, 1, 3)
 ```
 
 
@@ -142,14 +142,33 @@ predict(user_book_matrix, book_differencial, weight_matrix, 1, 3)
 
     3.75
 
+## 新的评分数据
 
+当某用户对某个其之间未评分过的物品进行一次新的评分时，需要更新三个矩阵的值。令人欣喜的是，Slope One的计算过程使得这种更新非常迅速，时间复杂度仅为O(x)，其中x为该用户之前评过分的所有物品的数量。
+
+理所当然要在`user_item_matrix`填入评分值，此外，对此index为i的物品，需要与那x个物品依次组合在`weight_matrix`中将值增加1。同理`differential_matrix`也只需要累计上新的差值即可。    
+一个用户评价过的物品数目是很有限的，这种更新模型的方法可谓飞快。
+
+```python
+def update_matrices(user_index, item_index, rating):
+    rated_item_indexes = user_item_matrix[user_index].nonzero()[0]
+    user_item_matrix[user_index][item_index] = rating
+    for rated_item_index in rated_item_indexes:
+        old_weight = weight_matrix[rated_item_index][item_index]
+        weight_matrix[rated_item_index][item_index] += 1
+        weight_matrix[item_index][rated_item_index] += 1
+        differential_matrix[rated_item_index][item_index] = (differential_matrix[rated_item_index][item_index] \
+            * old_weight + (user_item_matrix[user_index][rated_item_index] - rating)) / (old_weight + 1)
+        differential_matrix[item_index][rated_item_index] = (differential_matrix[item_index][rated_item_index] \
+            * old_weight + (rating - user_item_matrix[user_index][rated_item_index])) / (old_weight + 1)
+```
 
 ## 评价
 
 **简单易懂**：参见代码；    
-**存储**：存储上除了`user_item_matrix`，还需要存下`differencial_matrix`与`weight_matrix`，为节省空间，可以只存后两者的对角线的右上部分即可；    
-**预测时间复杂度**：用户评价过的物品数为x，则做一次预测的时间复杂度为O(x)；    
-**更新时间复杂度**：当用户新进行一次评分时，需要更新两矩阵，则`weight_matrix`中只可能是物品已评价过的x个物品中的物品可能会+1，同理在差值矩阵，只需计算出其与x个物品各自的评分差值更新到相应位置即可，无需重新计算两个矩阵，是飞快的，时间复杂度O(x)；    
+**存储**：存储上除了`user_item_matrix`，还需要存下`differential_matrix`与`weight_matrix`，为节省空间，可以只存后两者的对角线的右上部分即可；    
+**预测时间复杂度**：用户评价过的物品数为x，由predict代码，则做一次预测的时间复杂度为O(x)；    
+**更新时间复杂度**：当用户新进行一次评分时，由update_matrices代码，时间复杂度为O(x);    
 **新用户友好**：当用户仅进行少量评分时，即可为其进行较高质量的推荐。
 
 ## 参考
