@@ -1,5 +1,5 @@
 ---
-title: Slope One进行评分测试
+title: Slope One进行评分预测
 date: 2019.02.20 16:17:35
 tags:
 - 推荐系统
