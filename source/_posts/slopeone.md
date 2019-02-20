@@ -151,3 +151,8 @@ predict(user_book_matrix, book_differencial, weight_matrix, 1, 3)
 **预测时间复杂度**：用户评价过的物品数为x，则做一次预测的时间复杂度为O(x)；    
 **更新时间复杂度**：当用户新进行一次评分时，需要更新两矩阵，则`weight_matrix`中只可能是物品已评价过的x个物品中的物品可能会+1，同理在差值矩阵，只需计算出其与x个物品各自的评分差值更新到相应位置即可，无需重新计算两个矩阵，是飞快的，时间复杂度O(x)；    
 **新用户友好**：当用户仅进行少量评分时，即可为其进行较高质量的推荐。
+
+## 参考
+
+[《Slope One Predictors for Online Rating-Based Collaborative Filtering》](https://www.researchgate.net/publication/1960789_Slope_One_Predictors_for_Online_Rating-Based_Collaborative_Filtering)
+[Slope One wiki](https://zh.wikipedia.org/wiki/Slope_one)
