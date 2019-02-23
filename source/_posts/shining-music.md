@@ -95,7 +95,7 @@ Rush - 《2112》
 <div>
 
 <div align=center>
-![](https://img1.doubanio.com/view/subject/m/public/s4614409.jpg)
+![](https://ws1.sinaimg.cn/large/0073xHwmly1g0ghbim96oj30dw0dwjxx.jpg)
 万能青年旅店 - 《万能青年旅店》
 <div>
 
