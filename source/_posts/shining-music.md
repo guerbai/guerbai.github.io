@@ -39,6 +39,11 @@ Queen - 《A Night at the Opera》
 <div>
 
 <div align=center>
+![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0geq2mabhj3276276noa.jpg)
+Black Sabbath - 《Paranoid》
+<div>
+
+<div align=center>
 ![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gd8jhrrzj32bc2bcu0x.jpg)
 John Lennon - 《John Lennon/Plastic Ono Band》
 <div>
@@ -46,6 +51,11 @@ John Lennon - 《John Lennon/Plastic Ono Band》
 <div align=center>
 ![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0ge3x6201j32bc2bcb29.jpg)
 Janis Joplin - 《Pearl》
+<div>
+
+<div align=center>
+![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0genqe6omj327c27c0yq.jpg)
+AC/DC - 《Back in Black》
 <div>
 
 <div align=center>
