@@ -149,7 +149,7 @@ def least_squares(Cui, X, Y, regularization):
         X[u] = spsolve(A, b) 
 ```
 
-依然是数据量的问题，上述代码基本是没法用的。大矩阵各种点乘，空间和时间消费都难以承受。优化方法是利用数学，显然$Y ^ { T } C ^ { u } Y$等于$Y ^ { T } Y + Y ^ { T } \left( C ^ { u } - I \right) Y$，由于当用户u没有收听artist i时，$c_{ui}$为1，使得$\left( C ^ { u } - I \right)$非常稀疏，同时p(u)亦非常稀疏，计算时将矩阵点乘拆开，仅取出有值的部分循环相加即可，如此可极大程度提升计算速度并对内存的需求。
+依然是数据量的问题，上述代码基本是没法用的。大矩阵各种点乘，空间和时间消费都难以承受。优化方法是利用数学，显然$Y ^ { T } C ^ { u } Y$等于$Y ^ { T } Y + Y ^ { T } \left( C ^ { u } - I \right) Y$，由于当用户u没有收听artist i时，$c_{ui}$为1，使得$\left( C ^ { u } - I \right)$非常稀疏，同时p(u)亦非常稀疏，计算时将矩阵点乘拆开，仅取出有值的部分循环相加即可，如此可极大程度提升计算速度并降低对内存的需求。
 
 [implicit](https://github.com/benfred/implicit)的作者在blog中实现了这一过程，里面全是线性代数：
 
@@ -268,7 +268,7 @@ print ('blur similar artists:\n', get_similar_artists(blur))
 得到的结果令人欣喜。    
 
 yes的相似列表里有king crimson，rush，emerson, lake & palmer，genesis，都是前卫得不行的乐队，在前卫摇滚全家福上很容易找到他们的身影；    
-the clash的列表中ramons，pixies，iggy pop都是朋克乐队，joy division与the clash都是1976年成立，前者是后朋的先驱，看到the velvet underground真的笑出声，毕竟“每一位朋克、后朋克和先锋流行艺术家在过去的30年中都欠下了‘地下丝绒’乐队一笔灵感的债务，哪怕只是受到了间接的影响。”；    
+the clash的列表中ramones，pixies，iggy pop都是朋克乐队，joy division与the clash都是1976年成立，前者是后朋的先驱，看到the velvet underground真的笑出声，毕竟“每一位朋克、后朋克和先锋流行艺术家在过去的30年中都欠下了‘地下丝绒’乐队一笔灵感的债务，哪怕只是受到了间接的影响。”；    
 the smiths是上个世纪80年代英国独立摇滚的代表，列表中第一位是主唱莫老师，然后有同时期的joy division，echo & the bunnymen，都是独立摇滚的代表；    
 pink floyd的列表也不必多说，关键字70年代，同一时期历史评价极高的几支乐队都在推荐之列；        
 最后看到blur的列表里面有pulp和oasis，就放心了。
