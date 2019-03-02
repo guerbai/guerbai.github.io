@@ -194,6 +194,7 @@ lastfm_sentences = LastfmSentences('./sentences.txt')
 model = Word2Vec(lastfm_sentences, size=50, min_count=20, window=10, hs=0, negative=20, workers=4, sg=1, sample=1e-5)
 ```
 
+假如训练的数据集为歌单，一个歌单为一个句子，由于出现在同一个歌单内代表了其中歌曲的某种共性，那么会希望将所有item两两之间的关系都考虑进去，故window size的取值可以取`(所有歌单长度最大值-1)/2`，会取得更好的效果。这里由于是以用户和天做分割，暂且拍脑袋拍出一个10。    
 sample用于控制对热门词汇的采样比例，降低太过热门的词汇对整个模型的影响，比如Radiohead的creep，这里面还有个计算公式不再细说。    
 sg取0、1分别表示使用CBOW与Skip-gram算法，而hs取0、1分别表示使用hierarchical softmax与negative sampling。
 
