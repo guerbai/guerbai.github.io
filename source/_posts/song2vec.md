@@ -1,5 +1,5 @@
 ---
-title: 人是会变的，今天她喜欢听后朋，明天可能喜欢别的
+title: Song2vec
 date: 2019-03-01 11:52:00
 tags:
 - 推荐系统
@@ -359,7 +359,7 @@ display_track_info(recommend_with_playlist([
     24                         Sweet Dream             Jethro Tull
 
 
-人是会变的，今天她喜欢听后朋，明天可能喜欢别的，但既然我们有数学与集体智慧，这又有什么关系呢？
+人是会变的，今天她喜欢听后朋，明天可能喜欢别的，但既然我们有数学与集体智慧，问题并不大。
 
 ## 参考
 
