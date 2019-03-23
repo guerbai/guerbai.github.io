@@ -51,7 +51,8 @@ import numpy as np
 from scipy.sparse import csr_matrix, diags
 
 
-df = pd.read_csv('~/music-recommend/dataset/lastfm-dataset-1K/userid-timestamp-artid-artname-traid-traname.tsv', 
+file_path = '~/music-recommend/dataset/lastfm-dataset-1K/userid-timestamp-artid-artname-traid-traname.tsv'
+df = pd.read_csv(file_path, 
             sep = '\t',
             header = None,                   
             names = ['user_id', 'timestamp', 'artist_id', 'artist_name', 'track_id', 'track_name'],
@@ -160,6 +161,21 @@ generate_sentence_file(df)
 
     100%|██████████| 992/992 [1:22:23<00:00,  5.62s/it]
 
+这个过程比较慢，在mac跑下来要快一个半小时。这里可以使用Spark来生成sentences.txt，若是在生产环境，可以利用大量机器资源，在单机上亦可以享受其将任务拆分成map、reduce来并行处理的便利，以如下Spark代码来生成Sentences.txt在mac上只需要10分钟：
+
+```python
+import pyspark
+import arrow
+
+sc = pyspark.SparkContext(appName="generate-song-sentences")
+lines = sc.textFile(file_path)
+lines = lines.map(lambda l: l.split("\t")) # 按\t分隔为list.
+lines = lines.filter(lambda l: len([item for item in l if not item]) == 0) # 去掉数据不全的行.
+lines = lines.map(lambda line: ((line[0], arrow.get(line[1]).date()), str(track_id_to_track_index_dict.get(line[4], '')))) # 以(user_id, date)为key，track_id为value的二元组.
+lines = lines.reduceByKey(lambda a, b: a + ' ' + b) # reduce，将track_id拼为sentence.
+lines = lines.map(lambda line: line[1]) # 输出不再关心key.
+lines.repartition(1).saveAsTextFile("./spark-generated-song-sentences") # 使Spark只写一份txt文件.
+```
 
 生成后的文件长这个样子：
 ![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0o99odtizj311w0ee79v.jpg)
