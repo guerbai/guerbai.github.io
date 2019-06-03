@@ -59,14 +59,14 @@ Wiki中对Scheme的宏系统有如下一段较为晦涩的描述：
 
 我们知道python有个可以同时迭代两个list的函数为zip，使用方法为：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1fxee152ejtj30f80coq4c.jpg)
+![](http://45.76.195.123/images/2019/06/03/10.jpg)
 
 python zip展示
 </div>
 
 而Scheme本身是没有zip这种语法的：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1fxee14nwm0j30gg034aab.jpg)
+![](http://45.76.195.123/images/2019/06/03/11.jpg)
 
 Scheme无zip
 </div>
@@ -83,7 +83,7 @@ Scheme无zip
 
 效果如下：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rffn9fqj30ra0dggow.jpg)
+![](http://45.76.195.123/images/2019/06/03/12.jpg)
 
 zip效果
 </div>
@@ -134,7 +134,7 @@ console.log(bb8);
 假设，在word中经常要键入自己的邮箱，并改变字体大小、颜色，现将这个操作使用宏记录下来，可以对自己的一连串操作进行复用。
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rfxnye1g32801cue89.gif)
+![](http://45.76.195.123/images/2019/06/03/13.gif)
 
 使用Word录制宏
 </div>
@@ -145,7 +145,7 @@ console.log(bb8);
 
 这里举两个例子，其一是生成数字1到100，每个一行，当然不是每行每行输入了，接下来是表演时间：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rgjegvjg32801cuu10.gif)
+![](http://45.76.195.123/images/2019/06/03/14.gif)
 
 生成1-100的数字
 </div>
@@ -153,7 +153,7 @@ console.log(bb8);
 那现在，需要将它们转为python的list，且每个都变为字符串格式，操作如下：
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rgxksokg32801cuhdy.gif)
+![](http://45.76.195.123/images/2019/06/03/15.gif)
 
 生成num_list
 </div>
@@ -166,7 +166,7 @@ console.log(bb8);
 Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制的宏生成一段elisp函数，存放在配置里，这样不用每次用的时候都去录制。
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rh9omgxg30ze0lcqva.gif)
+![](http://45.76.195.123/images/2019/06/03/16.gif)
 
 使用Emacs定义宏，并生成elisp配置代码
 </div>
@@ -178,7 +178,7 @@ Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制
 宏病毒常见于微软的Office产品中，上面介绍了在Word中录制宏，其实它的本质是生成一段VBA代码，这相当于提供了VBA的编程接口，那么，在这段代码中编入恶意代码运行，便成为病毒。
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rhivcvoj325k1e011y.jpg)
+![](http://45.76.195.123/images/2019/06/03/17.jpg)
 
 生成的VB代码
 </div>

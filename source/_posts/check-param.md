@@ -59,7 +59,7 @@ class UserSchema(Schema):
             raise ValidationError('Unknown location.')
 ```
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1fzptwqs6icj30wq0q4jzu.jpg)
+![](http://45.76.195.123/images/2019/06/03/1.jpg)
 
 使用marshmallow进行验参
 </div>
@@ -109,7 +109,7 @@ if __name__ == "__main__":
 抄袭项目readme示例代码如下，诸位可以感受下，还是蛮有意思的：
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1fzptz0pnfvj31fc0lkdks.jpg)
+![](http://45.76.195.123/images/2019/06/03/2.jpg)
 
 schema示例代码
 </div>
