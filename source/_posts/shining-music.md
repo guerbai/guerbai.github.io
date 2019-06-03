@@ -14,103 +14,103 @@ tags:
 
 ## 国外专辑
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gcr92bhpj32h02h01kx.jpg)
+![](http://45.76.195.123/images/2019/06/03/54.jpg)
 Television - 《Marquee Moon》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gcuf3xuoj33pc3pc1ky.jpg)
+![](http://45.76.195.123/images/2019/06/03/55.jpg)
 Love - 《Forever Changes》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gcxcuoyfj33pc3pcb2b.jpg)
+![](http://45.76.195.123/images/2019/06/03/56.jpg)
 King Crimson - 《In the Court of the Crimson King》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gcyxcz4jj328g28ih4p.jpg)
+![](http://45.76.195.123/images/2019/06/03/57.jpg)
 Joy Division - 《Unknown Pleasures》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gd395s9sj32bc2bcgz6.jpg)
+![](http://45.76.195.123/images/2019/06/03/58.jpg)
 Queen - 《A Night at the Opera》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0geq2mabhj3276276noa.jpg)
+![](http://45.76.195.123/images/2019/06/03/59.jpg)
 Black Sabbath - 《Paranoid》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gd8jhrrzj32bc2bcu0x.jpg)
+![](http://45.76.195.123/images/2019/06/03/60.jpg)
 John Lennon - 《John Lennon/Plastic Ono Band》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0ge3x6201j32bc2bcb29.jpg)
+![](http://45.76.195.123/images/2019/06/03/61.jpg)
 Janis Joplin - 《Pearl》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0genqe6omj327c27c0yq.jpg)
+![](http://45.76.195.123/images/2019/06/03/62.jpg)
 AC/DC - 《Back in Black》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gdega6qhj326825q4qp.jpg)
+![](http://45.76.195.123/images/2019/06/03/63.jpg)
 Dire Straits - 《On the Night》(Live)
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gdh9wyvxj30xc0xcdv8.jpg)
+![](http://45.76.195.123/images/2019/06/03/64.jpg)
 The Stone Roses - 《The Stone Roses》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0gdqrc44rj325s25sqpq.jpg)
+![](http://45.76.195.123/images/2019/06/03/65.jpg)
 Radiohead - 《OK Computer》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0gdt59482j32762767wh.jpg)
+![](http://45.76.195.123/images/2019/06/03/66.jpg)
 Metallica - 《Master of Puppets》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0gdvt5xynj32bc2bcqv5.jpg)
+![](http://45.76.195.123/images/2019/06/03/67.jpg)
 Carpenters - 《Now & Then》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0gdzqnj97j328k28ke60.jpg)
+![](http://45.76.195.123/images/2019/06/03/68.jpg)
 Rush - 《2112》
 <div>
 
 ## 国内专辑
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gd7a0lroj325s25sb29.jpg)
+![](http://45.76.195.123/images/2019/06/03/69.jpg)
 窦唯 - 《黑梦》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0ghbim96oj30dw0dwjxx.jpg)
+![](http://45.76.195.123/images/2019/06/03/70.jpg)
 万能青年旅店 - 《万能青年旅店》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gdj8q8dlj32802807h5.jpg)
+![](http://45.76.195.123/images/2019/06/03/71.jpg)
 刺猬 - 《幻象波普星》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g0gdlnxwoij3280280tv9.jpg)
+![](http://45.76.195.123/images/2019/06/03/72.jpg)
 重塑雕像的权利 - 《WATCH OUT! CLIMATE HAS CHANGED，FAT MUM RISES...》
 <div>
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0ge0w90l1j33pc3pcqv5.jpg)
+![](http://45.76.195.123/images/2019/06/03/73.jpg)
 落日飞车 - 《Cassa Nova》
 <div>
 

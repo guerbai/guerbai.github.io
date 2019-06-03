@@ -90,7 +90,7 @@ print (user_book_matrix)
 所谓相似度，我们这里使用余弦相似度，其他的还有皮尔逊相关度、欧式距离、杰卡德相似度等，个中差别暂不细表。
 计算公式为：
 
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g09smu2endj30ze056aal.jpg)
+![](http://45.76.195.123/images/2019/06/03/3.jpg)
 
 现在已经拿到了`user_book_matrix`，每个用户、每个物品都可以对应一个向量，比如`user_book_matrix[2]`为代表`user_003`的向量等于`[4, 0, 5, 3, 4, 0]`，而`user_book_matrix[:,2]`则代表了`book_003`：`[0， 4， 5， 0， 0， 2]`。
 
@@ -186,7 +186,7 @@ print ('recommend item_indexes %s to book_001' % recommend_similar_items('book_0
 接下来是为用户推荐书籍，首先选出与该用户最相似的K个用户，然后找出这K个用户评过分的书籍的集合，再去掉该用户已经评过分的部分。
 在剩下的书籍中，根据下面的公式，计算出该用户为某书籍的预计评分，将评分从高到低排序输出即可。
 
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g09so7dewej30l605kq3b.jpg)
+![](http://45.76.195.123/images/2019/06/03/4.jpg)
 
 
 ```python

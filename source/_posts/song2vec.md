@@ -9,7 +9,7 @@ tags:
 
 摇滚乐经过几十年的发展，风格流派众多，从blues，到brit invasion，之后是punk，disco，indie rock等等。发展历程大致是这样的：
 
-![history of rock](https://ws1.sinaimg.cn/large/0073xHwmly1g0ndbv8v9gj31hc0xcnfv.jpg)
+![history of rock](http://45.76.195.123/images/2019/06/03/21.jpg)
 
 <!--more-->
 
@@ -25,11 +25,11 @@ Word2vec最初被提出是为了在自然语言处理(NLP)中用一个低维稠�
 
 假设拿到了一些句子作为数据集，要为该神经网络生成训练样本，这里要定义一个窗口大小比如为2，则对"shine on you crazy diamond"这句话来讲，将窗口从左滑到右，按照下图方式生成一系列单词对儿，其中每个单词对儿即作为一个训练样本，单词对儿中的第一个单词为输入，第二个单词为label。
 
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0npxol8xfj312m0h00uo.jpg)
+![](http://45.76.195.123/images/2019/06/03/22.jpg)
 
 假设语料库中有10000个互不相同的word，首先将某个单词使用one-hot vector(10000维)来表示输入神经网络，输出同样为10000维的vector，每一维上的数字代表此位置为1所代表的one-hot vector所对应的word在输入word周围的可能性：
 
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0nq1des49j313m0pkgon.jpg)
+![](http://45.76.195.123/images/2019/06/03/23.jpg)
 
 输入输出层的节点数为语料库word数，隐藏层的节点数则为表示每个单词的向量的维数。此模型每个输入层节点会与隐藏层的每个节点相连且都对应了一个权重，而对某输入节点来说，它与隐藏层相连的所有这些权重组成的向量即为该节点为1所代表的one-hot vector所对应的单词的embedding向量。
 
@@ -178,7 +178,7 @@ lines.repartition(1).saveAsTextFile("./spark-generated-song-sentences") # 使Spa
 ```
 
 生成后的文件长这个样子：
-![](https://ws1.sinaimg.cn/large/0073xHwmgy1g0o99odtizj311w0ee79v.jpg)
+![](http://45.76.195.123/images/2019/06/03/24.jpg)
 
 ## 训练模型生成embedding
 

@@ -37,7 +37,7 @@ Spacemacs与org-pomodoro非必选，仅使用原生的Emacs经过简单的配置
 ```
 经过这几行配置，已经初有效果了：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rjlb4rqg32801cu4q9.gif)
+![](http://45.76.195.123/images/2019/06/03/36.gif)
 
 通过Ctrl-C a进入agenda view
 </div>
@@ -51,21 +51,21 @@ Spacemacs与org-pomodoro非必选，仅使用原生的Emacs经过简单的配置
 ```
 上面设置的快捷键C-c r，Emacs会提示根据todo template来创建一个任务。
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rk4qme1g32801cub2a.gif)
+![](http://45.76.195.123/images/2019/06/03/37.gif)
 
 新建一个任务
 </div>
 
 创建任务之后，可以在agenda-view的list all TODO entries里看到刚刚添加的任务。
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rki5k0vj327q1e0guk.jpg)
+![](http://45.76.195.123/images/2019/06/03/38.jpg)
 
 all todo entries
 </div>
 
 但是这是在日任务、周任务里是看不到的，需要为它添加起始、结束时间，操作分别为C-c C-s，C-c C-d。
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rkxbaywg32801cue81.gif)
+![](http://45.76.195.123/images/2019/06/03/39.gif)
 
 为任务添加起始、结束时间并在week中查看
 </div>
@@ -84,29 +84,29 @@ all todo entries
         ))
 ```
 
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rl9hryhj313i09c0tt.jpg)
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rlmpbapj313g04adgm.jpg)
+![](http://45.76.195.123/images/2019/06/03/40.jpg)
+![](http://45.76.195.123/images/2019/06/03/41.jpg)
 
 利用这个机制，可以编写自己的template，对自己的使用情景进行分类，可以使操作更加多样化，满足更大的想象力。
 
 ## 周期性任务
 有些任务是周期性、经常没有结束的，比如我使用RSS看各种资讯，每3天看一次，时间在当天中午吃过饭13:00到14:00一个小时，那么可以在设置任务起始时间时，加入周期性的标记即可（在指定的时间后面加上：+3d），效果在week-view中很明显，会周期性地出现。
 
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rm0un5pj313603kjsk.jpg)
+![](http://45.76.195.123/images/2019/06/03/42.jpg)
 
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rmgmbmwj312q0gugq0.jpg)
+![](http://45.76.195.123/images/2019/06/03/43.jpg)
 
 ## 按Tag进行分组与搜索
 使用Tag进行将事物进行分组是一种常见的管理模式，在org-agenda中，新建一个任务时可以为它加Tag，方法为在任务描述后面加上`:tag1:tag2:`这样的标记。
 
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rmtqq45j313002m3z4.jpg)
+![](http://45.76.195.123/images/2019/06/03/44.jpg)
 
 在上图中可以看到，将*学agenda*归为*学习*和*工具*标签下，这样，就可以通过标签搜索的功能将该Tag下所有的任务搜出来。
 
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rnobn2zj312g03eq3s.jpg)
+![](http://45.76.195.123/images/2019/06/03/45.jpg)
 
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05ro22qc4j312g03e0tl.jpg)
+![](http://45.76.195.123/images/2019/06/03/46.jpg)
 
 分别按不同的标签搜索
 </div>
@@ -114,7 +114,7 @@ all todo entries
 同时，agenda-view还提供各种搜索的方式，可以根据关键字，是否完成等条件搜索。
 各个搜索入口在agenda-view描述得很清楚：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rou8hsmj3130098gpc.jpg)
+![](http://45.76.195.123/images/2019/06/03/47.jpg)
 
 agenda-view按键说明
 </div>
@@ -122,7 +122,7 @@ agenda-view按键说明
 ## 任务优先级
 根据四象限工作法，各任务是有优先级的，org-agenda当然提供了为任务设计不同优先级的功能，为A，B，C三个不同的级别，操作为将光标放到任务的一行上，按Shift-上、下键，即可调整该任务优先级。
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rp5umfeg32801cu1kx.gif)
+![](http://45.76.195.123/images/2019/06/03/48.gif)
 
 切换任务优先级
 </div>
@@ -141,7 +141,7 @@ agenda-view按键说明
 ```
 上述配置定义了最低优先级为D，且为默认优先级，同时设置了颜色，使得各优先级区分度更高，配置过后效果图如下：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rpmqf1ng32801cub29.gif)
+![](http://45.76.195.123/images/2019/06/03/49.gif)
 
 有底色与自定义优先级的展示
 </div>
@@ -185,7 +185,7 @@ agenda-view按键说明
 ```
 效果如下：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rq3lk2rg32801cu4qt.gif)
+![](http://45.76.195.123/images/2019/06/03/50.gif)
 
 自动抓取Chrome url创建任务
 </div>
@@ -202,7 +202,7 @@ C-c C-x C-r命令会生成一个org中的代码块，可针对各种关心的维
 
 由于我已经好久没有用这个东西统计了，没有数据，这里盗[一个网上的图](https://www.zhihu.com/question/34299750/answer/58303458)，来说明这个功能的强大。
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rqj4jvkj30k00nm0ym.jpg)
+![](http://45.76.195.123/images/2019/06/03/51.jpg)
 
 统计图示例
 </div>
@@ -214,14 +214,14 @@ C-c C-x C-r命令会生成一个org中的代码块，可针对各种关心的维
 
 安装好插件后，要为一个task开启一个番茄钟，只需要在task上M-x: org-pomodoro就开始了：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rqutqu5j327q1e0k3d.jpg)
+![](http://45.76.195.123/images/2019/06/03/52.jpg)
 
 tab栏上的倒计时钟
 </div>
 
 一声“叮”响之后，这个番茄钟就结束了，会进入break阶段：
 <div align=center>
-![](https://ws1.sinaimg.cn/large/0073xHwmly1g05rr6w3quj313u1cy451.jpg)
+![](http://45.76.195.123/images/2019/06/03/53.jpg)
 
 break5分钟
 </div>
