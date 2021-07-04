@@ -19,7 +19,7 @@ tags:
 
 作为一个神经网络，RBM有可见层和隐藏层两层，其中可见层每个节点对应一首歌曲，而隐藏层的每个节点我们则希望它对应于一种音乐类型，故对应上述歌曲的特点在说明中使隐藏层为两个节点。同时再加一个*bias unit*来控制太过热门的item对该模型造成的影响，此神经网络各节点的连接情况是这样的：
 
-![](http://45.76.195.123/images/2019/06/03/31.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/a4642c657403434cbf349d7bf4bd611a.jpg)
 
 可见层的每个节点与所有隐藏层的节点相连，bias unit与两层所有的节点相连，每个连接对应一个weight，首先使用矩阵来表示可见层与隐藏层节点的所有weight，比如该矩阵的第一行的第一列的数据对应于可见层节点*Dancing Queen*与hidden unit1相连的weight，然后在此基础上，插入bias unit的weight，因为它与可见层、隐藏层皆相连，故此矩阵的行与列各加1。给两层节点之间的所有weight赋予一个范围内的随机值以初始化该矩阵，与bias unit相连的节点暂全置为0。
 

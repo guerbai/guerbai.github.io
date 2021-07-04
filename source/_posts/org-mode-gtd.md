@@ -37,7 +37,8 @@ Spacemacs与org-pomodoro非必选，仅使用原生的Emacs经过简单的配置
 ```
 经过这几行配置，已经初有效果了：
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/36.gif)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/de685efd50179e9f214f22af916e9b93.gif)
 
 通过Ctrl-C a进入agenda view
 </div>
@@ -51,21 +52,24 @@ Spacemacs与org-pomodoro非必选，仅使用原生的Emacs经过简单的配置
 ```
 上面设置的快捷键C-c r，Emacs会提示根据todo template来创建一个任务。
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/37.gif)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/7d9bdaecfc2615620e6926e75cdf26e7.gif)
 
 新建一个任务
 </div>
 
 创建任务之后，可以在agenda-view的list all TODO entries里看到刚刚添加的任务。
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/38.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/c1f8ec124d3080e61e9f6736766c99e8.jpg)
 
 all todo entries
 </div>
 
 但是这是在日任务、周任务里是看不到的，需要为它添加起始、结束时间，操作分别为C-c C-s，C-c C-d。
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/39.gif)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/d48d7ce9e083c43f1da36b17155d5d90.gif)
 
 为任务添加起始、结束时间并在week中查看
 </div>
@@ -84,29 +88,30 @@ all todo entries
         ))
 ```
 
-![](http://45.76.195.123/images/2019/06/03/40.jpg)
-![](http://45.76.195.123/images/2019/06/03/41.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/cc940cfd3399ced810f2194c4ccc7094.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/25d80b958e6d68d6dd4c88d627b2b91b.jpg)
 
 利用这个机制，可以编写自己的template，对自己的使用情景进行分类，可以使操作更加多样化，满足更大的想象力。
 
 ## 周期性任务
 有些任务是周期性、经常没有结束的，比如我使用RSS看各种资讯，每3天看一次，时间在当天中午吃过饭13:00到14:00一个小时，那么可以在设置任务起始时间时，加入周期性的标记即可（在指定的时间后面加上：+3d），效果在week-view中很明显，会周期性地出现。
 
-![](http://45.76.195.123/images/2019/06/03/42.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/27310eb4c8224e272857cc276cb9b775.jpg)
 
-![](http://45.76.195.123/images/2019/06/03/43.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/390214585c84e4360442c7284cb1c93c.jpg)
 
 ## 按Tag进行分组与搜索
 使用Tag进行将事物进行分组是一种常见的管理模式，在org-agenda中，新建一个任务时可以为它加Tag，方法为在任务描述后面加上`:tag1:tag2:`这样的标记。
 
-![](http://45.76.195.123/images/2019/06/03/44.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/1aa1cfc887dcbac69d0c6d6f5878f39b.jpg)
 
 在上图中可以看到，将*学agenda*归为*学习*和*工具*标签下，这样，就可以通过标签搜索的功能将该Tag下所有的任务搜出来。
 
-![](http://45.76.195.123/images/2019/06/03/45.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/359a416a1ae6e1efe6b2ad247c41a276.jpg)
 
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/46.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/260f60aadbb1d5ff39d49b00723ae43b.jpg)
 
 分别按不同的标签搜索
 </div>
@@ -114,7 +119,8 @@ all todo entries
 同时，agenda-view还提供各种搜索的方式，可以根据关键字，是否完成等条件搜索。
 各个搜索入口在agenda-view描述得很清楚：
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/47.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/7daf1a5fd426b2156ae2864bc0a481b6.jpg)
 
 agenda-view按键说明
 </div>
@@ -122,7 +128,8 @@ agenda-view按键说明
 ## 任务优先级
 根据四象限工作法，各任务是有优先级的，org-agenda当然提供了为任务设计不同优先级的功能，为A，B，C三个不同的级别，操作为将光标放到任务的一行上，按Shift-上、下键，即可调整该任务优先级。
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/48.gif)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/60af48df68a43afb843b684985a91eba.gif)
 
 切换任务优先级
 </div>
@@ -141,7 +148,8 @@ agenda-view按键说明
 ```
 上述配置定义了最低优先级为D，且为默认优先级，同时设置了颜色，使得各优先级区分度更高，配置过后效果图如下：
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/49.gif)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/8ab1bed940db119814ed1822a4eb941f.gif)
 
 有底色与自定义优先级的展示
 </div>
@@ -185,7 +193,8 @@ agenda-view按键说明
 ```
 效果如下：
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/50.gif)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/3e3057f5283f1e4ab6ba3ce870de6dc5.gif)
 
 自动抓取Chrome url创建任务
 </div>
@@ -202,7 +211,8 @@ C-c C-x C-r命令会生成一个org中的代码块，可针对各种关心的维
 
 由于我已经好久没有用这个东西统计了，没有数据，这里盗[一个网上的图](https://www.zhihu.com/question/34299750/answer/58303458)，来说明这个功能的强大。
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/51.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/610e4b7b3873cc17ea7f0dbaf9870106.jpg)
 
 统计图示例
 </div>
@@ -214,14 +224,16 @@ C-c C-x C-r命令会生成一个org中的代码块，可针对各种关心的维
 
 安装好插件后，要为一个task开启一个番茄钟，只需要在task上M-x: org-pomodoro就开始了：
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/52.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/f55c6a20538ea1bd525b04baa5e06ce3.jpg)
 
 tab栏上的倒计时钟
 </div>
 
 一声“叮”响之后，这个番茄钟就结束了，会进入break阶段：
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/53.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/e7be1c036fa1122e22a208184ce7affa.jpg)
 
 break5分钟
 </div>

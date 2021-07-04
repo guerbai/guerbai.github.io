@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
 结果为：
 
-![](http://45.76.195.123/images/2019/06/03/25.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/418666470665dea4b68514f506c1c8c5.jpg)
 
 此处需要注意的是，若127.0.0.1换成localhost则该请求会被同源政策禁止。
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     app.run(port=5000)
 ```
 得到如下结果：
-![](http://45.76.195.123/images/2019/06/03/26.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/168d0ac47c26d05aac2ce1deb213f6d5.jpg)
 
 显然，由于端口号已经不一致，违反了同源政策，请求失败。
 
@@ -115,10 +115,10 @@ app = Flask(__name__)
 CORS(app)
 ```
 重启项目后，访问`http://127.0.0.1:4000`即可拿到5000的数据。
-![](http://45.76.195.123/images/2019/06/03/27.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/ed9a47ef1af1755a3dbd360a784ae2eb.jpg)
 
 可以看到第三方包自动处理了response header。
-![](http://45.76.195.123/images/2019/06/03/28.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/58e3537abc161fa6a69e45d3ef9e50e9.jpg)
 
 此处不只是flask，不只是python，各个语言，各种web框架，都可以在这一层通过第三方包的形式来处理跨域问题，如果找不到相关插件，大不了自己写一个好喽。
 
@@ -143,7 +143,7 @@ server {
 然后去掉flask-cors插件，再将4000中的ajax url改为`http://127.0.0.1/get_data_5000`。
 
 效果如图：
-![](http://45.76.195.123/images/2019/06/03/29.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/8f04fc58987759286a00971dbc0fa6b6.jpg)
 
 可以看到，此时不再需要response header中的Access-Control-Allow-Origin即可请求到另一个项目的服务。
 
@@ -189,6 +189,6 @@ location /get_data_5000 {
 ```
 
 配置中可写if，可按需要操作header，结果如下：
-![](http://45.76.195.123/images/2019/06/03/30.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/d0fcdbeedf400c65285c55db74bb1e33.jpg)
 
 **OK, Well done!**

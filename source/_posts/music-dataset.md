@@ -89,7 +89,7 @@ user-artist文件的统计数据如下：
 -   56,506,688 (track - similar track) pairs
 
 与MSD一样的奇怪的目录结构，每个歌曲对应一个json文件，长这个样子：
-![img](http://45.76.195.123/images/2019/06/03/20.jpg)
+![img](https://raw.githubusercontent.com/guerbai/scene/main/blog/8cf5b699c1faf5c5922fabe47f42cded.jpg)
 
 文件名是 TRAAAAW128F429D538.json 这样的编码可与MSD的某首歌关联起来，图中提供了基本的歌曲、作者信息、标签。
 比较独特的是还有Lastfm直接提供的与此歌曲相似的歌曲列表以及相似度值。

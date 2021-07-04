@@ -49,7 +49,9 @@ Python有其自带的多线程模块，而且著名的爬虫框架[scrapy](https
 
 CSAPP中提到了对于并行程序性能的衡量标准: **加速比** 。
 <div align=center>
-![img](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3c07dec?w=228&h=108&f=png&s=4216)
+
+![](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3c07dec?w=228&h=108&f=png&s=4216)
+
 </div>
 上述公式中，Sp称为加速比，其中p是处理器核的数量，Tp是指在p个核上程序的执行时间，当T1是程序顺序执行版本的执行时间时，Sp称为绝对加速比，而当Sp为程序并行版本在一个核上的执行时间时，Sp称为相对加速比。  
 
@@ -103,12 +105,16 @@ def measure_time_cost(thread_nums):
 
 由于笔者的mac只有两核，无法看到4核、8核等更明显的效果，Python版本的程序跑下来结果为：  
 <div align=center>
-![img](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3b5a99a?w=1058&h=372&f=png&s=66487)
+
+![](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3b5a99a?w=1058&h=372&f=png&s=66487)
+
 </div>
 
 而Java版本的相同实现，跑下来的结果为：  
 <div align=center>
-![img](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3aebe77?w=697&h=371&f=png&s=64233)
+
+![](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3aebe77?w=697&h=371&f=png&s=64233)
+
 </div>
 
 由于电脑核少，故主要看2核情况的对比，Python版本使用2核并没有得到明显的增速，加速比小于1。而Java版则差不多为2，发挥到了多核的效用，提高了计算密集性任务的效率。  
@@ -116,7 +122,9 @@ def measure_time_cost(thread_nums):
 
 之后，在[知乎](https://www.zhihu.com/question/296546864/answer/501359602)上有网友利用8核电脑做了验证，依然与预期相符，Java的最大加速比为0.701/0.168=4.17，而Python的加速比均小于0.5。
 <div align=center>
-![img](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3c7b9a5?w=1278&h=692&f=png&s=583611)
+
+![](https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3c7b9a5?w=1278&h=692&f=png&s=583611)
+
 </div>
 
 Java代码就是Executor提交任务，然后通过继承Callable利用Future得到结果。

@@ -62,7 +62,8 @@ pidfile /var/run/redis_6379.pid
 不妨进行一次尝试，比如在6379设置key 1 2，而到6380 get 1只能得到nil，说明它们是各自工作的，已经满足可以测试的条件。
 
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/34.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/fbe23bd067e44e9839b59ee16c889120.jpg)
 
 不同的节点展示
 </div>
@@ -220,7 +221,8 @@ targetPercent方法是用来统计命中率用。
 当虚拟节点为5时，命中率约为60%左右，把它加大到100后，可以到达预期的80%的命中率。
 
 <div align=center>
-![](http://45.76.195.123/images/2019/06/03/35.jpg)
+
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/cd2da5a363979167522fb64370007ebd.jpg)
 
 测试结果
 </div>

@@ -7,7 +7,7 @@ tags:
 ---
 
 在网易云音乐中，点入某歌手主页时会有一栏为相似歌手：
-![](http://45.76.195.123/images/2019/06/03/18.jpg)
+![](https://raw.githubusercontent.com/guerbai/scene/main/blog/aefe5c43cb674b203c42b9ae07907363.jpg)
 
 Yes是1968年成立的著名前卫摇滚乐队，云音乐中与其相似的列表中有Rush，而后者则是来自加拿大的一支异常出色的前卫摇滚乐队，这对于一个喜爱前卫摇滚的听众来说，当然是一个很不错的推荐。然而，Yes的推荐列表中的第一位是Coda(小田和奏)，此君是何许人也，此君并不像Rush、Yes一样是几十年前便成立并在摇滚史上留下浓墨重彩的前卫摇滚音乐人，那云音乐又为何会把此君放在Yes相似列表的第一位呢？ 
 
@@ -89,7 +89,7 @@ print ('00000c289a1829a808ac09c00daf10bc3c4e223b listened red hot chili peppers 
 当然使用[基于领域的协同过滤](https://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/)也可以做这个事情，但已经不再合适，首先向量维度越高相互之间计算相似度越慢，更重要的是，决定用户是否喜欢听某歌手的原因可能是多方面的，但绝不是要到30万这个数量级这么多的方面来决定的，这里面并不是一个线性的关系。
 
 矩阵分解是对上述用户物品关系矩阵的降维打击，为user和item各生成一个低维的隐因子，来表达各自的特征：
-![matrix factorization](http://45.76.195.123/images/2019/06/03/19.jpg)
+![matrix factorization](https://raw.githubusercontent.com/guerbai/scene/main/blog/29021bda37b62ee589745eb5544cac2d.jpg)
 
 将原矩阵分解成两个矩阵，两矩阵的乘积尽可能与原矩阵相等，越接近越好。对于电影评分这样的显示反馈来讲，损失函数为：
 $$
