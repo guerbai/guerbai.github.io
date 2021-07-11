@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cn">
   <head><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 <meta name="description" content="说一下Python项目中的验参"/><meta name="keywords" content="python, 微服务, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
-<link rel="canonical" href="http://example.com/2018/08/19/check-param/"/>
+<link rel="canonical" href="http://guerbai.github.io/2018/08/19/check-param/"/>
 
 <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
     MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
@@ -118,7 +118,7 @@
     <div class="post-toc-content">
       <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E9%AA%8C%E5%8F%82%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9C%BA%E6%99%AF"><span class="toc-text">需要验参的几个场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E5%8F%82%E5%A6%82%E4%BD%95%E5%81%9A"><span class="toc-text">验参如何做</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if-else%E7%9B%B4%E6%8E%A5%E5%B9%B2"><span class="toc-text">if else直接干</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#marshmallow"><span class="toc-text">marshmallow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webargs"><span class="toc-text">webargs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#schema"><span class="toc-text">schema</span></a></li></ol></li></ol>
     </div>
-  </div><div class="post-content"><p>在积累了一定的工作与项目实战经验后，越来越意识到验参的重要性。<br>前几天又重读<a target="_blank" rel="noopener" href="https://guerbai.github.io/2018/08/12/pragmatic-programmer-note/">总结了一下【程序员修炼之道】</a>，书中提到，卓有成效的程序员从不相信任何人，包括自己。<br>关于这句话的一个很重要的实践即是在自己编写的程序中，做好验参工作，使对字段的限制与文档一致。这点可以显著得增强系统的稳定性，保护系统的健壮与数据的一致。</p>
+  </div><div class="post-content"><p>在积累了一定的工作与项目实战经验后，越来越意识到验参的重要性。<br>前几天又重读<a href="https://guerbai.github.io/2018/08/12/pragmatic-programmer-note/">总结了一下【程序员修炼之道】</a>，书中提到，卓有成效的程序员从不相信任何人，包括自己。<br>关于这句话的一个很重要的实践即是在自己编写的程序中，做好验参工作，使对字段的限制与文档一致。这点可以显著得增强系统的稳定性，保护系统的健壮与数据的一致。</p>
 <span id="more"></span>
 
 <p>在实际工作中，发现验参环节并不是那么容易做好，微服务系统有多层结构，每个服务内代码的组织又是分层的， 在哪些场景与环节进行验参比较实用是自己需要考虑清楚的点。<br>这篇总结一下工作中见到的各Python项目对于验参的各种处理，以及常用的验参的库。</p>
@@ -164,11 +164,11 @@
       <div class="post-copyright">
     <p class="copyright-item">
       <span>Author: </span>
-      <a href="http://example.com">John Doe</a>
+      <a href="http://guerbai.github.io">Guerbai</a>
     </p>
     <p class="copyright-item">
       <span>Link: </span>
-      <a href="http://example.com/2018/08/19/check-param/">http://example.com/2018/08/19/check-param/</a>
+      <a href="http://guerbai.github.io/2018/08/19/check-param/">http://guerbai.github.io/2018/08/19/check-param/</a>
     </p>
     <p class="copyright-item">
       <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
@@ -212,7 +212,7 @@
   <span class="copyright-year">&copy;2015 - 2021<span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
-    <span class="author">John Doe</span>
+    <span class="author">Guerbai</span>
   </span>
 </div>
 </footer>

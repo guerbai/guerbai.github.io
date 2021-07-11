@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cn">
   <head><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 <meta name="description" content="为什么与Yes乐队最相似的歌手是Coda(小田和奏)？"/><meta name="keywords" content="推荐系统, 算法, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
-<link rel="canonical" href="http://example.com/2019/02/24/matrix-factorization/"/>
+<link rel="canonical" href="http://guerbai.github.io/2019/02/24/matrix-factorization/"/>
 
 <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
     MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
@@ -138,7 +138,7 @@ plays matrix memory usage: 133 MB.
 
 <pre><code>00000c289a1829a808ac09c00daf10bc3c4e223b listened red hot chili peppers count:  691.0
 </code></pre>
-<h2 id="矩阵分解理论基础"><a href="#矩阵分解理论基础" class="headerlink" title="矩阵分解理论基础"></a>矩阵分解理论基础</h2><p>当然使用<a target="_blank" rel="noopener" href="https://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/">基于领域的协同过滤</a>也可以做这个事情，但已经不再合适，首先向量维度越高相互之间计算相似度越慢，更重要的是，决定用户是否喜欢听某歌手的原因可能是多方面的，但绝不是要到30万这个数量级这么多的方面来决定的，这里面并不是一个线性的关系。</p>
+<h2 id="矩阵分解理论基础"><a href="#矩阵分解理论基础" class="headerlink" title="矩阵分解理论基础"></a>矩阵分解理论基础</h2><p>当然使用<a href="https://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/">基于领域的协同过滤</a>也可以做这个事情，但已经不再合适，首先向量维度越高相互之间计算相似度越慢，更重要的是，决定用户是否喜欢听某歌手的原因可能是多方面的，但绝不是要到30万这个数量级这么多的方面来决定的，这里面并不是一个线性的关系。</p>
 <p>矩阵分解是对上述用户物品关系矩阵的降维打击，为user和item各生成一个低维的隐因子，来表达各自的特征：<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/29021bda37b62ee589745eb5544cac2d.jpg" alt="matrix factorization"></p>
 <p>将原矩阵分解成两个矩阵，两矩阵的乘积尽可能与原矩阵相等，越接近越好。对于电影评分这样的显示反馈来讲，损失函数为：<br>$$<br>\min _ { x _ { * } , y _ {*} , } \sum _ { u , i }  \left( p _ { u i } - x _ { u } ^ { T } y _ { i } \right) ^ { 2 } + \lambda \left( \sum _ { u } \left| x _ { u } \right| ^ { 2 } + \sum _ { i } \left| y _ { i } \right| ^ { 2 } \right)<br>$$</p>
 <p>而对于听音乐这样的隐示反馈，损失函数需要添加一个置信度：<br>$$<br>\min _ { x _ { * } , y _ {*} , } \sum _ { u , i } c _ { u i } \left( p _ { u i } - x _ { u } ^ { T } y _ { i } \right) ^ { 2 } + \lambda \left( \sum _ { u } \left| x _ { u } \right| ^ { 2 } + \sum _ { i } \left| y _ { i } \right| ^ { 2 } \right)<br>$$</p>
@@ -193,11 +193,11 @@ blur similar artists:
       <div class="post-copyright">
     <p class="copyright-item">
       <span>Author: </span>
-      <a href="http://example.com">John Doe</a>
+      <a href="http://guerbai.github.io">Guerbai</a>
     </p>
     <p class="copyright-item">
       <span>Link: </span>
-      <a href="http://example.com/2019/02/24/matrix-factorization/">http://example.com/2019/02/24/matrix-factorization/</a>
+      <a href="http://guerbai.github.io/2019/02/24/matrix-factorization/">http://guerbai.github.io/2019/02/24/matrix-factorization/</a>
     </p>
     <p class="copyright-item">
       <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
@@ -241,7 +241,7 @@ blur similar artists:
   <span class="copyright-year">&copy;2015 - 2021<span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
-    <span class="author">John Doe</span>
+    <span class="author">Guerbai</span>
   </span>
 </div>
 </footer>

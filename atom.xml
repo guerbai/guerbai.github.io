@@ -3,14 +3,14 @@
   <title>Guerbai&#39;s Blog</title>
   
   
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="http://guerbai.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
+  <link href="http://guerbai.github.io/"/>
   <updated>2021-07-03T17:42:55.588Z</updated>
-  <id>http://example.com/</id>
+  <id>http://guerbai.github.io/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>Guerbai</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>推荐系统中的排序技术</title>
-    <link href="http://example.com/2019/03/13/rank/"/>
-    <id>http://example.com/2019/03/13/rank/</id>
+    <link href="http://guerbai.github.io/2019/03/13/rank/"/>
+    <id>http://guerbai.github.io/2019/03/13/rank/</id>
     <published>2019-03-13T07:59:23.000Z</published>
     <updated>2021-07-03T17:42:55.588Z</updated>
     
@@ -38,16 +38,16 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="http://guerbai.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
   <entry>
     <title>受限玻尔兹曼机的实现及其在推荐系统中的应用</title>
-    <link href="http://example.com/2019/03/07/restricted-boltzmann-machine/"/>
-    <id>http://example.com/2019/03/07/restricted-boltzmann-machine/</id>
+    <link href="http://guerbai.github.io/2019/03/07/restricted-boltzmann-machine/"/>
+    <id>http://guerbai.github.io/2019/03/07/restricted-boltzmann-machine/</id>
     <published>2019-03-07T08:55:00.000Z</published>
     <updated>2021-07-03T16:33:16.130Z</updated>
     
@@ -63,18 +63,18 @@
     
     
     
-    <category term="源码阅读" scheme="http://example.com/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="算法" scheme="http://guerbai.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="源码阅读" scheme="http://guerbai.github.io/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
     
   </entry>
   
   <entry>
     <title>Song2vec</title>
-    <link href="http://example.com/2019/03/01/song2vec/"/>
-    <id>http://example.com/2019/03/01/song2vec/</id>
+    <link href="http://guerbai.github.io/2019/03/01/song2vec/"/>
+    <id>http://guerbai.github.io/2019/03/01/song2vec/</id>
     <published>2019-03-01T03:52:00.000Z</published>
     <updated>2021-07-03T16:33:16.430Z</updated>
     
@@ -87,18 +87,18 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="http://guerbai.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
-    <category term="摇滚乐" scheme="http://example.com/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
+    <category term="摇滚乐" scheme="http://guerbai.github.io/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
     
   </entry>
   
   <entry>
     <title>为什么与Yes乐队最相似的歌手是Coda(小田和奏)？</title>
-    <link href="http://example.com/2019/02/24/matrix-factorization/"/>
-    <id>http://example.com/2019/02/24/matrix-factorization/</id>
+    <link href="http://guerbai.github.io/2019/02/24/matrix-factorization/"/>
+    <id>http://guerbai.github.io/2019/02/24/matrix-factorization/</id>
     <published>2019-02-24T15:36:00.000Z</published>
     <updated>2021-07-03T16:33:16.070Z</updated>
     
@@ -111,16 +111,16 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="http://guerbai.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
   <entry>
     <title>Shining Music</title>
-    <link href="http://example.com/2019/02/23/shining-music/"/>
-    <id>http://example.com/2019/02/23/shining-music/</id>
+    <link href="http://guerbai.github.io/2019/02/23/shining-music/"/>
+    <id>http://guerbai.github.io/2019/02/23/shining-music/</id>
     <published>2019-02-23T06:12:46.000Z</published>
     <updated>2021-07-04T14:05:59.160Z</updated>
     
@@ -132,16 +132,16 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="摇滚乐" scheme="http://example.com/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
+    <category term="摇滚乐" scheme="http://guerbai.github.io/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
     
   </entry>
   
   <entry>
     <title>Slope One进行评分预测</title>
-    <link href="http://example.com/2019/02/20/slopeone/"/>
-    <id>http://example.com/2019/02/20/slopeone/</id>
+    <link href="http://guerbai.github.io/2019/02/20/slopeone/"/>
+    <id>http://guerbai.github.io/2019/02/20/slopeone/</id>
     <published>2019-02-20T08:17:35.000Z</published>
     <updated>2021-07-03T16:33:16.055Z</updated>
     
@@ -154,16 +154,16 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="http://guerbai.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
   <entry>
     <title>基于邻域的协同过滤</title>
-    <link href="http://example.com/2019/02/16/intro-to-collaborative-filtering/"/>
-    <id>http://example.com/2019/02/16/intro-to-collaborative-filtering/</id>
+    <link href="http://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/"/>
+    <id>http://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/</id>
     <published>2019-02-16T06:57:00.000Z</published>
     <updated>2021-07-03T16:33:16.389Z</updated>
     
@@ -176,16 +176,16 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="算法" scheme="http://example.com/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="http://guerbai.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
   <entry>
     <title>音乐数据集汇总</title>
-    <link href="http://example.com/2019/02/13/music-dataset/"/>
-    <id>http://example.com/2019/02/13/music-dataset/</id>
+    <link href="http://guerbai.github.io/2019/02/13/music-dataset/"/>
+    <id>http://guerbai.github.io/2019/02/13/music-dataset/</id>
     <published>2019-02-13T06:17:57.000Z</published>
     <updated>2021-07-03T16:33:16.397Z</updated>
     
@@ -198,16 +198,16 @@
     
     
     
-    <category term="推荐系统" scheme="http://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
+    <category term="推荐系统" scheme="http://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/"/>
     
-    <category term="摇滚乐" scheme="http://example.com/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
+    <category term="摇滚乐" scheme="http://guerbai.github.io/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
     
   </entry>
   
   <entry>
     <title>使用 Karabiner 改善 Poker 键盘体验</title>
-    <link href="http://example.com/2018/10/23/anli-karabiner/"/>
-    <id>http://example.com/2018/10/23/anli-karabiner/</id>
+    <link href="http://guerbai.github.io/2018/10/23/anli-karabiner/"/>
+    <id>http://guerbai.github.io/2018/10/23/anli-karabiner/</id>
     <published>2018-10-23T04:00:00.000Z</published>
     <updated>2021-07-04T14:03:55.305Z</updated>
     
@@ -220,16 +220,16 @@
     
     
     
-    <category term="软件" scheme="http://example.com/tags/%E8%BD%AF%E4%BB%B6/"/>
+    <category term="软件" scheme="http://guerbai.github.io/tags/%E8%BD%AF%E4%BB%B6/"/>
     
-    <category term="折腾" scheme="http://example.com/tags/%E6%8A%98%E8%85%BE/"/>
+    <category term="折腾" scheme="http://guerbai.github.io/tags/%E6%8A%98%E8%85%BE/"/>
     
   </entry>
   
   <entry>
     <title>关于Java单例模式需要知道的</title>
-    <link href="http://example.com/2018/10/23/java-singleton/"/>
-    <id>http://example.com/2018/10/23/java-singleton/</id>
+    <link href="http://guerbai.github.io/2018/10/23/java-singleton/"/>
+    <id>http://guerbai.github.io/2018/10/23/java-singleton/</id>
     <published>2018-10-23T02:19:00.000Z</published>
     <updated>2021-07-03T16:33:16.072Z</updated>
     
@@ -242,18 +242,18 @@
     
     
     
-    <category term="java" scheme="http://example.com/tags/java/"/>
+    <category term="java" scheme="http://guerbai.github.io/tags/java/"/>
     
-    <category term="读书" scheme="http://example.com/tags/%E8%AF%BB%E4%B9%A6/"/>
+    <category term="读书" scheme="http://guerbai.github.io/tags/%E8%AF%BB%E4%B9%A6/"/>
     
-    <category term="源码阅读" scheme="http://example.com/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
+    <category term="源码阅读" scheme="http://guerbai.github.io/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
     
   </entry>
   
   <entry>
     <title>你见过Python的GIL吗</title>
-    <link href="http://example.com/2018/10/19/python-gil-exist/"/>
-    <id>http://example.com/2018/10/19/python-gil-exist/</id>
+    <link href="http://guerbai.github.io/2018/10/19/python-gil-exist/"/>
+    <id>http://guerbai.github.io/2018/10/19/python-gil-exist/</id>
     <published>2018-10-19T15:46:00.000Z</published>
     <updated>2021-07-04T14:02:51.719Z</updated>
     
@@ -268,16 +268,16 @@
     
     
     
-    <category term="python" scheme="http://example.com/tags/python/"/>
+    <category term="python" scheme="http://guerbai.github.io/tags/python/"/>
     
-    <category term="并发" scheme="http://example.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    <category term="并发" scheme="http://guerbai.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>谈下python微服务中的序列化场景</title>
-    <link href="http://example.com/2018/08/19/python-serialization-scenes/"/>
-    <id>http://example.com/2018/08/19/python-serialization-scenes/</id>
+    <link href="http://guerbai.github.io/2018/08/19/python-serialization-scenes/"/>
+    <id>http://guerbai.github.io/2018/08/19/python-serialization-scenes/</id>
     <published>2018-08-19T14:34:00.000Z</published>
     <updated>2021-07-03T16:33:16.130Z</updated>
     
@@ -289,16 +289,16 @@
     
     
     
-    <category term="python" scheme="http://example.com/tags/python/"/>
+    <category term="python" scheme="http://guerbai.github.io/tags/python/"/>
     
-    <category term="微服务" scheme="http://example.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    <category term="微服务" scheme="http://guerbai.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
   <entry>
     <title>说一下Python项目中的验参</title>
-    <link href="http://example.com/2018/08/19/check-param/"/>
-    <id>http://example.com/2018/08/19/check-param/</id>
+    <link href="http://guerbai.github.io/2018/08/19/check-param/"/>
+    <id>http://guerbai.github.io/2018/08/19/check-param/</id>
     <published>2018-08-19T09:47:00.000Z</published>
     <updated>2021-07-03T17:33:59.907Z</updated>
     
@@ -310,16 +310,16 @@
     
     
     
-    <category term="python" scheme="http://example.com/tags/python/"/>
+    <category term="python" scheme="http://guerbai.github.io/tags/python/"/>
     
-    <category term="微服务" scheme="http://example.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    <category term="微服务" scheme="http://guerbai.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
   </entry>
   
   <entry>
     <title>Redis集群一致性Hash效果的代码演示</title>
-    <link href="http://example.com/2018/08/12/redis-consistent-hashing-code/"/>
-    <id>http://example.com/2018/08/12/redis-consistent-hashing-code/</id>
+    <link href="http://guerbai.github.io/2018/08/12/redis-consistent-hashing-code/"/>
+    <id>http://guerbai.github.io/2018/08/12/redis-consistent-hashing-code/</id>
     <published>2018-08-12T15:44:00.000Z</published>
     <updated>2021-07-03T17:36:20.737Z</updated>
     
@@ -331,16 +331,16 @@
     
     
     
-    <category term="微服务" scheme="http://example.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    <category term="微服务" scheme="http://guerbai.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
     
-    <category term="java" scheme="http://example.com/tags/java/"/>
+    <category term="java" scheme="http://guerbai.github.io/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>【程序员修炼之道】书摘</title>
-    <link href="http://example.com/2018/08/12/pragmatic-programmer-note/"/>
-    <id>http://example.com/2018/08/12/pragmatic-programmer-note/</id>
+    <link href="http://guerbai.github.io/2018/08/12/pragmatic-programmer-note/"/>
+    <id>http://guerbai.github.io/2018/08/12/pragmatic-programmer-note/</id>
     <published>2018-08-12T10:27:00.000Z</published>
     <updated>2021-07-03T16:33:16.131Z</updated>
     
@@ -353,16 +353,16 @@
     
     
     
-    <category term="读书" scheme="http://example.com/tags/%E8%AF%BB%E4%B9%A6/"/>
+    <category term="读书" scheme="http://guerbai.github.io/tags/%E8%AF%BB%E4%B9%A6/"/>
     
-    <category term="软件工程" scheme="http://example.com/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
+    <category term="软件工程" scheme="http://guerbai.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
   <entry>
     <title>Patti与他们相遇</title>
-    <link href="http://example.com/2018/08/05/just-kids/"/>
-    <id>http://example.com/2018/08/05/just-kids/</id>
+    <link href="http://guerbai.github.io/2018/08/05/just-kids/"/>
+    <id>http://guerbai.github.io/2018/08/05/just-kids/</id>
     <published>2018-08-05T15:17:00.000Z</published>
     <updated>2021-07-03T17:34:51.119Z</updated>
     
@@ -378,16 +378,16 @@
     
     
     
-    <category term="读书" scheme="http://example.com/tags/%E8%AF%BB%E4%B9%A6/"/>
+    <category term="读书" scheme="http://guerbai.github.io/tags/%E8%AF%BB%E4%B9%A6/"/>
     
-    <category term="摇滚乐" scheme="http://example.com/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
+    <category term="摇滚乐" scheme="http://guerbai.github.io/tags/%E6%91%87%E6%BB%9A%E4%B9%90/"/>
     
   </entry>
   
   <entry>
     <title>几种宏的描述与展示</title>
-    <link href="http://example.com/2018/07/22/many-macro/"/>
-    <id>http://example.com/2018/07/22/many-macro/</id>
+    <link href="http://guerbai.github.io/2018/07/22/many-macro/"/>
+    <id>http://guerbai.github.io/2018/07/22/many-macro/</id>
     <published>2018-07-21T16:12:00.000Z</published>
     <updated>2021-07-03T17:33:02.979Z</updated>
     
@@ -399,14 +399,14 @@
     
     
     
-    <category term="折腾" scheme="http://example.com/tags/%E6%8A%98%E8%85%BE/"/>
+    <category term="折腾" scheme="http://guerbai.github.io/tags/%E6%8A%98%E8%85%BE/"/>
     
   </entry>
   
   <entry>
     <title>使用Emacs做GTD软件</title>
-    <link href="http://example.com/2018/07/13/org-mode-gtd/"/>
-    <id>http://example.com/2018/07/13/org-mode-gtd/</id>
+    <link href="http://guerbai.github.io/2018/07/13/org-mode-gtd/"/>
+    <id>http://guerbai.github.io/2018/07/13/org-mode-gtd/</id>
     <published>2018-07-12T17:54:00.000Z</published>
     <updated>2021-07-04T13:55:42.244Z</updated>
     
@@ -418,16 +418,16 @@
     
     
     
-    <category term="折腾" scheme="http://example.com/tags/%E6%8A%98%E8%85%BE/"/>
+    <category term="折腾" scheme="http://guerbai.github.io/tags/%E6%8A%98%E8%85%BE/"/>
     
-    <category term="GTD" scheme="http://example.com/tags/GTD/"/>
+    <category term="GTD" scheme="http://guerbai.github.io/tags/GTD/"/>
     
   </entry>
   
   <entry>
     <title>没有时间管理的日常</title>
-    <link href="http://example.com/2018/07/11/no-gtd-life/"/>
-    <id>http://example.com/2018/07/11/no-gtd-life/</id>
+    <link href="http://guerbai.github.io/2018/07/11/no-gtd-life/"/>
+    <id>http://guerbai.github.io/2018/07/11/no-gtd-life/</id>
     <published>2018-07-10T17:14:00.000Z</published>
     <updated>2021-07-03T16:33:16.389Z</updated>
     
@@ -439,14 +439,14 @@
     
     
     
-    <category term="GTD" scheme="http://example.com/tags/GTD/"/>
+    <category term="GTD" scheme="http://guerbai.github.io/tags/GTD/"/>
     
   </entry>
   
   <entry>
     <title>解决跨域问题代码示例</title>
-    <link href="http://example.com/2018/01/05/solve-cross-origin-code/"/>
-    <id>http://example.com/2018/01/05/solve-cross-origin-code/</id>
+    <link href="http://guerbai.github.io/2018/01/05/solve-cross-origin-code/"/>
+    <id>http://guerbai.github.io/2018/01/05/solve-cross-origin-code/</id>
     <published>2018-01-04T16:11:53.000Z</published>
     <updated>2021-07-03T16:33:16.053Z</updated>
     

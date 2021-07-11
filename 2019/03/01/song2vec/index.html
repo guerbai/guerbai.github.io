@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cn">
   <head><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 <meta name="description" content="Song2vec"/><meta name="keywords" content="推荐系统, 算法, 摇滚乐, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
-<link rel="canonical" href="http://example.com/2019/03/01/song2vec/"/>
+<link rel="canonical" href="http://guerbai.github.io/2019/03/01/song2vec/"/>
 
 <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" /><script type="text/x-mathjax-config">
     MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });
@@ -123,7 +123,7 @@
 <span id="more"></span>
 
 <p>摇滚乐的听众，总是能体会到发现宝藏的快乐，可能突然就会邂逅某支自己不曾接触过的歌曲、乐队、风格，感觉好听得不行，以前怎么从来不知道，接下来的一段时间便会沉浸于此，每天都在听该风格的主要乐队和专辑。用户收听音乐在一段时间内可能是有着某个“主题”的，这个主题可能是地理上的(俄罗斯的摇滚乐队)，可能是时间上的(2000年后优秀的专辑)，还可能是某流派、甚至是都被某影视作品用作BGM。之前很少听国内摇滚的笔者，在去年听了刺猬、P.K.14、重塑雕像的权利、新裤子、海朋森等一些国内乐队的很多作品后，才知道原来在老崔、窦唯、万青、老谢之外还有这么多优秀的国产摇滚乐。</p>
-<p>这种“在某一时间会被用户放到一起听”的co-occurrence歌曲列表在音乐软件里的形态是playlist或radio，由editor或用户编辑生成，当然，还有”专辑“这个很强的联系，特别是像《The Dark Side of the Moon》这样的专辑。然而在<a target="_blank" rel="noopener" href="https://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">前几篇文章</a>提到的内容中，最为核心的数据结构是用户物品关系矩阵，这里面并没有包含”一段时间“这个信息。这段时间可以称为session，在其他领域的实际应用中，这个session可能是一篇研究石墨烯的论文，可能是一个Airbnb用户某天在30分钟内寻找夏威夷租房信息的点击情况。把session内的co-occurrence关系考虑进去，可以为用户做出更符合其当下所处情境的推荐结果。</p>
+<p>这种“在某一时间会被用户放到一起听”的co-occurrence歌曲列表在音乐软件里的形态是playlist或radio，由editor或用户编辑生成，当然，还有”专辑“这个很强的联系，特别是像《The Dark Side of the Moon》这样的专辑。然而在<a href="https://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">前几篇文章</a>提到的内容中，最为核心的数据结构是用户物品关系矩阵，这里面并没有包含”一段时间“这个信息。这段时间可以称为session，在其他领域的实际应用中，这个session可能是一篇研究石墨烯的论文，可能是一个Airbnb用户某天在30分钟内寻找夏威夷租房信息的点击情况。把session内的co-occurrence关系考虑进去，可以为用户做出更符合其当下所处情境的推荐结果。</p>
 <p>这篇文章使用Word2vec处理<a target="_blank" rel="noopener" href="https://www.dtic.upf.edu/~ocelma/MusicRecommendationDataset/lastfm-1K.html">Last.fm 1K数据集</a>，来完成这种纳入session信息的歌曲co-occurrence关系的建立。</p>
 <h2 id="Word2vec与音乐推荐"><a href="#Word2vec与音乐推荐" class="headerlink" title="Word2vec与音乐推荐"></a>Word2vec与音乐推荐</h2><p>Word2vec最初被提出是为了在自然语言处理(NLP)中用一个低维稠密向量来表示一个word(该向量称为embedding)，并进一步根据embedding来研究词语之间的关系。它使用一个仅包含一层隐藏层的神经网络来训练被分成许多句子的数据，来学习词汇之间的co-occurrence关系，其中训练时分为CBOW(Continuous Bag-of-Words)与Skip-gram两种方式，这里简单说一下使用Skip-gram获取embedding的过程。</p>
 <p>假设拿到了一些句子作为数据集，要为该神经网络生成训练样本，这里要定义一个窗口大小比如为2，则对”shine on you crazy diamond”这句话来讲，将窗口从左滑到右，按照下图方式生成一系列单词对儿，其中每个单词对儿即作为一个训练样本，单词对儿中的第一个单词为输入，第二个单词为label。</p>
@@ -272,11 +272,11 @@ similarity between shine on part 1, good times: 0.425195
       <div class="post-copyright">
     <p class="copyright-item">
       <span>Author: </span>
-      <a href="http://example.com">John Doe</a>
+      <a href="http://guerbai.github.io">Guerbai</a>
     </p>
     <p class="copyright-item">
       <span>Link: </span>
-      <a href="http://example.com/2019/03/01/song2vec/">http://example.com/2019/03/01/song2vec/</a>
+      <a href="http://guerbai.github.io/2019/03/01/song2vec/">http://guerbai.github.io/2019/03/01/song2vec/</a>
     </p>
     <p class="copyright-item">
       <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
@@ -321,7 +321,7 @@ similarity between shine on part 1, good times: 0.425195
   <span class="copyright-year">&copy;2015 - 2021<span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
-    <span class="author">John Doe</span>
+    <span class="author">Guerbai</span>
   </span>
 </div>
 </footer>
