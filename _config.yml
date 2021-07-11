@@ -7,13 +7,13 @@ title: Guerbai's Blog
 subtitle: ''
 description: ''
 keywords:
-author: John Doe
-language: en
+author: Guerbai
+language: cn
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://guerbai.github.io/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
