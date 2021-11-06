@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="说一下Python项目中的验参"/><meta name="keywords" content="python, 微服务, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/08/19/check-param/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>说一下Python项目中的验参 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">说一下Python项目中的验参
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-08-19
+        </span><span class="post-visits"
+             data-url="/2018/08/19/check-param/"
+             data-title="说一下Python项目中的验参">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E9%AA%8C%E5%8F%82%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9C%BA%E6%99%AF"><span class="toc-text">需要验参的几个场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E5%8F%82%E5%A6%82%E4%BD%95%E5%81%9A"><span class="toc-text">验参如何做</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if-else%E7%9B%B4%E6%8E%A5%E5%B9%B2"><span class="toc-text">if else直接干</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#marshmallow"><span class="toc-text">marshmallow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webargs"><span class="toc-text">webargs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#schema"><span class="toc-text">schema</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><p>在积累了一定的工作与项目实战经验后，越来越意识到验参的重要性。<br>前几天又重读<a href="https://guerbai.github.io/2018/08/12/pragmatic-programmer-note/">总结了一下【程序员修炼之道】</a>，书中提到，卓有成效的程序员从不相信任何人，包括自己。<br>关于这句话的一个很重要的实践即是在自己编写的程序中，做好验参工作，使对字段的限制与文档一致。这点可以显著得增强系统的稳定性，保护系统的健壮与数据的一致。</p>
+<span id="more"></span>
+
+<p>在实际工作中，发现验参环节并不是那么容易做好，微服务系统有多层结构，每个服务内代码的组织又是分层的， 在哪些场景与环节进行验参比较实用是自己需要考虑清楚的点。<br>这篇总结一下工作中见到的各Python项目对于验参的各种处理，以及常用的验参的库。</p>
+<h2 id="需要验参的几个场景"><a href="#需要验参的几个场景" class="headerlink" title="需要验参的几个场景"></a>需要验参的几个场景</h2><p>假设项目为一个简单的两层结构，gateway接受浏览器http请求，通过thrift rpc协议调下层service，service将数据写到DB中。</p>
+<p>这样一个简单的调用链可以抽出几处需要验参的地方：</p>
+<ul>
+<li>收到http请求时，对前端传来的参数进行验证，确保前端传来的参数与前端文档中约定的一致；</li>
+<li>service服务代码分层为handler, service, model三层，handler接受到thrift请求，将thrift request对象序列化为dict后，调用service层代码前，需要进行参数验证(包括一些业务上的验参)，确保client端传来的参数与idl中定义的参数规则一致；</li>
+<li>service服务的service层往DB写数据前(包括新增与更新时)需要验参，确保写到数据库中的数据与model文件(orm定义)中定义的规则一致。</li>
+</ul>
+<h2 id="验参如何做"><a href="#验参如何做" class="headerlink" title="验参如何做"></a>验参如何做</h2><h3 id="if-else直接干"><a href="#if-else直接干" class="headerlink" title="if else直接干"></a>if else直接干</h3><p>之前在写一个Java项目的时候，问到组内的一个较有经验的Java开发在Java中验参通常怎么做，怎样是比较地道的写法。<br>他开玩笑说，if else不就好了嘛。(当然，之后还是告诉了我可以用javax.validation中的注解很自然轻易地完成这个任务)</p>
+<p>诚然，if else可以撸出一切。而且的确我也在一些项目中包括刚参加工作时的小公司的代码里见到过这样的做法，不用引入第三方库，直接进行判断，某字段是否存在，某字段是否为None，字段长度是否超长等。<br>这的确可以完成工作，但真的不够clean，每次在函数的前部分都要处理这些东西，代码写出来很丑。若要把这种if抽出来，粒度又太细，同时又要使用比如装饰器这种技术将它和函数本体编织起来，而且不同函数要验证的条件往往又是不一样的，之前写的验证方法可能还要再改以达到通用，这就又要再改引用了这个验证方法的方法，等等情况会出现很多问题，所以并不是一个长久的组织方法。</p>
+<p>下面介绍几个我见过的用于验参的第三方包，可接避免上面那样的重复造轮子。</p>
+<h3 id="marshmallow"><a href="#marshmallow" class="headerlink" title="marshmallow"></a><a target="_blank" rel="noopener" href="https://marshmallow.readthedocs.io/en/3.0/">marshmallow</a></h3><p>marshmallow本身是Python中的一个出色的用于做序列化的库，同时也提供了在验参功能。<br>它允许开发者定义一些schema，schema中可以以各种方式(allow_none, required, lambda)来表述一个字段的规则，同时在反序列化(将外部参数转化为领域对象)时，会自动进行验参工作，并将不符合规则的参数统一组织起来，而且允许开发者自己提供个性化的相应报错信息。</p>
+<p>上面说到反序列化，那这位又问了，序列化时它不做验参吗？的确如此，marshmallow的作者认为，序列化是指将自己系统内的数据给提供出去(相当于to_json())，对于它们的质量与来源是我们可以保证的，故不需要在这个时候进行反序列化。<br>但实际情况也并不往往如此，比如我最近接触到的项目，由于之前没有做好验参工作，且表结构较复杂，会有一些存在库中的历史数据其实是少字段的或者是不符合规则的，在这种情况下，可以先将数据取出来，进行序列化生成dict对象，再用dict对象来调用schema.validate(dict)来专门进行验证，从而搜集信息，修补数据。</p>
+<p>它的schema可以按照如下方式定义：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> marshmallow <span class="keyword">import</span> Schema, fields, validate, validates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserSchema</span>(<span class="params">Schema</span>):</span></span><br><span class="line">    name = fields.Str(required=<span class="literal">True</span>, validate=<span class="keyword">lambda</span> n: n)</span><br><span class="line">    age = fields.Decimal(required=<span class="literal">True</span>, validate=<span class="keyword">lambda</span> n: n &gt; <span class="number">18</span>)</span><br><span class="line">    location = fields.Str(required=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @validates(<span class="params"><span class="string">&#x27;location&#x27;</span></span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validate_location</span>(<span class="params">self, value</span>):</span></span><br><span class="line">        valid_locations = [<span class="string">u&#x27;SHANGHAI&#x27;</span>, <span class="string">u&#x27;TOKYO&#x27;</span>, <span class="string">u&#x27;NEWYORK&#x27;</span>]</span><br><span class="line">        <span class="keyword">if</span> value <span class="keyword">not</span> <span class="keyword">in</span> valid_locations:</span><br><span class="line">            <span class="keyword">raise</span> ValidationError(<span class="string">&#x27;Unknown location.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/1ebddc04d1ef280df94d6c63b94e4363.jpg"></p>
+<p>使用marshmallow进行验参</p>
+</div>
+
+
+<p>此外，marshmallow还提供了一些常见规则的验证，比如Email，URL来验证字段是否符合规则，不用再去硬写一些让人头疼的正则。它们都继承于Validator类，你也可以继承它来<a target="_blank" rel="noopener" href="https://marshmallow.readthedocs.io/en/latest/_modules/marshmallow/validate.html">编写自己的验证规则类</a>来扩展marshmallow的能力，使得一切都很地道、好用。</p>
+<h3 id="webargs"><a href="#webargs" class="headerlink" title="webargs"></a><a target="_blank" rel="noopener" href="https://github.com/sloria/webargs">webargs</a></h3><p>在gateway层面，面对http请求，可以使用webargs包来进行参数提取与校验。<br>我们知道，http请求传参有多种可能，比如在url中的<code>?key=value&amp;key2=value2</code>这种格式，此外，post方法传参的可能就更多了，有plan text，application/json等。</p>
+<p>而webargs包便是用来简化这一拿参验参的过程，它让开发者可以通过定义一个schema或是dict的结构来表示自己期望从http中得到哪些参数，以及使用哪些规则。查一下源码的话，很容易发现，它内部也是使用了marshmallow，调用了marshmallow的load函数，最后返回一个dict。<br>这种方式使用起来对开发还是很友好的，举例如下(抄自项目readme)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> webargs <span class="keyword">import</span> fields</span><br><span class="line"><span class="keyword">from</span> webargs.flaskparser <span class="keyword">import</span> use_args</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">hello_args = &#123;<span class="string">&quot;name&quot;</span>: fields.Str(required=<span class="literal">True</span>)&#125;</span><br><span class="line"><span class="comment"># or use schema</span></span><br><span class="line"><span class="comment"># HelloArgs(Schema):</span></span><br><span class="line"><span class="comment">#     name = fields.Str(required=True)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="meta">@use_args(<span class="params">hello_args</span>)</span></span><br><span class="line"><span class="comment"># 对应上面</span></span><br><span class="line"><span class="comment"># @use_args(HelloArgs(strict=True))</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>(<span class="params">args</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello &quot;</span> + args[<span class="string">&quot;name&quot;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run()</span><br><span class="line"></span><br><span class="line"><span class="comment"># curl http://localhost:5000/\?name\=&#x27;World&#x27;</span></span><br><span class="line"><span class="comment"># Hello World</span></span><br></pre></td></tr></table></figure>
+<h3 id="schema"><a href="#schema" class="headerlink" title="schema"></a><a target="_blank" rel="noopener" href="https://github.com/keleshev/schema">schema</a></h3><p>说了上面，哪位又问了，marshmallow与webargs所做的验参都不够专一，前者是为序列化服务，后者更多地是为取参同时进行，有些情况下只有两个参数，不想去定义那些schema，感觉好麻烦，而且只想用单一的验参功能，要怎么做呢？</p>
+<p>那么schema就是你想要的。<code>Schema validation just got Pythonic</code><br>它的用法与api比较pythonic，很语义化而且够函数式，写起来还是比较好玩的，不过要注意正确性。<br>在工作中我见过一些同事拿它在service中的handler代码层验参。<br>抄袭项目readme示例代码如下，诸位可以感受下，还是蛮有意思的：</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/0e504026866cf110d6a75286b2323d0b.jpg"></p>
+<p>schema示例代码</p>
+</div>
+
+<hr>
+<p>一定不要小看验参这件事，在大型项目的开发中，可能有很多历史遗留问题，兼容性问题，甚至是来自脚本的恶意请求等。你根本无法确定你编写的代码会被怎样调用，如果这些环节失去了这些保障，线上的复杂情况，会让你的代码在一些匪夷所思的地方报出经典的<code>NoneType</code> error，甚至有些数据库的字段会被莫名其妙地被写为空，却根本不知道它是在何处发生的。这些错误的发生会让开发人员不知所措，措手不及，因为明明在测试时根本没出现过，极度难以调试。<br>等到时候再要加校验，已经很困难了。</p>
+<p>在经历了一些莫明其妙的问题后，我不得不开始重视验参环节，毕竟没吃过亏还是不知道疼。<br>我认为验参环节是一种运行时的assert技术，marshmallow与webargs提供的序列化、取参数的同时进行验参我认为是比较好的方案，它不会让开发者在代码中多写一行专门去调验参函数又能把这件事给做得很棒。</p>
+<p>做好参数验证，是一次请求，一个函数运行，一次持久化成功的第一道保障，client环境太复杂，我们这些写service的还是要保护好自己啊！</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/08/19/check-param/">http://guerbai.github.io/2018/08/19/check-param/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/08/19/python-serialization-scenes/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">谈下python微服务中的序列化场景</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/08/12/redis-consistent-hashing-code/">
+        <span class="next-text nav-default">Redis集群一致性Hash效果的代码演示</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="records库源码阅读"/><meta name="keywords" content="python, 源码阅读, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2017/08/03/read-records-source-code/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>records库源码阅读 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">records库源码阅读
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-08-03
+        </span><span class="post-visits"
+             data-url="/2017/08/03/read-records-source-code/"
+             data-title="records库源码阅读">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAcli%E5%BA%94%E7%94%A8"><span class="toc-text">创建cli应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%83%E7%BB%84%E5%88%B0%E5%AD%97%E5%85%B8%EF%BC%8C%E5%8D%8Aorm"><span class="toc-text">元组到字典，半orm</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RecordCollection"><span class="toc-text">RecordCollection</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Database%E7%B1%BB"><span class="toc-text">Database类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%84%E7%A7%8D%E6%A0%BC%E5%BC%8F%E7%9A%84%E5%AF%BC%E5%87%BA"><span class="toc-text">各种格式的导出</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>翻requests作者kennethreitz的repositories时发现了该库，想起之前做报表用index对应key的痛苦经历。<br>原来这样的问题早已被解决掉了。</p>
+<p>k神300多行代码便得了3000多个star。</p>
+<span id="more"></span>
+
+<p>该项目本质上依然是对sqlalchemy的包装。</p>
+<h1 id="创建cli应用"><a href="#创建cli应用" class="headerlink" title="创建cli应用"></a>创建cli应用</h1><p>该库包提供了一个命令行服务，直接在终端输入records即可运行，代码中最后一个函数cli()实现了这一点。</p>
+<p>稍微探究了一下实现到命令行的过程：</p>
+<p>既然是可在命令行中被运行，必然在某个/bin文件夹下有其运行文件，binary or soft link。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ll /usr/bin | grep records</span></span><br></pre></td></tr></table></figure>
+
+<p>在/usr/bin文件夹下找到了records文件。<br>至于soft link的情况，会出现<code>records -&gt; **</code>的情况。而上述命令的结果只有<code>records</code>，看来不是soft link。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat /usr/<span class="built_in">bin</span>/records</span><br></pre></td></tr></table></figure>
+
+<p>该命令输入了一段python脚本，引入了records.cli。处理了args后，运行<code>sys.exit(cli())</code>。<br><code>records &lt;args&gt;</code>输入的命令行参数会被cli函数使用到，而cli的返回值便作为脚本退出的返回码。</p>
+<p>也就是pip下载该库时其放了一个python文件到了/usr/bin/records。</p>
+<h1 id="元组到字典，半orm"><a href="#元组到字典，半orm" class="headerlink" title="元组到字典，半orm"></a>元组到字典，半orm</h1><p>其对sqlalchemy进行了包装，在sqlalchemy中使用execute sql返回的结果为元组，要做api的话，还要根据index一个一个去构造字典，而k神用了一些处理便解决了这个问题。</p>
+<p>其Record类实例化时接受两个元组参数，keys与value。前者为select 之后的key，而value为返回结果，将两者一一对应起来，形成字典的形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">    <span class="comment"># Support for index-based lookup.</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(key, <span class="built_in">int</span>):</span><br><span class="line">        <span class="keyword">return</span> self.values()[key]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Support for string-based lookup.</span></span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">in</span> self.keys():</span><br><span class="line">        i = self.keys().index(key)</span><br><span class="line">        <span class="keyword">return</span> self.values()[i]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">as_dict</span>(<span class="params">self, ordered=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Returns the row as a dictionary, as ordered.&quot;&quot;&quot;</span></span><br><span class="line">    items = <span class="built_in">zip</span>(self.keys(), self.values())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> OrderedDict(items) <span class="keyword">if</span> ordered <span class="keyword">else</span> <span class="built_in">dict</span>(items)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getattr__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> self[key]</span><br><span class="line">    <span class="keyword">except</span> KeyError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">raise</span> AttributeError(e)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get</span>(<span class="params">self, key, default=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Returns the value for a given key, or default.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> self[key]</span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">        <span class="keyword">return</span> default</span><br></pre></td></tr></table></figure>
+
+<p>说一下实现，<code>__getitem__</code>是像字典一样取值时会被调用，如<code>record=Record(keys, values); record[&#39;a&#39;]</code>这样。<br>可以看到，其不但支持以key为key，亦支持以index为key，仍然保留了sqlalchemy其自身行为的兼容性，使用起来真的是方便。</p>
+<p>而之前的一一对应化为字典的活只用一个zip便轻松解决。<br>该函数举例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>];b = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]; c = <span class="built_in">dict</span>(<span class="built_in">zip</span>(a, b))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c</span><br><span class="line">&#123;<span class="string">&#x27;a&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;c&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>__getattr__</code>中实现了点操作符取值。get方法则对应到字典的.get()功能。</p>
+<h1 id="RecordCollection"><a href="#RecordCollection" class="headerlink" title="RecordCollection"></a>RecordCollection</h1><p>RecordCollection中实现了迭代器的魔法方法<code>__iter__</code>与<code>__next__</code>。<br>使用一个bool字段pending来表示迭代是否完成。<br>使用这种实现亦考虑了内存占用，性能等问题。</p>
+<p>在Database类中，一个query语句之后，将sqlalchemy的结果构造为一个generator，传入RecordCollection类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Execute the given query.</span></span><br><span class="line">cursor = self.db.execute(text(query), **params) <span class="comment"># <span class="doctag">TODO:</span> PARAMS GO HERE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Row-by-row Record generator.</span></span><br><span class="line">row_gen = (Record(cursor.keys(), row) <span class="keyword">for</span> row <span class="keyword">in</span> cursor)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Convert psycopg2 results to RecordCollection.</span></span><br><span class="line">results = RecordCollection(row_gen)</span><br></pre></td></tr></table></figure>
+
+<p>在该类中，将对该类的迭代映射到自身的_rows字段上，并将已迭代出来的结果放入_all_rows字段。<br>这段实现很精彩，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RecordCollection</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;A set of excellent Records from a query.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, rows</span>):</span></span><br><span class="line">        self._rows = rows</span><br><span class="line">        self._all_rows = []</span><br><span class="line">        self.pending = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&lt;RecordCollection size=&#123;&#125; pending=&#123;&#125;&gt;&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">len</span>(self), self.pending)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Iterate over all rows, consuming the underlying generator</span></span><br><span class="line"><span class="string">        only when necessary.&quot;&quot;&quot;</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="comment"># Other code may have iterated between yields,</span></span><br><span class="line">            <span class="comment"># so always check the cache.</span></span><br><span class="line">            <span class="keyword">if</span> i &lt; <span class="built_in">len</span>(self):</span><br><span class="line">                <span class="keyword">yield</span> self[i]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># Throws StopIteration when done.</span></span><br><span class="line">                <span class="comment"># Prevent StopIteration bubbling from generator, following https://www.python.org/dev/peps/pep-0479/</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">yield</span> <span class="built_in">next</span>(self)</span><br><span class="line">                <span class="keyword">except</span> StopIteration:</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.__next__()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            nextrow = <span class="built_in">next</span>(self._rows)</span><br><span class="line">            self._all_rows.append(nextrow)</span><br><span class="line">            <span class="keyword">return</span> nextrow</span><br><span class="line">        <span class="keyword">except</span> StopIteration:</span><br><span class="line">            self.pending = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">raise</span> StopIteration(<span class="string">&#x27;RecordCollection contains no more rows.&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span>(<span class="params">self, key</span>):</span></span><br><span class="line">        is_int = <span class="built_in">isinstance</span>(key, <span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Convert RecordCollection[1] into slice.</span></span><br><span class="line">        <span class="keyword">if</span> is_int:</span><br><span class="line">            key = <span class="built_in">slice</span>(key, key + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">len</span>(self) &lt; key.stop <span class="keyword">or</span> key.stop <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="built_in">next</span>(self)</span><br><span class="line">            <span class="keyword">except</span> StopIteration:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        rows = self._all_rows[key]</span><br><span class="line">        <span class="keyword">if</span> is_int:</span><br><span class="line">            <span class="keyword">return</span> rows[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> RecordCollection(<span class="built_in">iter</span>(rows))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self._all_rows)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">export</span>(<span class="params">self, <span class="built_in">format</span>, **kwargs</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Export the RecordCollection to a given format (courtesy of Tablib).&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> self.dataset.export(<span class="built_in">format</span>, **kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">all</span>(<span class="params">self, as_dict=<span class="literal">False</span>, as_ordereddict=<span class="literal">False</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;Returns a list of all rows for the RecordCollection. If they haven&#x27;t</span></span><br><span class="line"><span class="string">        been fetched yet, consume the iterator and cache the results.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># By calling list it calls the __iter__ method</span></span><br><span class="line">        rows = <span class="built_in">list</span>(self)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> as_dict:</span><br><span class="line">            <span class="keyword">return</span> [r.as_dict() <span class="keyword">for</span> r <span class="keyword">in</span> rows]</span><br><span class="line">        <span class="keyword">elif</span> as_ordereddict:</span><br><span class="line">            <span class="keyword">return</span> [r.as_dict(ordered=<span class="literal">True</span>) <span class="keyword">for</span> r <span class="keyword">in</span> rows]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> rows</span><br></pre></td></tr></table></figure>
+
+<h1 id="Database类"><a href="#Database类" class="headerlink" title="Database类"></a>Database类</h1><p>在主类中，实现了上下文管理的with方法相关的魔法方法。在进入和退出时处理连接的开启与关闭，十分优雅。让使用者无需关心这些事情。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">close</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Closes the connection to the Database.&quot;&quot;&quot;</span></span><br><span class="line">    self.db.close()</span><br><span class="line">    self.<span class="built_in">open</span> = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__enter__</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__exit__</span>(<span class="params">self, exc, val, traceback</span>):</span></span><br><span class="line">    self.close()</span><br></pre></td></tr></table></figure>
+
+<h1 id="各种格式的导出"><a href="#各种格式的导出" class="headerlink" title="各种格式的导出"></a>各种格式的导出</h1><p>该库还提供了各种格式如json，xls，cvs的导出功能，是结合tablib库实现的。<br><a target="_blank" rel="noopener" href="http://docs.python-tablib.org/en/latest/">tablib文档</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2017/08/03/read-records-source-code/">http://guerbai.github.io/2017/08/03/read-records-source-code/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            <a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2017/08/30/several-js-async-code/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">JS异步的几种写法</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2017/07/10/read-june-source-code/">
+        <span class="next-text nav-default">june源码阅读</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

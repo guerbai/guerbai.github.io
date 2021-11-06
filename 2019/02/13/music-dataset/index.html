@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="音乐数据集汇总"/><meta name="keywords" content="摇滚乐, 推荐系统, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2019/02/13/music-dataset/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>音乐数据集汇总 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">音乐数据集汇总
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-02-13
+        </span><span class="post-visits"
+             data-url="/2019/02/13/music-dataset/"
+             data-title="音乐数据集汇总">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Million-Song-Dataset"><span class="toc-text">Million Song Dataset</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Lastfm%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-text">Lastfm数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1K-users-user-full-listening-history"><span class="toc-text">1K users (user full listening history)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#360K-users-user-top-artists"><span class="toc-text">360K users (user top artists)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HetRec-2011"><span class="toc-text">HetRec 2011</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSD%E2%80%99s-Lastfm"><span class="toc-text">MSD’s Lastfm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-text">其他数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#API"><span class="toc-text">API</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><p>接下来会研究一下音乐推荐系统，需要数据来进行算法及工程代码的演示，遂汇总一下网上开源的音乐数据集。</p>
+<h1 id="Million-Song-Dataset"><a href="#Million-Song-Dataset" class="headerlink" title="Million Song Dataset"></a>Million Song Dataset</h1><p>说到音乐数据集第一位肯定是MSD，它包含了100万首歌曲的信息，总量有280GB大小。由于数据量的确较大，它使用了h5的文件压缩格式，并提供了一些<a target="_blank" rel="noopener" href="https://github.com/tbertinmahieux/MSongsDB">code</a>用于读这种文件。</p>
+<span id="more"></span>
+
+<p>每首歌对应一个文件，字段包括歌曲的方方面面，如 <code>artist_mbid</code> ， <code>artist_name</code> ， <code>title</code> ， <code>tempo</code> 等等，所有字段<a target="_blank" rel="noopener" href="https://labrosa.ee.columbia.edu/millionsong/pages/example-track-description">在这里列出</a>。<br>路径是奇怪的，Q&amp;A中解释说，实在无法把所有文件都放到同一个目录下，目录的组织方式为：<br>某首歌曲所在位置为它的The Echo Nest track IDs的第三、第四、第五位形成的层级目录，比如 <code>MillionSong/data/A/D/H/TRADHRX12903CD3866.h5</code> 。</p>
+<p>此外，在MSD的基础上，社区还贡献了不少补充数据集，方便对MSD做各方面的研究。在首页可以很容易找到它们。</p>
+<ul>
+<li>  <a target="_blank" rel="noopener" href="https://labrosa.ee.columbia.edu/millionsong/secondhand">The SecondHandSongs Dataset</a>: 一些歌曲被翻唱的信息，以及<a target="_blank" rel="noopener" href="https://secondhandsongs.com/">Second Hand</a>网站对各翻唱的performance值。</li>
+<li>  <a target="_blank" rel="noopener" href="https://labrosa.ee.columbia.edu/millionsong/musixmatch">The musiXmatch Dataset</a>: 以bag-of-words的形式提供了MSD中77%数量歌曲的歌词数据。</li>
+<li>  <a target="_blank" rel="noopener" href="https://labrosa.ee.columbia.edu/millionsong/lastfm">The Last.fm Dataset</a>: <a href="#org2ba734e">见下文</a></li>
+<li>  <a target="_blank" rel="noopener" href="https://labrosa.ee.columbia.edu/millionsong/tasteprofile">The Echo Nest Taste Profile Subset</a>: Echo Nest提供了可以与MSD关联的user-song-play count数据集，包含100万user，4800万播放记录。</li>
+<li>  <a target="_blank" rel="noopener" href="https://labrosa.ee.columbia.edu/millionsong/thisismyjam">thisismyjam-to-MSD mapping</a>: 音乐社交网站<a target="_blank" rel="noopener" href="https://www.thisismyjam.com/">thisisjam</a>的用户数据以及到MSD的关联。</li>
+<li>  <a target="_blank" rel="noopener" href="http://www.tagtraum.com/msd_genre_datasets.html">tagtraum genre annotations</a>: music genre标注。</li>
+<li>  <a target="_blank" rel="noopener" href="http://www.ifs.tuwien.ac.at/mir/msd/">Top MAGD dataset</a>: music genre标注。</li>
+</ul>
+<h1 id="Lastfm数据集"><a href="#Lastfm数据集" class="headerlink" title="Lastfm数据集"></a>Lastfm数据集</h1><p><a target="_blank" rel="noopener" href="https://www.last.fm/">last.fm</a>是一家英国的网络电台和音乐社区，其向发开者提供了<a target="_blank" rel="noopener" href="https://www.last.fm/api">丰富的API</a>，于是有很多机构或个人通过调用这些API来生成一些数据集。</p>
+<h2 id="1K-users-user-full-listening-history"><a href="#1K-users-user-full-listening-history" class="headerlink" title="1K users (user full listening history)"></a>1K users (user full listening history)</h2><p>《推荐系统实战》2.1节介绍到了<a target="_blank" rel="noopener" href="https://www.dtic.upf.edu/~ocelma/MusicRecommendationDataset/lastfm-1K.html">此数据集</a>，作为有上下文信息的隐性反馈数据集的代表。<br>它有两个文件，听歌记录与用户信息。<br>前者为近1000位听众至2009年5月5日为止的所有音乐播放记录与播放时间，以及音乐的title、artist name、musicbrain id等信息。<br>后者则记录了所有听众的性别、年龄、国家、注册时间的信息。<br>其中听歌记录的统计数字如下：</p>
+<ul>
+<li>  Total Lines:           19,150,868</li>
+<li>  Unique Users:                 992</li>
+<li>  Artists with MBID:        107,528</li>
+<li>  Artists without MBDID:     69,420</li>
+</ul>
+<h2 id="360K-users-user-top-artists"><a href="#360K-users-user-top-artists" class="headerlink" title="360K users (user top artists)"></a>360K users (user top artists)</h2><p>与1K数据集一起出现的还有360K users数据集。<br>包含user-artist关系信息以及用户信息。<br>用户信息与1K相同，不过数据量来到了360K，user-artist关系文件的一行为某user听某乐队的次数。<br>user-artist文件的统计数据如下：</p>
+<ul>
+<li>  Total Lines:           17,559,530</li>
+<li>  Unique Users:             359,347</li>
+<li>  Artists with MBID:        186,642</li>
+<li>  Artists without MBID:     107,373</li>
+</ul>
+<h2 id="HetRec-2011"><a href="#HetRec-2011" class="headerlink" title="HetRec 2011"></a>HetRec 2011</h2><p>这是2011年HetRec会议发布的<a target="_blank" rel="noopener" href="https://grouplens.org/datasets/hetrec-2011/">从Last.fm获取的数据集</a>。<br>与上两例不同的是它包含有社会好友关系，标签信息。其中文件数目比较多，但各文件列很较少，其中是很明显简单的关联关系，不再赘述。<br>统计数据如下：</p>
+<ul>
+<li>  1892 users</li>
+<li>  17632 artists</li>
+<li>  12717 好友关系</li>
+<li>  92834 user-listened artist relations</li>
+<li>  11946 tags</li>
+<li>  186479 tag assignments (tas), i.e. tuples [user, tag, artist]</li>
+</ul>
+<h2 id="MSD’s-Lastfm"><a href="#MSD’s-Lastfm" class="headerlink" title="MSD’s Lastfm"></a>MSD’s Lastfm<a id="org2ba734e"></a></h2><p>在MSD的首页可以看到此来自Lastfm的数据集（又一个，真的很容易搞乱。），它作为MSD的补充信息，可与其id直接关联。<br>数据量较大，是下面的样子：</p>
+<ul>
+<li>  943,347 matched tracks MSD &lt;-&gt; Last.fm</li>
+<li>  505,216 tracks with at least one tag</li>
+<li>  584,897 tracks with at least one similar track</li>
+<li>  522,366 unique tags</li>
+<li>  8,598,630 (track - tag) pairs</li>
+<li>  56,506,688 (track - similar track) pairs</li>
+</ul>
+<p>与MSD一样的奇怪的目录结构，每个歌曲对应一个json文件，长这个样子：<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/8cf5b699c1faf5c5922fabe47f42cded.jpg" alt="img"></p>
+<p>文件名是 TRAAAAW128F429D538.json 这样的编码可与MSD的某首歌关联起来，图中提供了基本的歌曲、作者信息、标签。<br>比较独特的是还有Lastfm直接提供的与此歌曲相似的歌曲列表以及相似度值。</p>
+<h1 id="其他数据集"><a href="#其他数据集" class="headerlink" title="其他数据集"></a>其他数据集</h1><ul>
+<li>  <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1612.01840">fma</a>: music audio大型数据集，917 GiB and 343 days of Creative Commons-licensed audio from 106,574 tracks from 16,341 artists and 14,854 albums, arranged in a hierarchical taxonomy of 161 genres。</li>
+<li>  <a target="_blank" rel="noopener" href="https://www.kaggle.com/nolanbconaway/pitchfork-data/home">Pitchfork reviews</a>: <a target="_blank" rel="noopener" href="https://pitchfork.com/">Pitchfork</a>是一家在线音乐杂志，有人爬取了自1999年以来的18000份音乐评论文章放到Kaggle上用于分析和学习。 格式为sqlite文件，主要提供信息为文章的id、标题、artist、文章链接、评分、作者、发布时间等。</li>
+<li>  <a target="_blank" rel="noopener" href="https://github.com/walkerkq/musiclyrics">50 Years of Pop Music Lyrics</a>: 1964到2015Billboard每年的Year-End Hot100歌曲的歌词。</li>
+<li>  <a target="_blank" rel="noopener" href="https://www.kaggle.com/gyani95/380000-lyrics-from-metrolyrics/home">MetroLyrics</a>: 从MetroLyrics爬取的38万首歌词，csv格式，字段有song title，artist，genre，lyric。</li>
+<li>  <a target="_blank" rel="noopener" href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge">kkbox</a>: WSDM 2018比赛使用的数据集，<a target="_blank" rel="noopener" href="https://www.kkbox.com/intl/">kkbox</a>作为一家亚洲音乐服务商，提供了很多亚洲歌曲信息，这点是以上其他所不具有的。</li>
+<li>  <a target="_blank" rel="noopener" href="https://www.kaggle.com/geomack/spotifyclassification/home">Spotify Song Attributes</a>: 作者调用spotify的api获取了2017首歌的数据并尝试获取训练一个模型来预测自己是否喜欢一首歌。</li>
+</ul>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>根据一些官方或民间的API，可以根据自己的需求生成自定义的数据集。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.last.fm/api">last.fm API</a></li>
+<li><a target="_blank" rel="noopener" href="http://developer.echonest.com/">echonest API</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.spotify.com/documentation/web-api/">Spotify API</a></li>
+<li><a target="_blank" rel="noopener" href="http://static.echonest.com/enspex/">The Echo Nest / Spotify APIs work together</a></li>
+<li><a target="_blank" rel="noopener" href="https://musicbrainz.org/doc/Developer_Resources">music brain API</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yanunon/NeteaseCloudMusic/wiki/%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90API%E5%88%86%E6%9E%90">云音乐API</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.quora.com/What-is-the-best-most-complete-API-or-database-for-searching-music-data">Quora: What is the best, most complete API or database for searching music data?</a></li>
+</ul>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2019/02/13/music-dataset/">http://guerbai.github.io/2019/02/13/music-dataset/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%91%87%E6%BB%9A%E4%B9%90/">摇滚乐</a>
+            <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">推荐系统</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/02/16/intro-to-collaborative-filtering/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">基于邻域的协同过滤</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/10/23/anli-karabiner/">
+        <span class="next-text nav-default">使用 Karabiner 改善 Poker 键盘体验</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

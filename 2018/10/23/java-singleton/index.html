@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="关于Java单例模式需要知道的"/><meta name="keywords" content="读书, java, 源码阅读, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/10/23/java-singleton/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>关于Java单例模式需要知道的 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">关于Java单例模式需要知道的
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-23
+        </span><span class="post-visits"
+             data-url="/2018/10/23/java-singleton/"
+             data-title="关于Java单例模式需要知道的">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Singleton-in-lt-Thinking-in-Java-gt"><span class="toc-text">Singleton in &lt;Thinking in Java&gt;</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%A0%E7%A7%8D%E5%86%99%E6%B3%95%E7%9A%84%E8%80%83%E9%87%8F"><span class="toc-text">几种写法的考量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD"><span class="toc-text">延迟加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">线程安全性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">Java语言设计中的单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Runtime"><span class="toc-text">Runtime</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Desktop"><span class="toc-text">Desktop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#System-SecurityManager"><span class="toc-text">System.SecurityManager</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>单例模式，甚至是所有的二十几种设计模式，已经是一个被说得快要烂掉的话题了。<br>笔者也自觉网上太多类似内容未免有些聒噪，然而最近在看《<a target="_blank" rel="noopener" href="https://book.douban.com/subject/2130190/">Java编程思想</a>》时，意识到该书之意味无穷有很大一部分原因在于将各色设计模式整合于各处，在描述讲解Java语言的设计时，各种成熟的设计便在例子与解读中缓缓流淌而出。  </p>
+<p>诚然，要论设计模式，若用Python来举例，总不免会感觉一些例子着实有些迁强，而Java才是设计模式生长的沃土，在很多内置库中便采用了这些设计与实现。  </p>
+<span id="more"></span>
+
+<p>故笔者意欲总结、学习一下在该书、Java内置语言实现方面所用到的设计模式，以及采用这种设计的思考，并不同于网上随处可见模式讲解以及代码罗列。<br>遂有些篇。</p>
+<h1 id="Singleton-in-lt-Thinking-in-Java-gt"><a href="#Singleton-in-lt-Thinking-in-Java-gt" class="headerlink" title="Singleton in &lt;Thinking in Java&gt;"></a>Singleton in <code>&lt;Thinking in Java&gt;</code></h1><p>作者在第六章 <em>访问控制权限</em> 的 <em>类的访问权限</em> 中即举了一个 <em>单例模式</em> 的例子，此时前面的章节只讲了操作符、 <code>if-else</code> 与构造器的内容，连函数都没开讲，甚至在代码例子中设计到 <code>public static Soup1 makeSoup()</code> 这样的语句也要跟读者补充一下Soup1是返回值的类型的知识。<br>那作者何故要在此节的例子中直接引入设计模式这样相对而言更为高深的话题呢？这对于作者讲解类的访问权限有什么帮助呢？</p>
+<p>例子很简单，诸君想必已见过无数次：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Soup</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Soup</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Soup ps1 = <span class="keyword">new</span> Soup();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Soup <span class="title">access</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ps1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个常见的单例写法，看到代码之后很容易明悉作者的意图，正是由于该类的构造函数被设定为private，才保证其不能被客户端任意实例化，只能通过类设计者提供的唯一入口来获取此实例，保证了单例的唯一性。  </p>
+<p>此时反观Python，由于其并未具有类似Java语言private提供的这种保证，其单例模式的实现看起来更像是一种hack，需要对Python有一些更深入的理解才可领悟，对比如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    _instance = <span class="literal">None</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span>(<span class="params">cls, *args, **kw</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> cls._instance:</span><br><span class="line">            cls._instance = <span class="built_in">super</span>(Singleton, cls).__new__(cls, *args, **kw)</span><br><span class="line">        <span class="keyword">return</span> cls._instance</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>显然，就两种版本而言，Python的实现相较于Java需要对语言本身更为深入的理解。<br>要看懂Python版本的单例模式，你需要了解到Python <code>__init__</code> 与 <code>__new__</code> 的区别， <code>*args</code> 与 <code>**kw</code> 这种写法的意思以及继承的有关知识。  </p>
+<p>本书后文 <em>类型信息</em> 一章 <em>空对象</em> 一节，给出了一个使用单例模式的典型场景。<br>使用一个static final的单例来表示系统中的空对象，比如一个不存在的Person，可以保证该对象不被改变，从而给系统带来一个有效的对象，并且可以减少和优化四处判断空指针的dirty code。</p>
+<h1 id="几种写法的考量"><a href="#几种写法的考量" class="headerlink" title="几种写法的考量"></a>几种写法的考量</h1><p>在单例模式的实现上也有一定的差异，这其中设计到一些效率与线程安全性方面的考量，并不是“茴香豆”的茴有几种写法一般的炫技取乐。</p>
+<h2 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h2><p>在上面关于Soup的例子中，可以看出在类被加载时其单例便已经被构造成功了。<br>这就好比饭店煮了一碗汤，材料与能源直接消耗掉，却不一定有顾客去真的喝这碗汤，这便形成了一种浪费。<br>在大型程序中，有些对象的构造的确是要消耗比较大的资源的，等到有顾客需要时，才去构造，会是一种行之有效的优化。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Soup</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Soup</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Soup ps1;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Soup <span class="title">access</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ps1 == <span class="keyword">null</span>) &#123;</span><br><span class="line">            ps1 = <span class="keyword">new</span> Soup();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ps1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如此便是一种优化了。</p>
+<h2 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h2><p>然而，上面的例子是有隐患的，它并不是线程安全的，由于存在<a target="_blank" rel="noopener" href="https://github.com/guerbai/it-does-works">竞态条件</a>的问题，以上的写法在多线程环境下，只是 <strong>有可能</strong> 运行正确，实际上它无法保证该类只有一个实例。<br>其实要消除这种隐患很简单，将access方法标记为synchronized即可。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Soup <span class="title">access</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (ps1 == <span class="keyword">null</span>) &#123;</span><br><span class="line">        ps1 = <span class="keyword">new</span> Soup();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ps1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然而，对线程安全性的保证往往是有性能代价的，上述写法的synchronized实际上只是为了保护ps1的确为null时的情况，而当其已被实例化之后多个线程再去access时，也会受到一定的性能影响，而此时synchronized其实是不再需要了的。  </p>
+<p>为解决此问题，又有一些其他的写法，比如 <em>内部类</em> 、 <em>双重检查</em> 、 <em>enum</em> 等，会引入Java语言其他的细节，此处不再多表。</p>
+<h1 id="Java语言设计中的单例模式"><a href="#Java语言设计中的单例模式" class="headerlink" title="Java语言设计中的单例模式"></a>Java语言设计中的单例模式</h1><p>在Java语言自身的设计实现中，也随便可见单例模式的身影，现举例如下。</p>
+<h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Runtime</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Runtime currentRuntime = <span class="keyword">new</span> Runtime();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Runtime <span class="title">getRuntime</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> currentRuntime;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Runtime</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Runtime采用了最初的Soup写法，毕竟它是Java运行时必要的对象，也没有延迟加载的必要，直接在类加载时实例化，也不会遭遇线程安全性的问题，很干净且合理。</p>
+<h2 id="Desktop"><a href="#Desktop" class="headerlink" title="Desktop"></a>Desktop</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Desktop</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> synchronizedsynchronized Desktop <span class="title">getDesktop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (GraphicsEnvironment.isHeadless()) <span class="keyword">throw</span> <span class="keyword">new</span> HeadlessException();</span><br><span class="line">        <span class="keyword">if</span> (!Desktop.isDesktopSupported()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">&quot;Desktop API is not &quot;</span> +</span><br><span class="line">                                                    <span class="string">&quot;supported on the current platform&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        sun.awt.AppContext context = sun.awt.AppContext.getAppContext();</span><br><span class="line">        Desktop desktop = (Desktop)context.get(Desktop.class);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (desktop == <span class="keyword">null</span>) &#123;</span><br><span class="line">            desktop = <span class="keyword">new</span> Desktop();</span><br><span class="line">            context.put(Desktop.class, desktop);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> desktop;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Java图型化界面中，Desktop采用了线程安全的延迟加载，这在很大程序上依赖于该类的特性，Desktop是否被支持，包括App的上下文都是要考虑的因素，最后才去创建实例。<br>在这里，并未看到为了synchronized造成的一点性能影响而采用其他写法。</p>
+<h2 id="System-SecurityManager"><a href="#System-SecurityManager" class="headerlink" title="System.SecurityManager"></a>System.SecurityManager</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecurityManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> initialized = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SecurityManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(SecurityManager.class) &#123;</span><br><span class="line">            SecurityManager sm = System.getSecurityManager();</span><br><span class="line">            <span class="comment">/* whatever code block */</span></span><br><span class="line">            initialized = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">System</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SecurityManager security = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SecurityManager <span class="title">getSecurityManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> security;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这的确是很特立独行的一种写法，可以看到，两个类相互配合共同实现了SecurityManager的单例，并且在System中并未在get函数或是类加载时进行初始化。<br>SecurityManager的单例并不是其自身的一个属性，而是在System中，同时，全局唯一访问入口也在System的getSecurityManager方法。  在程序设计上让System持有其他类的实例，并且保证了它是单例的。  </p>
+<p>可以注意到，System中该属性使用了volatile修饰，避免多纯种之间的可见性问题，这是为了满足security可以为null的设计需要，这种灵活性是上面的其他例子所没有的。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过思考《Java编程思想》作者介绍单例模式的思路，以及一些写法的改进与讨论，再加上最后Java语言本身的设计实现上的例子，对单例模式可以有更进一步的了解和对实际应用的思考。<br>单例模式可以实现得很简单，也可以实现得较为复杂，其间的一些取舍与优劣还需诸君在实际应用中考虑具体情况，选择最合适的那一种。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li> <a target="_blank" rel="noopener" href="https://book.douban.com/subject/2130190/">Thinking in Java</a></li>
+<li> <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/">Java8 document</a></li>
+<li> <a target="_blank" rel="noopener" href="https://github.com/iluwatar/java-design-patterns">java-design-patterns</a></li>
+<li> <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31046230">线程安全的单例类</a></li>
+</ol>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/10/23/java-singleton/">http://guerbai.github.io/2018/10/23/java-singleton/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%AF%BB%E4%B9%A6/">读书</a>
+            <a href="/tags/java/">java</a>
+            <a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/10/23/anli-karabiner/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用 Karabiner 改善 Poker 键盘体验</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/10/19/python-gil-exist/">
+        <span class="next-text nav-default">你见过Python的GIL吗</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

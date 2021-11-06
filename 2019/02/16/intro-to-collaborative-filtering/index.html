@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="基于邻域的协同过滤"/><meta name="keywords" content="推荐系统, 算法, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>基于邻域的协同过滤 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">基于邻域的协同过滤
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-02-16
+        </span><span class="post-visits"
+             data-url="/2019/02/16/intro-to-collaborative-filtering/"
+             data-title="基于邻域的协同过滤">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%94%A8%E6%88%B7%E7%89%A9%E5%93%81%E5%85%B3%E7%B3%BB%E7%9F%A9%E9%98%B5"><span class="toc-text">生成用户物品关系矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E7%9B%B8%E4%BC%BC%E5%BA%A6%E7%9F%A9%E9%98%B5"><span class="toc-text">计算相似度矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90"><span class="toc-text">推荐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>此篇使用朴素的代码介绍基于邻域的协同过滤算法机制。</p>
+<p>为了使说明过程更清楚，这里使用<a target="_blank" rel="noopener" href="https://gist.githubusercontent.com/guerbai/3f4964350678c84d359e3536a08f6d3a/raw/f62f26d9ac24d434b1a0be3b5aec57c8a08e7741/user_book_ratings.txt">自已编造的数据</a>。每一行记录着某用户对某本书的评分，评分区间为1至5。</p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">data_url = <span class="string">&#x27;https://gist.githubusercontent.com/guerbai/3f4964350678c84d359e3536a08f6d3a/raw/f62f26d9ac24d434b1a0be3b5aec57c8a08e7741/user_book_ratings.txt&#x27;</span></span><br><span class="line">df = pd.read_csv(data_url, </span><br><span class="line">            sep = <span class="string">&#x27;,&#x27;</span>,</span><br><span class="line">            header = <span class="literal">None</span>,                   </span><br><span class="line">            names = [<span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;book_id&#x27;</span>, <span class="string">&#x27;rating&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (df.head())</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;-----&#x27;</span>)</span><br><span class="line">user_count = df[<span class="string">&#x27;user_id&#x27;</span>].unique().shape[<span class="number">0</span>]</span><br><span class="line">book_count = df[<span class="string">&#x27;book_id&#x27;</span>].unique().shape[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;user_count: &#x27;</span>, user_count)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;book_count: &#x27;</span>, book_count)</span><br></pre></td></tr></table></figure>
+
+<pre><code>    user_id   book_id  rating
+0  user_001  book_001       4
+1  user_001  book_002       3
+2  user_001  book_005       5
+3  user_002  book_001       5
+4  user_002  book_003       4
+-----
+user_count:  6
+book_count:  6
+</code></pre>
+<h2 id="生成用户物品关系矩阵"><a href="#生成用户物品关系矩阵" class="headerlink" title="生成用户物品关系矩阵"></a>生成用户物品关系矩阵</h2><p>现在根据加载进来的数据生成推荐系统中至关重要的用户物品关系矩阵。可以理解为数据库中的一张表，一本书为一列，一行对应一个用户，当用户看过某本书并进行评分后，在对应的位置填入分数，其他位置均置为0，表示尚未看过。</p>
+<p>需要注意的是，矩阵取值要用下标表示，比如<code>matrix[2][2]</code>对应的是第三个用户对第三本书的评分情况，所以这里要做一个<code>user_id</code>, <code>book_id</code>到该矩阵坐标的对应关系，使用pandas的Series表示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user_id_index_series = pd.Series(<span class="built_in">range</span>(user_count), index=[<span class="string">&#x27;user_001&#x27;</span>, <span class="string">&#x27;user_002&#x27;</span>, <span class="string">&#x27;user_003&#x27;</span>, <span class="string">&#x27;user_004&#x27;</span>, <span class="string">&#x27;user_005&#x27;</span>, <span class="string">&#x27;user_006&#x27;</span>])</span><br><span class="line">book_id_index_series = pd.Series(<span class="built_in">range</span>(book_count), index=[<span class="string">&#x27;book_001&#x27;</span>, <span class="string">&#x27;book_002&#x27;</span>, <span class="string">&#x27;book_003&#x27;</span>, <span class="string">&#x27;book_004&#x27;</span>, <span class="string">&#x27;book_005&#x27;</span>, <span class="string">&#x27;book_006&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">construct_user_item_matrix</span>(<span class="params">df</span>):</span></span><br><span class="line">    user_item_matrix = np.zeros((user_count, book_count), dtype=np.int8)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> df.itertuples():</span><br><span class="line">        user_id = row[<span class="number">1</span>]</span><br><span class="line">        book_id = row[<span class="number">2</span>]</span><br><span class="line">        rating = row[<span class="number">3</span>]</span><br><span class="line">        user_item_matrix[user_id_index_series[user_id], book_id_index_series[book_id]] = rating</span><br><span class="line">    <span class="keyword">return</span> user_item_matrix</span><br><span class="line"></span><br><span class="line">user_book_matrix = construct_user_item_matrix(df)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;用户关系矩阵长这样：&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;-----&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (user_book_matrix)</span><br></pre></td></tr></table></figure>
+
+<pre><code>用户关系矩阵长这样：
+-----
+[[4 3 0 0 5 0]
+ [5 0 4 0 4 0]
+ [4 0 5 3 4 0]
+ [0 3 0 0 0 5]
+ [0 4 0 0 0 4]
+ [0 0 2 4 0 5]]
+</code></pre>
+<h2 id="计算相似度矩阵"><a href="#计算相似度矩阵" class="headerlink" title="计算相似度矩阵"></a>计算相似度矩阵</h2><p>所谓相似度，我们这里使用余弦相似度，其他的还有皮尔逊相关度、欧式距离、杰卡德相似度等，个中差别暂不细表。<br>计算公式为：</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/190fdce53dc3115406f3661c89fadd77.jpg"></p>
+<p>现在已经拿到了<code>user_book_matrix</code>，每个用户、每个物品都可以对应一个向量，比如<code>user_book_matrix[2]</code>为代表<code>user_003</code>的向量等于<code>[4, 0, 5, 3, 4, 0]</code>，而<code>user_book_matrix[:,2]</code>则代表了<code>book_003</code>：<code>[0， 4， 5， 0， 0， 2]</code>。</p>
+<p>这样基于用户和基于物品便分别可以计算出用户相似度矩阵与物品相似度矩阵。</p>
+<p>以用户相似度矩阵为例，计算后会得到一个形状为(user_count, user_count)的矩阵，比如<code>user_similarity_matrix[2][3]</code>的值为0.5，则表示<code>user_002</code>与<code>user_003</code>的余弦相似度为0.5。<br>此矩阵为对称矩阵，相应地，<code>user_similarity_matrix[3][2]</code>亦为0.5，而用户与自己自然是最相似的，遂有<code>user_similarity_matrix[n][n]</code>总是等于1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cosine_similarity</span>(<span class="params">vec1, vec2</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">round</span>(vec1.dot(vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2)), <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">construct_similarity_matrix</span>(<span class="params">user_item_matrix, dim=<span class="string">&#x27;user&#x27;</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> dim == <span class="string">&#x27;user&#x27;</span>:</span><br><span class="line">        similarity_matrix = np.zeros((user_count, user_count))</span><br><span class="line">        count = user_count</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        similarity_matrix = np.zeros((book_count, book_count))</span><br><span class="line">        count = book_count</span><br><span class="line">    get_vector = <span class="keyword">lambda</span> i: user_item_matrix[i] <span class="keyword">if</span> dim == <span class="string">&#x27;user&#x27;</span> <span class="keyword">else</span> user_item_matrix[:,i]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(user_count):</span><br><span class="line">        i_vector = get_vector(i)</span><br><span class="line">        similarity_matrix[i][i] = cosine_similarity(i_vector, i_vector)</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i, count):</span><br><span class="line">            j_vector = get_vector(j)</span><br><span class="line">            similarity = cosine_similarity(i_vector, j_vector)</span><br><span class="line">            similarity_matrix[i][j] = similarity</span><br><span class="line">            similarity_matrix[j][i] = similarity</span><br><span class="line">    <span class="keyword">return</span> similarity_matrix</span><br><span class="line"></span><br><span class="line">user_similarity_matrix = construct_similarity_matrix(user_book_matrix)</span><br><span class="line">book_similarity_matrix = construct_similarity_matrix(user_book_matrix, dim=<span class="string">&#x27;book&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;user_similarity_matrix:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (user_similarity_matrix)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;book_similarity_matrix:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (book_similarity_matrix)</span><br></pre></td></tr></table></figure>
+
+<pre><code>user_similarity_matrix:
+[[1.   0.75 0.63 0.22 0.3  0.  ]
+ [0.75 1.   0.91 0.   0.   0.16]
+ [0.63 0.91 1.   0.   0.   0.4 ]
+ [0.22 0.   0.   1.   0.97 0.64]
+ [0.3  0.   0.   0.97 1.   0.53]
+ [0.   0.16 0.4  0.64 0.53 1.  ]]
+book_similarity_matrix:
+[[1.   0.27 0.79 0.32 0.98 0.  ]
+ [0.27 1.   0.   0.   0.34 0.65]
+ [0.79 0.   1.   0.69 0.71 0.18]
+ [0.32 0.   0.69 1.   0.32 0.49]
+ [0.98 0.34 0.71 0.32 1.   0.  ]
+ [0.   0.65 0.18 0.49 0.   1.  ]]
+</code></pre>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>有了相似度矩阵，可以开始进行推荐。<br>首先可以为用户推荐与其品味相同的用户列表，这在知乎、豆瓣、网易云音乐这样具有社交属性的产品中很有意义。</p>
+<p>做法很简单，要为用户A推荐K位品味相似的用户(此处K取3)，则将<code>user_similarity_matrix</code>中关于A的那一行的值排序从最高往下取出K位即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recommend_similar_users</span>(<span class="params">user_id, n=<span class="number">3</span></span>):</span></span><br><span class="line">    user_index = user_id_index_series[user_id]</span><br><span class="line">    similar_users_index = pd.Series(user_similarity_matrix[user_index]).drop(index=user_index).sort_values(ascending=<span class="literal">False</span>).index[:n]</span><br><span class="line">    <span class="keyword">return</span> np.array(similar_users_index)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;recommend user_indexes %s to user_001&#x27;</span> % recommend_similar_users(<span class="string">&#x27;user_001&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>recommend user_indexes [1 2 4] to user_001
+</code></pre>
+<p>同时在物品维度，类似的推荐也是很有用的，比如QQ音乐给用户正在听的音乐推荐相似的歌曲，还有亚马逊中对用户刚购买的物品推荐相似的物品。<br>代码与推荐相似用户相同，无需做其他处理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recommend_similar_items</span>(<span class="params">item_id, n=<span class="number">3</span></span>):</span></span><br><span class="line">    item_index = book_id_index_series[item_id]</span><br><span class="line">    similar_item_index = pd.Series(book_similarity_matrix[item_index]).drop(index=item_index).sort_values(ascending=<span class="literal">False</span>).index[:n]</span><br><span class="line">    <span class="keyword">return</span> np.array(similar_item_index)</span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;recommend item_indexes %s to book_001&#x27;</span> % recommend_similar_items(<span class="string">&#x27;book_001&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>recommend item_indexes [4 2 3] to book_001
+</code></pre>
+<p>接下来是为用户推荐书籍，首先选出与该用户最相似的K个用户，然后找出这K个用户评过分的书籍的集合，再去掉该用户已经评过分的部分。<br>在剩下的书籍中，根据下面的公式，计算出该用户为某书籍的预计评分，将评分从高到低排序输出即可。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/84bf01e478190752aa7a91dcfe3249fa.jpg"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recommend_item_to_user</span>(<span class="params">user_id</span>):</span></span><br><span class="line">    user_index = user_id_index_series[user_id]</span><br><span class="line">    similar_users = recommend_similar_users(user_id, <span class="number">2</span>)</span><br><span class="line">    recommend_set = <span class="built_in">set</span>()</span><br><span class="line">    <span class="keyword">for</span> similar_user <span class="keyword">in</span> similar_users:</span><br><span class="line">        recommend_set = recommend_set.union(np.nonzero(user_book_matrix[similar_user])[<span class="number">0</span>])</span><br><span class="line">    recommend_set = recommend_set.difference(np.nonzero(user_book_matrix[user_index])[<span class="number">0</span>])</span><br><span class="line">    predict = pd.Series([<span class="number">0.0</span>]*<span class="built_in">len</span>(recommend_set), index=<span class="built_in">list</span>(recommend_set))</span><br><span class="line">    <span class="keyword">for</span> book_index <span class="keyword">in</span> recommend_set:</span><br><span class="line">        fenzi = <span class="number">0</span></span><br><span class="line">        fenmu = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> similar_users:</span><br><span class="line">            <span class="keyword">if</span> user_book_matrix[j][book_index] == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">continue</span> <span class="comment"># 相似用户未看过该书则不计入统计.</span></span><br><span class="line">            fenzi += user_book_matrix[j][book_index] * user_similarity_matrix[j][user_index]</span><br><span class="line">            fenmu += user_similarity_matrix[j][user_index]</span><br><span class="line">        <span class="keyword">if</span> fenmu == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        predict[book_index] = <span class="built_in">round</span>(fenzi/fenmu, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> predict.sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">recommend_item_to_user(<span class="string">&#x27;user_005&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>3    4.0
+2    2.0
+dtype: float64
+</code></pre>
+<p>以上是利用用户相似度矩阵来为用户推荐物品，同样也可以反过来为利用物品相似度矩阵来为用户推荐书籍。<br>做法是，找出该用户读过的所有书，为每本书找出两本与该书最相似的书籍，将找出来的所有书去掉用户已读过的，然后为书籍预测被用户评分的分值。</p>
+<p>这里的确有些绕，容易与上文缠在一起搞乱掉，遂举例如下：<br>比如<code>user_001</code>读过书<code>book_001</code>, <code>book_002</code>，<code>book_005</code>，找到的书籍集合再去掉用户已读过的结果为<code>&#123;&#39;book_003&#39;, &#39;book_006&#39;&#125;</code>，要为<code>book_003</code>预测分数，需要注意到它同时被<code>book_001</code>与<code>book_005</code>找出，要根据它们、用户对<code>book_001</code>与<code>book_005</code>的评分以及相似度套用至上文公式，来得出对<code>book_003</code>的分数为：<code>(4*0.79+5*0.71)/(0.79+0.71)=4.47</code>。</p>
+<p>则基于物品为用户推荐物品的函数为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recommend_item_to_user_ib</span>(<span class="params">user_id</span>):</span></span><br><span class="line">    user_index = user_id_index_series[user_id]</span><br><span class="line">    user_read_books = np.nonzero(user_book_matrix[user_index])[<span class="number">0</span>]</span><br><span class="line">    book_set = <span class="built_in">set</span>()</span><br><span class="line">    book_relation = <span class="built_in">dict</span>()</span><br><span class="line">    <span class="keyword">for</span> book <span class="keyword">in</span> user_read_books:</span><br><span class="line">        relative_books = recommend_similar_items(book, <span class="number">2</span>)</span><br><span class="line">        book_set = book_set.union(relative_books)</span><br><span class="line">        book_relation[book] = relative_books</span><br><span class="line">    book_set = book_set.difference(user_read_books)</span><br><span class="line">    predict = pd.Series([<span class="number">0.0</span>]*<span class="built_in">len</span>(book_set), index=<span class="built_in">list</span>(book_set))</span><br><span class="line">    <span class="keyword">for</span> book <span class="keyword">in</span> book_set:</span><br><span class="line">        fenzi = <span class="number">0</span></span><br><span class="line">        fenmu = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> similar_book, relative_books <span class="keyword">in</span> book_relation.items():</span><br><span class="line">            <span class="keyword">if</span> book <span class="keyword">in</span> relative_books:</span><br><span class="line">                fenzi += book_similarity_matrix[book][similar_book] * user_book_matrix[user_index][similar_book]</span><br><span class="line">                fenmu += book_similarity_matrix[book][similar_book]</span><br><span class="line">        predict[book] = <span class="built_in">round</span>(fenzi/fenmu, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> predict.sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">recommend_item_to_user_ib(<span class="string">&#x27;user_001&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>2    4.47
+5    3.00
+dtype: float64
+</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上是基于领域的协同过滤的运作机制介绍，只用了两个简单的数学公式，加上各种代码处理，便可以为用户做出一些推荐。</p>
+<p>就给用户推荐物品而言，基于用户与基于物品各有特点。<br>基于用户给出的推荐结果，更依赖于当前用户相近的用户群体的社会化行为，考虑到计算代价，它适合于用户数较少的情况，同时，对于新加入的物品的冷启动问题比较友好，然而相对于物品的相似性，根据用户之间的相似性做出的推荐的解释性是比较弱的，实时性方面，用户新的行为不一定会导致结果的变化。<br>基于物品给出的推荐结果，更侧重于用户自身的个体行为，适用于物品数较少的情况，对长尾物品的发掘好于基于用户，同时，新加入的用户可以很快得到推荐，并且物品之间的关联性更易懂，是更易于解释的，而且用户新的行为一定能导致结果的变化。</p>
+<p>显然，基于物品总体上要优于基于用户，历史上，也的确是基于用户先被发明出来，之后Amazon发明了基于物品的算法，现在基于用户的产品已经比较少了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.ethanrosenthal.com/2015/11/02/intro-to-collaborative-filtering/">Intro to Recommender Systems: Collaborative Filtering</a><br><a target="_blank" rel="noopener" href="https://time.geekbang.org/column/article/4802">【近邻推荐】人以群分，你是什么人就看到什么世界</a><br><a target="_blank" rel="noopener" href="https://www.infoq.cn/minibooks/recommendation-system-theroy">架构师特刊：推荐系统（理论篇）</a><br><a target="_blank" rel="noopener" href="https://tech.meituan.com/2015/01/22/mt-recommend-practice.html">美团推荐算法实践</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/">http://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">推荐系统</a>
+            <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/02/20/slopeone/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Slope One进行评分预测</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/02/13/music-dataset/">
+        <span class="next-text nav-default">音乐数据集汇总</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

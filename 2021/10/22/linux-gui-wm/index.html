@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Linux发行版与GUI介绍"/><meta name="keywords" content="软件, 折腾, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2021/10/22/linux-gui-wm/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Linux发行版与GUI介绍 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Linux发行版与GUI介绍
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-10-22
+        </span><span class="post-visits"
+             data-url="/2021/10/22/linux-gui-wm/"
+             data-title="Linux发行版与GUI介绍">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GNU-Linux%E7%9A%84%E8%AF%9E%E7%94%9F"><span class="toc-text">GNU&#x2F;Linux的诞生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-text">Linux发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GUI%E4%B8%8EX-Window-System"><span class="toc-text">GUI与X Window System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83"><span class="toc-text">桌面环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window-Manager"><span class="toc-text">Window Manager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h2 id="GNU-Linux的诞生"><a href="#GNU-Linux的诞生" class="headerlink" title="GNU/Linux的诞生"></a>GNU/Linux的诞生</h2><p>1991年8月25日，21岁的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%B5%AB%E5%B0%94%E8%BE%9B%E5%9F%BA%E5%A4%A7%E5%AD%A6">赫尔辛基大学</a>学生Linus Torvalds发布了他的开源操作系统，”Just a hobby, won’t be a big professional thing”，几年后，这个”hobby”–Linux成为了计算机历史上最重要的一个项目。</p>
+<p>与Windows这样以盈利的操作系统不同，Linux的理念是：</p>
+<blockquote>
+<p>Software is like sex; it’s better when it’s free.     –Linus Torvalds</p>
+</blockquote>
+<span id="more"></span>
+
+
+<p>时间再回到1983年，AT&amp;T与BSDI正因为Unix打得不可开交(<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unix_wars">Unix Wars</a>)，Richard Stallman创建了GNU(GNU’s Not Unix) Project，试图建立可以替代Unix的自由与开源版本操作系统。彼时的Unix已然非常庞大，经过了几年的努力，GNU重写了许多自由软件，其中包括今天耳熟能详的Tar、Bash、Grep等。</p>
+<p>到了90年代，GNU项目依然缺少操作系统内核。而一个完整的操作系统需要内核来连接硬件与软件，掌控CPU与内存来运行软件。此时横空出世的Linux，正是GNU所需要的。于是一个完整的替代Unix的操作系统诞生了：GNU/Linux！</p>
+<h2 id="Linux发行版"><a href="#Linux发行版" class="headerlink" title="Linux发行版"></a>Linux发行版</h2><p>因为是自由软件，任何人都可以根据自已的喜好定制自已的操作系统，到目前已经有了千级别的Linux发行版。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211020013629.png"></p>
+<p>一个Linux发行版包括：</p>
+<ul>
+<li>Linux内核</li>
+<li>一系列预装软件</li>
+<li>软件包管理器</li>
+<li>桌面环境(optional)</li>
+</ul>
+<p>各发行版之间有着几大派系和千丝万缕的衍生关系，比如使用apt的Debian家族，基于Debian衍生出了Ubuntu这样对新手十分友好的发行版，而基于Ubuntu又衍生出了Kubuntu、Linux Mint等等。</p>
+<p>此外另一大发行版派系是使用rpm/yum的Redhat家族，其中包括作为服务器常用的CentOS，以及著名的Fedora。</p>
+<p>事实上，很多Linux发行版都会原生装配一些用户并不会使用的软件包，这不仅占用了电脑的资源，同时也会占用使用者的心力。于是又诞生了两个讲究简单和最小化原则的发行版派系：Arch与Gentoo。</p>
+<p>完整的发行版的发展脉络及衍生关系见<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Linux_distribution#/media/File:Linux_Distribution_Timeline_Dec._2020.svg">维基百科</a>，看到也许会被吓一跳。</p>
+<h2 id="GUI与X-Window-System"><a href="#GUI与X-Window-System" class="headerlink" title="GUI与X Window System"></a>GUI与X Window System</h2><p>黑乎乎的终端是Linux给人留下的刻板印象，然而作为个人日常使用来讲，用户更喜欢也更需要GUI–用户图形界面。</p>
+<p>于是有了X Window System，它通过软件工具及架构协议来创建操作系统所用的GUI，此后逐渐扩展适用到各形各色的其他操作系统上，现在几乎所有的操作系统都能支持与使用X。</p>
+<p>X只是工具包及架构规范，本身并无实际参与运作的实体，目前依据X的规范架构所开发撰写成的实现体中，以X.Org最为普遍且受欢迎。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211022150000.png"></p>
+<p>X系统采用Client-Server的架构，与直觉不同的是，用户的显示器是服务端，真正在运行的软件是客户端。</p>
+<p>理解X与X.Org存在的意义可以举一个最简单的例子：</p>
+<p>使用VMWare安装Linux系统后往往所展示的桌面只是中间很小的一块，这时便可以使用X.Org提供的xrandr工具将分辨率设置为1920x1080来占满屏幕。</p>
+<h2 id="桌面环境"><a href="#桌面环境" class="headerlink" title="桌面环境"></a>桌面环境</h2><p>一个桌面环境由多个软件组成，这些软件共享同一个GUI，这些软件提供给用户视窗、文件夹、工具栏、壁纸、图标、拖放服务等内容。不同桌面环境在设计和功能上的特性会赋予其与众不同的外观和感觉。</p>
+<p>Linux有几套常用的桌面环境，包括GNOME、KDE、Xfce等，如第二节中描述，桌面环境只是一个发行版的可选部分，同时是可以替换的。一个Linux系统完全可以同时安装多种桌面环境来进行切换。</p>
+<p>这些桌面环境也有各自的特点和理念，比如Xfce的：</p>
+<blockquote>
+<p> 设计为可作为实际应用，快速加载及运行程序，并减少耗用系统资源</p>
+</blockquote>
+<p><strong>GNOME of Ubuntu</strong><br><img src="https://ubuntuclub.org/uploads/ubuntu-20-04-lts-scaled.jpg" alt="GNOME of Ubuntu"></p>
+<p><strong>KDE of Manjaro</strong><br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211022151409.png" alt="KDE of Manjaro"></p>
+<p><strong>Xfce of Artix</strong><br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211022151504.png" alt="Xfce of Artix"></p>
+<h2 id="Window-Manager"><a href="#Window-Manager" class="headerlink" title="Window Manager"></a>Window Manager</h2><p>窗口管理器与桌面环境不同，它只是用来控制窗口位置与外观，不包括设置壁纸、调节音量等能力</p>
+<p>各桌面环境都有自己的窗口管理器，比如GNOME的Mutter，Xfce的Xfwm4。它们为打开的软件窗口提供了最小化、最大化、关闭按钮，以及鼠标点击拖动的能力。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211022152216.png"></p>
+<p>与上述这些需要使用电脑鼠标控制不同，在Linux用户中还有另外一种非常流行的WM: Tiling Window Manager.</p>
+<p><strong>Bspwm of ArchCraft</strong><br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211022152956.png" alt="Bspwm of ArchCraft"></p>
+<p>使用这样的WM时，打开的软件窗口不会有<em>关闭</em>等图标，也无法通过拖拽来移动位置，窗口会自动铺满屏幕并排列好位置，就像瓷砖一样，非常酷炫且高效。</p>
+<p>值得一提的是，不需要桌面环境，只用X.Org+WM即可构建出GUI，在这种环境下比如要设置壁纸可以在终端中使用相应的工具xwallpaper，调节音量可以使用PauseAudio，是比较极客的玩法，优点是不会被预装上一堆本不需要的软件，同时会比一个完整的桌面环境占用更少的系统资源。这是一种“简单和最小化原则”的体现。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ShcR4Zfc6Dw">Why so many distros? The Weird History of Linux</a></p>
+<p><a target="_blank" rel="noopener" href="https://coolshell.cn/articles/2322.html">UNIX传奇(上篇)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/X%E8%A6%96%E7%AA%97%E7%B3%BB%E7%B5%B1">X窗口系统</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2021/10/22/linux-gui-wm/">http://guerbai.github.io/2021/10/22/linux-gui-wm/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%BD%AF%E4%BB%B6/">软件</a>
+            <a href="/tags/%E6%8A%98%E8%85%BE/">折腾</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2021/11/06/suckless/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Suckless--极简主义者的Linux世界</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/03/13/rank/">
+        <span class="next-text nav-default">推荐系统中的排序技术</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

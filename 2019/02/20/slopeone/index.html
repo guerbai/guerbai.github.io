@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Slope One进行评分预测"/><meta name="keywords" content="推荐系统, 算法, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2019/02/20/slopeone/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Slope One进行评分预测 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Slope One进行评分预测
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-02-20
+        </span><span class="post-visits"
+             data-url="/2019/02/20/slopeone/"
+             data-title="Slope One进行评分预测">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E7%89%A9%E5%93%81%E8%AF%84%E5%88%86%E5%B7%AE%E5%BC%82%E7%9F%A9%E9%98%B5"><span class="toc-text">构造物品评分差异矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E8%A1%8C%E8%AF%84%E5%88%86%E9%A2%84%E6%B5%8B"><span class="toc-text">进行评分预测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E7%9A%84%E8%AF%84%E5%88%86%E6%95%B0%E6%8D%AE"><span class="toc-text">新的评分数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E4%BB%B7"><span class="toc-text">评价</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>Slope One是一种基于物品的协同过滤算法，在2005年的paper《Slope One Predictors for Online Rating-Based Collaborative Filtering》被提出，用于预测用户对某一给定的物品的评分。</p>
+<p>依然使用<a href="https://guerbai.github.io/2019/02/16/intro-to-collaborative-filtering/">上一篇</a>中提到的自己编造的少量<a target="_blank" rel="noopener" href="https://gist.githubusercontent.com/guerbai/3f4964350678c84d359e3536a08f6d3a/raw/f62f26d9ac24d434b1a0be3b5aec57c8a08e7741/user_book_ratings.txt">评分数据</a>来描述该算法的运作机制。    </p>
+<span id="more"></span>
+
+<p>首先依然是加载数据和生成用户物品关系矩阵如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">data_url = <span class="string">&#x27;https://gist.githubusercontent.com/guerbai/3f4964350678c84d359e3536a08f6d3a/raw/f62f26d9ac24d434b1a0be3b5aec57c8a08e7741/user_book_ratings.txt&#x27;</span></span><br><span class="line">df = pd.read_csv(data_url, sep = <span class="string">&#x27;,&#x27;</span>, header = <span class="literal">None</span>, names = [<span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;book_id&#x27;</span>, <span class="string">&#x27;rating&#x27;</span>])</span><br><span class="line">user_count = df[<span class="string">&#x27;user_id&#x27;</span>].unique().shape[<span class="number">0</span>]</span><br><span class="line">item_count = df[<span class="string">&#x27;book_id&#x27;</span>].unique().shape[<span class="number">0</span>]</span><br><span class="line">user_id_index_series = pd.Series(<span class="built_in">range</span>(user_count), index=[<span class="string">&#x27;user_001&#x27;</span>, <span class="string">&#x27;user_002&#x27;</span>, <span class="string">&#x27;user_003&#x27;</span>, <span class="string">&#x27;user_004&#x27;</span>, <span class="string">&#x27;user_005&#x27;</span>, <span class="string">&#x27;user_006&#x27;</span>])</span><br><span class="line">item_id_index_series = pd.Series(<span class="built_in">range</span>(item_count), index=[<span class="string">&#x27;book_001&#x27;</span>, <span class="string">&#x27;book_002&#x27;</span>, <span class="string">&#x27;book_003&#x27;</span>, <span class="string">&#x27;book_004&#x27;</span>, <span class="string">&#x27;book_005&#x27;</span>, <span class="string">&#x27;book_006&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">construct_user_item_matrix</span>(<span class="params">df</span>):</span></span><br><span class="line">    user_item_matrix = np.zeros((user_count, item_count), dtype=np.int8)</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> df.itertuples():</span><br><span class="line">        user_id = row[<span class="number">1</span>]</span><br><span class="line">        book_id = row[<span class="number">2</span>]</span><br><span class="line">        rating = row[<span class="number">3</span>]</span><br><span class="line">        user_item_matrix[user_id_index_series[user_id], item_id_index_series[book_id]] = rating</span><br><span class="line">    <span class="keyword">return</span> user_item_matrix</span><br><span class="line"></span><br><span class="line">user_item_matrix = construct_user_item_matrix(df)</span><br><span class="line"><span class="built_in">print</span> (user_item_matrix)</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[4 3 0 0 5 0]
+ [5 0 4 0 4 0]
+ [4 0 5 3 4 0]
+ [0 3 0 0 0 5]
+ [0 4 0 0 0 4]
+ [0 0 2 4 0 5]]
+</code></pre>
+<h2 id="构造物品评分差异矩阵"><a href="#构造物品评分差异矩阵" class="headerlink" title="构造物品评分差异矩阵"></a>构造物品评分差异矩阵</h2><p>接下来生成两个shape为<code>(item_count, item_count)</code>的矩阵<code>differential_matrix</code>与<code>weight_matrix</code>。<br>前者记录物品两两之间的被评分差异情况，后者记录对某两个物品共同评分的人数，用于之后的计算做加权。</p>
+<p>以上面<code>user_item_matrix</code>举例来讲，index为2与4的item的共同评分人数为2(index为1与2的用户)，则计算这两者的评分差异为:<br><code>((4-4)+(5-4))/2 = 0.5</code>，故在<code>differential_matrix[2][4]</code>的位置填上0.5，同时在<code>weight_matrix[2][4]</code>的位置填上2。<br>同时，反过来，<code>differential_matrix[4][2]</code>的值为-0.5，而<code>weight_matrix[4][2]</code>的位置依然为2，这种相对应的位置不需要重复计算了。</p>
+<p>下面的函数接受一个用户物品关系矩阵，按照上述方法计算出这两个矩阵。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_differential</span>(<span class="params">ratings</span>):</span></span><br><span class="line">    item_count = ratings.shape[<span class="number">1</span>]</span><br><span class="line">    differential_matrix = np.zeros((item_count, item_count))</span><br><span class="line">    weight_matrix = np.zeros((item_count, item_count))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(item_count):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i+<span class="number">1</span>, item_count):</span><br><span class="line">            differential = <span class="number">0</span></span><br><span class="line">            i_rating_user_indexes = ratings[:, i].nonzero()[<span class="number">0</span>]</span><br><span class="line">            j_rating_user_indexes = ratings[:, j].nonzero()[<span class="number">0</span>]</span><br><span class="line">            rating_i_j_user = <span class="built_in">set</span>(i_rating_user_indexes).intersection(<span class="built_in">set</span>(j_rating_user_indexes))</span><br><span class="line">            user_count = <span class="built_in">len</span>(rating_i_j_user)</span><br><span class="line">            <span class="keyword">if</span> user_count == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">for</span> user_index <span class="keyword">in</span> rating_i_j_user:</span><br><span class="line">                differential += ratings[user_index][i] - ratings[user_index][j]</span><br><span class="line">            weight_matrix[i][j] = user_count</span><br><span class="line">            weight_matrix[j][i] = user_count</span><br><span class="line">            differential_matrix[i][j] = <span class="built_in">round</span>(differential/user_count, <span class="number">2</span>)</span><br><span class="line">            differential_matrix[j][i] = -differential_matrix[i][j]</span><br><span class="line">    <span class="keyword">return</span> differential_matrix, weight_matrix</span><br><span class="line"></span><br><span class="line">differential_matrix, weight_matrix = compute_differential(user_item_matrix)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;differential_matrix&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (differential_matrix)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;-----&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;weight_matrix&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (weight_matrix)</span><br></pre></td></tr></table></figure>
+
+<pre><code>differential_matrix
+[[ 0.   1.   0.   1.   0.   0. ]
+ [-1.   0.   0.   0.  -2.  -1. ]
+ [-0.   0.   0.   0.   0.5 -3. ]
+ [-1.   0.  -0.   0.  -1.  -1. ]
+ [-0.   2.  -0.5  1.   0.   0. ]
+ [ 0.   1.   3.   1.   0.   0. ]]
+-----
+weight_matrix
+[[ 0.  1.  2.  1.  3.  0.]
+ [ 1.  0.  0.  0.  1.  2.]
+ [ 2.  0.  0.  2.  2.  1.]
+ [ 1.  0.  2.  0.  1.  1.]
+ [ 3.  1.  2.  1.  0.  0.]
+ [ 0.  2.  1.  1.  0.  0.]]
+</code></pre>
+<h2 id="进行评分预测"><a href="#进行评分预测" class="headerlink" title="进行评分预测"></a>进行评分预测</h2><p>得到上述两个矩阵后可以根据用户的历史评分，为其进行未发生过评分关联的某物品的评分预测。</p>
+<p>比如要为index为1的用户<code>user_002</code>预测其对index为3的物品<code>item_004</code>的评分，计算过程如下：<br>先取出该用户看过的所有书，index分别为<code>[0, 2, 4]</code>;<br>以index为0的物品<code>item_001</code>开始，查<code>differential_matrix[3][0]</code>值为-1，表示<code>item_004</code>平均上比<code>item_001</code>低1分，以该用户对<code>item_001</code>的评分为5为基准，<code>5+(-1)=4</code>，则利用<code>item_001</code>可对<code>item_004</code>做出的评分判断为4分，查<code>weight_matrix</code>表知道同时评分过这两个物品的用户只有一个，置信度不够高，使用<code>4*1=4</code>，这便是加权的含义；<br>但这还没完，再根据index为2、4的item分别做上一步，并将得到的值加和为15，作为分子，分母为每次计算的人数之和，即加权平均，为4；<br>最后得此次预测评分为<code>15/4=3.75</code>。    </p>
+<p>下面的函数接受五个参数，分别为三个矩阵，用户id，物品id，结果为预测值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span>(<span class="params">ratings, differential_matrix, weight_matrix, user_index, item_index</span>):</span></span><br><span class="line">    <span class="keyword">if</span> ratings[user_index][item_index] != <span class="number">0</span>: <span class="keyword">return</span> ratings[user_index][item_index]</span><br><span class="line">    fenzi = <span class="number">0</span></span><br><span class="line">    fenmu = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> rated_item_index <span class="keyword">in</span> ratings[user_index].nonzero()[<span class="number">0</span>]:</span><br><span class="line">        fenzi += weight_matrix[item_index][rated_item_index] * \</span><br><span class="line">            (differential_matrix[item_index][rated_item_index] + ratings[user_index][rated_item_index])</span><br><span class="line">        fenmu += weight_matrix[rated_item_index][item_index]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">round</span>(fenzi/fenmu, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">predict(user_book_matrix, book_differential, weight_matrix, <span class="number">1</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>3.75
+</code></pre>
+<h2 id="新的评分数据"><a href="#新的评分数据" class="headerlink" title="新的评分数据"></a>新的评分数据</h2><p>当某用户对某个其之间未评分过的物品进行一次新的评分时，需要更新三个矩阵的值。令人欣喜的是，Slope One的计算过程使得这种更新非常迅速，时间复杂度仅为O(x)，其中x为该用户之前评过分的所有物品的数量。</p>
+<p>理所当然要在<code>user_item_matrix</code>填入评分值，此外，对此index为i的物品，需要与那x个物品依次组合在<code>weight_matrix</code>中将值增加1。同理<code>differential_matrix</code>也只需要累计上新的差值即可。<br>一个用户评价过的物品数目是很有限的，这种更新模型的方法可谓飞快。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_matrices</span>(<span class="params">user_index, item_index, rating</span>):</span></span><br><span class="line">    rated_item_indexes = user_item_matrix[user_index].nonzero()[<span class="number">0</span>]</span><br><span class="line">    user_item_matrix[user_index][item_index] = rating</span><br><span class="line">    <span class="keyword">for</span> rated_item_index <span class="keyword">in</span> rated_item_indexes:</span><br><span class="line">        old_weight = weight_matrix[rated_item_index][item_index]</span><br><span class="line">        weight_matrix[rated_item_index][item_index] += <span class="number">1</span></span><br><span class="line">        weight_matrix[item_index][rated_item_index] += <span class="number">1</span></span><br><span class="line">        differential_matrix[rated_item_index][item_index] = (differential_matrix[rated_item_index][item_index] \</span><br><span class="line">            * old_weight + (user_item_matrix[user_index][rated_item_index] - rating)) / (old_weight + <span class="number">1</span>)</span><br><span class="line">        differential_matrix[item_index][rated_item_index] = (differential_matrix[item_index][rated_item_index] \</span><br><span class="line">            * old_weight + (rating - user_item_matrix[user_index][rated_item_index])) / (old_weight + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h2><p><strong>简单易懂</strong>：参见代码；<br><strong>存储</strong>：存储上除了<code>user_item_matrix</code>，还需要存下<code>differential_matrix</code>与<code>weight_matrix</code>，为节省空间，可以只存后两者的对角线的右上部分即可；<br><strong>预测时间复杂度</strong>：用户评价过的物品数为x，由predict代码，则做一次预测的时间复杂度为O(x)；<br><strong>更新时间复杂度</strong>：当用户新进行一次评分时，由update_matrices代码，时间复杂度为O(x);<br><strong>新用户友好</strong>：当用户仅进行少量评分时，即可为其进行较高质量的推荐。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/1960789_Slope_One_Predictors_for_Online_Rating-Based_Collaborative_Filtering">《Slope One Predictors for Online Rating-Based Collaborative Filtering》</a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Slope_one">Slope One wiki</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2019/02/20/slopeone/">http://guerbai.github.io/2019/02/20/slopeone/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">推荐系统</a>
+            <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/02/23/shining-music/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Shining Music</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/02/16/intro-to-collaborative-filtering/">
+        <span class="next-text nav-default">基于邻域的协同过滤</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

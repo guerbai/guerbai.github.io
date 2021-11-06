@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="你见过Python的GIL吗"/><meta name="keywords" content="python, 并发, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/10/19/python-gil-exist/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>你见过Python的GIL吗 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">你见过Python的GIL吗
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-19
+        </span><span class="post-visits"
+             data-url="/2018/10/19/python-gil-exist/"
+             data-title="你见过Python的GIL吗">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EPython%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8EGIL%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-text">关于Python多线程与GIL的思考</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%90%E5%87%BA"><span class="toc-text">问题的提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%B9%B6%E5%8F%91%E7%9A%84%E7%9F%A5%E8%AF%86%E9%93%BA%E5%9E%AB"><span class="toc-text">关于并发的知识铺垫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%8A%A0%E9%80%9F%E6%AF%94%E8%AF%81%E6%98%8EGIL%E5%AD%98%E5%9C%A8%E7%9A%84%E5%81%87%E8%AE%BE"><span class="toc-text">使用加速比证明GIL存在的假设</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%81%E6%98%8E%E8%BF%87%E7%A8%8B"><span class="toc-text">证明过程</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>GIL是<strong>Global Interpreter Lock</strong>的简称，翻译为中文是<strong>全局解释器锁</strong>，维基百科的解释为：</p>
+<blockquote>
+<p>全局解释器锁是计算机程序设计语言解释器用于同步线程的一种机制，它使得任何时刻仅有一个线程在执行。即便在多核心处理器上，使用 GIL 的解释器也只允许同一时间执行一个线程。</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="关于Python多线程与GIL的思考"><a href="#关于Python多线程与GIL的思考" class="headerlink" title="关于Python多线程与GIL的思考"></a>关于Python多线程与GIL的思考</h1><h2 id="问题的提出"><a href="#问题的提出" class="headerlink" title="问题的提出"></a>问题的提出</h2><p>学过Python的人大都知道这个解释性语言最通用的实现(CPython)采用了GIL的方式，因此在网上可以看到一些言论说“Python因为有GIL存在，多线程就算了，还是多进程吧”。<br>可这并不符合使用Python编程的实际体验，的确会让人产生一些疑惑。<br>Python有其自带的多线程模块，而且著名的爬虫框架<a target="_blank" rel="noopener" href="https://github.com/scrapy/scrapy">scrapy</a>可以同时爬多个网站，感觉上其并没有受到GIL的限制。<br>与Java对比的话，Java也支持多线程也可以写爬虫，而Java并没有GIL，这与Python看起来好像没有什么区别，那么GIL到底有没有发挥作用呢？   </p>
+<p>能否使用Java和Python分别写一段语义上一样的代码，通过两段程序的output有着明显的不同来证明GIL的确存在并且起了一定的作用呢？<br>要做这个事情首先要进行理论上的更进一步探索，才能进行代码的实现与output的设计。</p>
+<h2 id="关于并发的知识铺垫"><a href="#关于并发的知识铺垫" class="headerlink" title="关于并发的知识铺垫"></a>关于并发的知识铺垫</h2><p>&lt;<a target="_blank" rel="noopener" href="https://book.douban.com/subject/26912767/">CSAPP</a>&gt;上提到了三种不同层面的 <strong>并发编程技术</strong>，分别为：</p>
+<ol>
+<li> 进程级别的并发；</li>
+<li> I/O多路复用；</li>
+<li> 线程级别的并发。</li>
+</ol>
+<p>显然此篇的讨论应该归到第三种类型。</p>
+<p>接下来，还要明确另一对容易搞错的概念， <strong>并发</strong> 与 <strong>并行</strong> 。<br><strong>并发</strong> 指的是逻辑控制流在时间上的重叠，而 <strong>并行</strong> 则是指对多核CPU的利用。<br>并行只是并发的一个真子集，有种说法是“并发是基于逻辑上的同时发生，而并行是基于物理上的同时发生”。<br>所以，在只有一个CPU的机器上也可以运行并发程序，却不能运行并行程序。</p>
+<h2 id="使用加速比证明GIL存在的假设"><a href="#使用加速比证明GIL存在的假设" class="headerlink" title="使用加速比证明GIL存在的假设"></a>使用加速比证明GIL存在的假设</h2><p>根据以上关于并发与并行的基本知识，Python与Java在并发程序上的本质区别便可以得知。<br>即，因为有GIL的存在，Python无法利用到多核处理器的并行性，但依然可以编写除此之外的并发程序，并获得效率提升。而Java则无此限制。  </p>
+<p>CSAPP中提到了对于并行程序性能的衡量标准: <strong>加速比</strong> 。</p>
+<div align=center>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3c07dec?w=228&h=108&f=png&s=4216"></p>
+</div>
+上述公式中，Sp称为加速比，其中p是处理器核的数量，Tp是指在p个核上程序的执行时间，当T1是程序顺序执行版本的执行时间时，Sp称为绝对加速比，而当Sp为程序并行版本在一个核上的执行时间时，Sp称为相对加速比。  
+
+<p>所以，可以使用绝对加速比来证明GIL的存在。<br>预期是，写一段无IO的计算密集性任务，分别交给Python与Java的一个(顺序执行)、多个线程(并行版本)去运行，算出各自的加速比，如果Python版本加速比小于1，而Java版本的加速比在计算机核心数左右，则说明是GIL起了作用，导致Python程序无法发挥多核的并行性。</p>
+<h1 id="证明过程"><a href="#证明过程" class="headerlink" title="证明过程"></a>证明过程</h1><p>依然使用书中的例子: 做一个加法任务，从0加到0x7fffffff求和，通过设置线程数n，将数字加和任务平均拆分为n份，给到各线程做自己的一份，最后将子任务的和再加和求得最后的结果。<br>那么当n等于1时，即为顺序版本，n大于1时则为并行版本。<br>书中代码使用C语言实现，此处分别改写为Python与Java两个版本。</p>
+<p>入口为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    thread_num1 = <span class="number">1</span></span><br><span class="line">    thread_num2 = <span class="number">2</span></span><br><span class="line">    thread_num4 = <span class="number">4</span></span><br><span class="line">    thread_num8 = <span class="number">8</span></span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;sum_task with thread_num1 cost time: &quot;</span> + <span class="built_in">str</span>(measure_time_cost(thread_num1)) + <span class="string">&quot;s in Python version.&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;sum_task with thread_num2 cost time: &quot;</span> + <span class="built_in">str</span>(measure_time_cost(thread_num2)) + <span class="string">&quot;s in Python version.&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;sum_task with thread_num4 cost time: &quot;</span> + <span class="built_in">str</span>(measure_time_cost(thread_num4)) + <span class="string">&quot;s in Python version.&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;sum_task with thread_num8 cost time: &quot;</span> + <span class="built_in">str</span>(measure_time_cost(thread_num4)) + <span class="string">&quot;s in Python version.&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>分别用尝试1，2，4，8个线程下运行结果，<code>measure_time_cost</code> 主要用来创建目标数量的线程，给各线程分配自己的计算任务，然后等待各线程全部返回，再加和，同时返回耗时，该函数实现为：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">measure_time_cost</span>(<span class="params">thread_nums</span>):</span></span><br><span class="line">    nums = <span class="number">99999999</span> <span class="comment"># Python加到0x7fffffff要太久，改一个小一点的值。</span></span><br><span class="line">    num_per_thread = <span class="built_in">int</span>((nums + <span class="number">1</span>) / thread_nums)</span><br><span class="line">    thread_list = [<span class="literal">None</span>] * thread_nums</span><br><span class="line">    task_list = [<span class="literal">None</span>] * thread_nums</span><br><span class="line">    start_at = time.time()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(thread_nums):</span><br><span class="line">        ct = SumTask()</span><br><span class="line">        thread_list[i] = threading.Thread(target=ct.run, args=(i, num_per_thread))</span><br><span class="line">        thread_list[i].start()</span><br><span class="line">        task_list[i] = ct</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(thread_nums):</span><br><span class="line">        thread_list[i].join()</span><br><span class="line">    end_at = time.time()</span><br><span class="line">    result = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(thread_nums):</span><br><span class="line">        result += task_list[i].get_result()</span><br><span class="line">    <span class="built_in">print</span> (result)</span><br><span class="line">    <span class="keyword">return</span> end_at - start_at</span><br></pre></td></tr></table></figure>
+
+<p>用到的SumTask就是一个简单的类用来处理返回值，不想去用queue，全局变量什么的。  </p>
+<p>由于笔者的mac只有两核，无法看到4核、8核等更明显的效果，Python版本的程序跑下来结果为：  </p>
+<div align=center>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3b5a99a?w=1058&h=372&f=png&s=66487"></p>
+</div>
+
+<p>而Java版本的相同实现，跑下来的结果为：  </p>
+<div align=center>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3aebe77?w=697&h=371&f=png&s=64233"></p>
+</div>
+
+<p>由于电脑核少，故主要看2核情况的对比，Python版本使用2核并没有得到明显的增速，加速比小于1。而Java版则差不多为2，发挥到了多核的效用，提高了计算密集性任务的效率。<br>随着线程数的增加，由于没有那么多核，线程切换的副作用体现了出来，后面时间会增加到比单线程还多。  </p>
+<p>之后，在<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/296546864/answer/501359602">知乎</a>上有网友利用8核电脑做了验证，依然与预期相符，Java的最大加速比为0.701/0.168=4.17，而Python的加速比均小于0.5。</p>
+<div align=center>
+
+<p><img src="https://user-gold-cdn.xitu.io/2018/10/19/1668d04bf3c7b9a5?w=1278&h=692&f=png&s=583611"></p>
+</div>
+
+<p>Java代码就是Executor提交任务，然后通过继承Callable利用Future得到结果。<br>完整版代码在<a target="_blank" rel="noopener" href="https://github.com/guerbai/it-does-works">这里</a>，直接复制进code runner跑就可以看到结果，很方便。</p>
+<p>这，可能是很多人第一次感受到GIL的存在吧~</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/10/19/python-gil-exist/">http://guerbai.github.io/2018/10/19/python-gil-exist/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            <a href="/tags/%E5%B9%B6%E5%8F%91/">并发</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/10/23/java-singleton/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">关于Java单例模式需要知道的</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/08/19/python-serialization-scenes/">
+        <span class="next-text nav-default">谈下python微服务中的序列化场景</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

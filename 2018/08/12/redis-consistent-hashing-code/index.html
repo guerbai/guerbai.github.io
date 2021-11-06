@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Redis集群一致性Hash效果的代码演示"/><meta name="keywords" content="微服务, java, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/08/12/redis-consistent-hashing-code/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Redis集群一致性Hash效果的代码演示 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Redis集群一致性Hash效果的代码演示
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-08-12
+        </span><span class="post-visits"
+             data-url="/2018/08/12/redis-consistent-hashing-code/"
+             data-title="Redis集群一致性Hash效果的代码演示">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7Hash%E5%AD%98%E5%9C%A8%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-text">一致性Hash存在的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E6%9C%BA%E9%83%A8%E7%BD%B2%E5%A4%9A%E4%B8%AARedis%E8%8A%82%E7%82%B9"><span class="toc-text">本机部署多个Redis节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">代码实现</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>在微服务领域，使用Redis做缓存可并不是一件容易的事情。<br>像新浪、推特这样的应用，许许多多的热点数据全都存放在Redis这一层，打到DB层的请求并不多，可以说非常依赖缓存了。如果缓存挂掉，流量全部穿透到DB层，其必然不堪其重，整个系统也会随之瘫痪，后果非常严重。<br>由于缓存数据量很大，Redis快正是快在其基于内存的快速存取，而计算机的内存资源又是十分有限的，故分布式缓存集群面临着伸缩性的要求。</p>
+<span id="more"></span>
+
+<h2 id="一致性Hash存在的意义"><a href="#一致性Hash存在的意义" class="headerlink" title="一致性Hash存在的意义"></a>一致性Hash存在的意义</h2><p>Redis集群中的各实例之间是并不知道对方的，需要在客户端实现路由法来将key路由到不同的redis节点。</p>
+<p>该路由算法是关键，它必须让新上线的缓存服务器对整个分布式缓存集群影响最小，使得扩容后，整个缓存服务器集群中已经缓存的数据尽可能还被访问到。</p>
+<p>若是使用一般的对key进行一次hash的算法，则会导致扩容后命中率极低。<br>如下表所示，当集群由3个节点扩容到4个节点时，会有75%的key无法命中。</p>
+<table>
+<thead>
+<tr>
+<th>hash(key)</th>
+<th>hash(key)/3</th>
+<th>hash(key)/4</th>
+<th>是否命中</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>是</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>是</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+<td>否</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>否</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>1</td>
+<td>否</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0</td>
+<td>2</td>
+<td>否</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>3</td>
+<td>否</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2</td>
+<td>0</td>
+<td>否</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0</td>
+<td>1</td>
+<td>否</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1</td>
+<td>2</td>
+<td>否</td>
+</tr>
+<tr>
+<td>11</td>
+<td>2</td>
+<td>3</td>
+<td>否</td>
+</tr>
+<tr>
+<td>12</td>
+<td>0</td>
+<td>0</td>
+<td>是</td>
+</tr>
+</tbody></table>
+<p>这可太糟糕了，当服务器数量为100台时，再增加一台新服务器，不能命中率将达到99%，这和整个缓存服务挂了一个效果。</p>
+<p>而一致性Hash正是为了解决这个问题而出现的，该路由算法通过引入一个一致性Hash环，以及进一步增加虚拟节点层，来实现尽可能高的命中率。<br>使用该算法，当节点由n扩容为n+1时，命中率可保持在n/(n+1)左右。</p>
+<p>关于该算法的具体原理与网上已经有一些说得很透彻的文章，本文不再赘述。<br>下面主要从代码实现及运行的方式来对此算法的效果进行展示。</p>
+<h2 id="本机部署多个Redis节点"><a href="#本机部署多个Redis节点" class="headerlink" title="本机部署多个Redis节点"></a>本机部署多个Redis节点</h2><p>要对一致性Hash进行验证，要做好准备工作，首先要有一个Redis集群。<br>这里我通过使用在本机上部署多个Redis实例指向不同端口来模拟这一形态。</p>
+<p>建立项目目录：<code>$ mkdir redis-conf</code><br>将redis的配置copy一份过来并复制为5份，分别命名为redis-6379.conf~redis-6383.conf。</p>
+<p>需要对其内容进行一些修改才能正常启动，分别找到配置文件中的如下两行并对数字进行相应修改。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">port 6379</span><br><span class="line">pidfile /var/run/redis_6379.pid</span><br></pre></td></tr></table></figure>
+<p>然后就可以分别启动了：<code>redis-server ./redis-6379 &amp;</code></p>
+<p>可以使用<code>redis-cli -p 6379</code>来指定连接的redis-server。<br>不妨进行一次尝试，比如在6379设置key 1 2，而到6380 get 1只能得到nil，说明它们是各自工作的，已经满足可以测试的条件。</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/fbe23bd067e44e9839b59ee16c889120.jpg"></p>
+<p>不同的节点展示</p>
+</div>
+
+
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>思路是这样的：<br>部署4个节点，从6379到6382，通过一致性Hash算法，将key: 0~99999共100000个key分别set到这4个服务器上，然后再部署一个节点6383，这时再从0到99999开始get一遍，统计get到的次数来验证命中率是否为期望的80%左右(4/5)。</p>
+<p>一致性Hash算法的实现严重借鉴了<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xrq730/p/5186728.html">这篇文章</a>，使用红黑树来做数据结构，来实现log(n)的查找时间复杂度，使用FNV1_32_HASH哈希算法来尽可能使key与节点分布得更加均匀，引入了虚拟节点，来做负载均衡。</p>
+<p>建议读者详细看下这篇文章，里面的讲解非常详细易懂。</p>
+<p>下面是我改写过后的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.guerbai.io.jedistry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis.clients.jedis.Jedis;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JedisProxy</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> String[][] redisNodeList = &#123;</span><br><span class="line">           &#123;<span class="string">&quot;localhost&quot;</span>, <span class="string">&quot;6379&quot;</span>&#125;,</span><br><span class="line">           &#123;<span class="string">&quot;localhost&quot;</span>, <span class="string">&quot;6380&quot;</span>&#125;,</span><br><span class="line">           &#123;<span class="string">&quot;localhost&quot;</span>, <span class="string">&quot;6381&quot;</span>&#125;,</span><br><span class="line">           &#123;<span class="string">&quot;localhost&quot;</span>, <span class="string">&quot;6382&quot;</span>&#125;,</span><br><span class="line">   &#125;;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, Jedis&gt; serverConnectMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> SortedMap&lt;Integer, String&gt; virtualNodes = <span class="keyword">new</span> TreeMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> VIRTUAL_NODES = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">static</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">for</span> (String[] str: redisNodeList)</span><br><span class="line">       &#123;</span><br><span class="line">           addServer(str[<span class="number">0</span>], str[<span class="number">1</span>]);</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getHash</span><span class="params">(String str)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">       <span class="keyword">final</span> <span class="keyword">int</span> p = <span class="number">16777619</span>;</span><br><span class="line">       <span class="keyword">int</span> hash = (<span class="keyword">int</span>)<span class="number">2166136261L</span>;</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length(); i++)</span><br><span class="line">           hash = (hash ^ str.charAt(i)) * p;</span><br><span class="line">       hash += hash &lt;&lt; <span class="number">13</span>;</span><br><span class="line">       hash ^= hash &gt;&gt; <span class="number">7</span>;</span><br><span class="line">       hash += hash &lt;&lt; <span class="number">3</span>;</span><br><span class="line">       hash ^= hash &gt;&gt; <span class="number">17</span>;</span><br><span class="line">       hash += hash &lt;&lt; <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 如果算出来的值为负数则取其绝对值</span></span><br><span class="line">       <span class="keyword">if</span> (hash &lt; <span class="number">0</span>)</span><br><span class="line">           hash = Math.abs(hash);</span><br><span class="line">       <span class="keyword">return</span> hash;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getServer</span><span class="params">(String node)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">       <span class="comment">// 得到带路由的结点的Hash值</span></span><br><span class="line">       <span class="keyword">int</span> hash = getHash(node);</span><br><span class="line">       <span class="comment">// 得到大于该Hash值的所有Map</span></span><br><span class="line">       SortedMap&lt;Integer, String&gt; subMap =</span><br><span class="line">               virtualNodes.tailMap(hash);</span><br><span class="line">       <span class="comment">// 第一个Key就是顺时针过去离node最近的那个结点</span></span><br><span class="line">       <span class="keyword">if</span> (subMap.isEmpty()) &#123;</span><br><span class="line">           subMap = virtualNodes.tailMap(<span class="number">0</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       Integer i = subMap.firstKey();</span><br><span class="line">       <span class="comment">// 返回对应的虚拟节点名称，这里字符串稍微截取一下</span></span><br><span class="line">       String virtualNode = subMap.get(i);</span><br><span class="line">       <span class="keyword">return</span> virtualNode.substring(<span class="number">0</span>, virtualNode.indexOf(<span class="string">&quot;&amp;&amp;&quot;</span>));</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addServer</span><span class="params">(String ip, String port)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; VIRTUAL_NODES; i++)</span><br><span class="line">       &#123;</span><br><span class="line">           String virtualNodeName = ip + <span class="string">&quot;:&quot;</span> + port + <span class="string">&quot;&amp;&amp;VN&quot;</span> + String.valueOf(i);</span><br><span class="line">           <span class="keyword">int</span> hash = getHash(virtualNodeName);</span><br><span class="line">           System.out.println(<span class="string">&quot;虚拟节点[&quot;</span> + virtualNodeName + <span class="string">&quot;]被添加, hash值为&quot;</span> + hash);</span><br><span class="line">           virtualNodes.put(hash, virtualNodeName);</span><br><span class="line">       &#125;</span><br><span class="line">       serverConnectMap.put(ip+<span class="string">&quot;:&quot;</span>+port, <span class="keyword">new</span> Jedis(ip, Integer.parseInt(port)));</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">(String key)</span> </span>&#123;</span><br><span class="line">       String server = getServer(key);</span><br><span class="line">       Jedis serverConnector = serverConnectMap.get(server);</span><br><span class="line">       <span class="keyword">if</span> (serverConnector.get(key) == <span class="keyword">null</span>) &#123;</span><br><span class="line">           System.out.println(key + <span class="string">&quot;not in host: &quot;</span> + server);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> serverConnector.get(key);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(String key, String value)</span> </span>&#123;</span><br><span class="line">       String server = getServer(key);</span><br><span class="line">       Jedis serverConnector = serverConnectMap.get(server);</span><br><span class="line">       serverConnector.set(key, value);</span><br><span class="line">       System.out.println(<span class="string">&quot;set &quot;</span> + key + <span class="string">&quot; into host: &quot;</span> + server);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flushdb</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">for</span> (String str: serverConnectMap.keySet()) &#123;</span><br><span class="line">           System.out.println(<span class="string">&quot;清空host: &quot;</span> + str);</span><br><span class="line">           serverConnectMap.get(str).flushDB();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">targetPercent</span><span class="params">(List&lt;String&gt; keyList)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> mingzhong = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">for</span> (String key: keyList) &#123;</span><br><span class="line">           String server = getServer(key);</span><br><span class="line">           Jedis serverConnector = serverConnectMap.get(server);</span><br><span class="line">           <span class="keyword">if</span> (serverConnector.get(key) != <span class="keyword">null</span>) &#123;</span><br><span class="line">               mingzhong++;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> (<span class="keyword">float</span>) mingzhong / keyList.size();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsistencyHashDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       JedisProxy jedis = <span class="keyword">new</span> JedisProxy();</span><br><span class="line">       jedis.flushdb();</span><br><span class="line">       List&lt;String&gt; keyList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">100000</span>; i++) &#123;</span><br><span class="line">           keyList.add(Integer.toString(i));</span><br><span class="line">           jedis.set(Integer.toString(i), <span class="string">&quot;value&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println(<span class="string">&quot;target percent before add a server node: &quot;</span> + jedis.targetPercent(keyList));</span><br><span class="line">       JedisProxy.addServer(<span class="string">&quot;localhost&quot;</span>, <span class="string">&quot;6383&quot;</span>);</span><br><span class="line">       System.out.println(<span class="string">&quot;target percent after add a server node: &quot;</span> + jedis.targetPercent(keyList));</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码对参考文章进行了一些改进。<br>首先，参考文章的getServer方法会有些问题，当key大于最大的虚拟节点hash值时tailMap方法会返回空，找不到节点会报错，其实这时应该去找hash值最小的一个虚拟节点。我加了处理，把这个环连上了。<br>下面getHash方法为FNV1_32_HASH算法，可以不用太在意。<br>VIRTUAL_NODES的值比较重要，当节点数目较少时，虚拟节点数目越大，命中率越高。</p>
+<p>在程序设计上也有很大的不同，我写了JedisProxy类，来做为client访问Redis的中间层，在该类的static块中利用服务器节点生成虚拟节点构造好红黑树，getServer里根据tailMap方法取出实际节点的地址，再由实际节点的地址直接拿到jedis对象，提供简单的get与set方法，先根据key拿特定的jedis对象，再进行get, set操作。</p>
+<p>addServer静态方法给了其动态扩容的能力，可以看到在main方法中，通过调用<code>JedisProxy.addServer(&quot;localhost&quot;, &quot;6383&quot;)</code>便直接增加了节点，不需要停应用。<br>targetPercent方法是用来统计命中率用。</p>
+<p>当虚拟节点为5时，命中率约为60%左右，把它加大到100后，可以到达预期的80%的命中率。</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/cd2da5a363979167522fb64370007ebd.jpg"></p>
+<p>测试结果</p>
+</div>
+
+<p>好的，完美。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/08/12/redis-consistent-hashing-code/">http://guerbai.github.io/2018/08/12/redis-consistent-hashing-code/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+            <a href="/tags/java/">java</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/08/19/check-param/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">说一下Python项目中的验参</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/08/12/pragmatic-programmer-note/">
+        <span class="next-text nav-default">【程序员修炼之道】书摘</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

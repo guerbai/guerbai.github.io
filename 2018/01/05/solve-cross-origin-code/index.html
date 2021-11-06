@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="解决跨域问题代码示例"/><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/01/05/solve-cross-origin-code/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>解决跨域问题代码示例 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">解决跨域问题代码示例
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-01-05
+        </span><span class="post-visits"
+             data-url="/2018/01/05/solve-cross-origin-code/"
+             data-title="解决跨域问题代码示例">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E6%BA%90%E4%B8%8B%E5%8F%AFAjax%E6%88%90%E5%8A%9F"><span class="toc-text">同源下可Ajax成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E6%BA%90%E6%97%B6Ajax%E4%B8%8D%E6%88%90%E5%8A%9F"><span class="toc-text">不同源时Ajax不成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%BA%94%E7%94%A8%E5%B1%82%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8C%85"><span class="toc-text">使用应用层第三方包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E5%B1%8F%E8%94%BD"><span class="toc-text">代理屏蔽</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E9%85%8D%E7%BD%AEHeader"><span class="toc-text">Nginx配置Header</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>本篇提供几个例子，从代码层面说明同源政策何时起作用，并尝试通过几种不同的方法解决跨域问题。</p>
+<h2 id="同源下可Ajax成功"><a href="#同源下可Ajax成功" class="headerlink" title="同源下可Ajax成功"></a>同源下可Ajax成功</h2><p>先是第一版，一个简单的flask程序。自己请求自己，不会有什么问题。</p>
+<span id="more"></span>
+
+<p>打开浏览器输入：<code>http://127.0.0.1:4000</code> 会返回字符串回去，交给浏览器，其解析运行其中的javascript代码，发出ajax请求，至同服务下的/get_data路由，得到数据后渲染至页面。<br>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">content = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="string">&lt;html lang=&quot;en&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;head&gt;</span></span><br><span class="line"><span class="string">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span></span><br><span class="line"><span class="string">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span></span><br><span class="line"><span class="string">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span></span><br><span class="line"><span class="string">    &lt;title&gt;Document&lt;/title&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">var xhr = new XMLHttpRequest();</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 指定通信过程中状态改变时的回调函数</span></span><br><span class="line"><span class="string">xhr.onreadystatechange = function()&#123;</span></span><br><span class="line"><span class="string">  // 通信成功时，状态值为4</span></span><br><span class="line"><span class="string">  if (xhr.readyState === 4)&#123;</span></span><br><span class="line"><span class="string">    if (xhr.status === 200)&#123;</span></span><br><span class="line"><span class="string">        document.body.innerHTML = xhr.responseText</span></span><br><span class="line"><span class="string">    &#125; else &#123;</span></span><br><span class="line"><span class="string">        document.body.innerHTML = xhr.statusText</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">&#125;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">xhr.onerror = function (e) &#123;</span></span><br><span class="line"><span class="string">  console.error(xhr.statusText);</span></span><br><span class="line"><span class="string">&#125;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// open方式用于指定HTTP动词、请求的网址、是否异步</span></span><br><span class="line"><span class="string">xhr.open(&#x27;GET&#x27;, &#x27;http://127.0.0.1:4000/get_data&#x27;, true);</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 发送HTTP请求</span></span><br><span class="line"><span class="string">xhr.send(null);</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span>():</span></span><br><span class="line">    <span class="keyword">return</span> content</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/get_data&#x27;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;got data!&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(port=<span class="number">4000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/418666470665dea4b68514f506c1c8c5.jpg"></p>
+<p>此处需要注意的是，若127.0.0.1换成localhost则该请求会被同源政策禁止。</p>
+<h2 id="不同源时Ajax不成功"><a href="#不同源时Ajax不成功" class="headerlink" title="不同源时Ajax不成功"></a>不同源时Ajax不成功</h2><p>此时，我们再启一个flask项目，端口定在5000，修改上面代码中xhr open的地址，使4000端口的ajax去5000取数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/get_data_5000&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;got data in 5000!&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(port=<span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+<p>得到如下结果：<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/168d0ac47c26d05aac2ce1deb213f6d5.jpg"></p>
+<p>显然，由于端口号已经不一致，违反了同源政策，请求失败。</p>
+<h2 id="使用应用层第三方包"><a href="#使用应用层第三方包" class="headerlink" title="使用应用层第三方包"></a>使用应用层第三方包</h2><p>在应用层，使用第三方包增加http response header的方式来处理。<br>5000项目变为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask_cors <span class="keyword">import</span> CORS</span><br><span class="line">app = Flask(__name__)</span><br><span class="line">CORS(app)</span><br></pre></td></tr></table></figure>
+<p>重启项目后，访问<code>http://127.0.0.1:4000</code>即可拿到5000的数据。<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/ed9a47ef1af1755a3dbd360a784ae2eb.jpg"></p>
+<p>可以看到第三方包自动处理了response header。<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/58e3537abc161fa6a69e45d3ef9e50e9.jpg"></p>
+<p>此处不只是flask，不只是python，各个语言，各种web框架，都可以在这一层通过第三方包的形式来处理跨域问题，如果找不到相关插件，大不了自己写一个好喽。</p>
+<h2 id="代理屏蔽"><a href="#代理屏蔽" class="headerlink" title="代理屏蔽"></a>代理屏蔽</h2><p>此时要Nginx上场了。<br>思路是，启项目于4000和5000端口，浏览器不直接通过端口访问web服务，而是通过Nginx的80端口，Nginx将实际上有两个项目这件事情对浏览器屏蔽掉。<br>改Nginx配置为:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">       <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">       <span class="attribute">server_name</span>  localhost;</span><br><span class="line"></span><br><span class="line">       <span class="attribute">location</span> / &#123;</span><br><span class="line">           <span class="attribute">proxy_pass</span> http://127.0.0.1:4000;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="attribute">location</span> /get_data_5000 &#123;</span><br><span class="line">           <span class="attribute">proxy_pass</span> http://127.0.0.1:5000/get_data_5000;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>然后去掉flask-cors插件，再将4000中的ajax url改为<code>http://127.0.0.1/get_data_5000</code>。</p>
+<p>效果如图：<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/8f04fc58987759286a00971dbc0fa6b6.jpg"></p>
+<p>可以看到，此时不再需要response header中的Access-Control-Allow-Origin即可请求到另一个项目的服务。</p>
+<p>这种处理方法可以联想到设计模式中的facade模式，此时Nginx即为外观层，后面到底有多少个项目在提供服务，请求者不需要关心。</p>
+<p>不过这种方式是有一定局限性的，即只有这个Nginx可导向的服务才可不受跨域问题影响。</p>
+<h2 id="Nginx配置Header"><a href="#Nginx配置Header" class="headerlink" title="Nginx配置Header"></a>Nginx配置Header</h2><p>移除之前的Nginx配置，通过4000端口访问页面，将5000端口的项目通过Nginx访问，并在Nginx这一层，来处理response header。</p>
+<p>在<a target="_blank" rel="noopener" href="https://enable-cors.org/server_nginx.html">这里</a>抄一下配置。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /get_data_5000 &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://127.0.0.1:5000/get_data_5000;</span><br><span class="line">    <span class="attribute">if</span> ($request_method = <span class="string">&#x27;OPTIONS&#x27;</span>) &#123;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span> <span class="string">&#x27;*&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span> <span class="string">&#x27;GET, POST, OPTIONS&#x27;</span>;</span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment"># Custom headers and headers various browsers *should* be OK with but aren&#x27;t</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span> <span class="string">&#x27;DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range&#x27;</span>;</span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment"># Tell client that this pre-flight info is valid for 20 days</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Max-Age&#x27;</span> <span class="number">1728000</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Content-Type&#x27;</span> <span class="string">&#x27;text/plain; charset=utf-8&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Content-Length&#x27;</span> <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">return</span> <span class="number">204</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="attribute">if</span> ($request_method = <span class="string">&#x27;POST&#x27;</span>) &#123;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span> <span class="string">&#x27;*&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span> <span class="string">&#x27;GET, POST, OPTIONS&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span> <span class="string">&#x27;DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Expose-Headers&#x27;</span> <span class="string">&#x27;DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="attribute">if</span> ($request_method = <span class="string">&#x27;GET&#x27;</span>) &#123;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span> <span class="string">&#x27;*&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span> <span class="string">&#x27;GET, POST, OPTIONS&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span> <span class="string">&#x27;DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range&#x27;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> <span class="string">&#x27;Access-Control-Expose-Headers&#x27;</span> <span class="string">&#x27;DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置中可写if，可按需要操作header，结果如下：<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/d0fcdbeedf400c65285c55db74bb1e33.jpg"></p>
+<p><strong>OK, Well done!</strong></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/01/05/solve-cross-origin-code/">http://guerbai.github.io/2018/01/05/solve-cross-origin-code/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2018/07/11/no-gtd-life/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">没有时间管理的日常</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2017/08/30/several-js-async-code/">
+        <span class="next-text nav-default">JS异步的几种写法</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Suckless--极简主义者的Linux世界"/><meta name="keywords" content="软件, 折腾, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2021/11/06/suckless/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Suckless--极简主义者的Linux世界 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Suckless--极简主义者的Linux世界
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2021-11-06
+        </span><span class="post-visits"
+             data-url="/2021/11/06/suckless/"
+             data-title="Suckless--极简主义者的Linux世界">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Suckless"><span class="toc-text">Suckless</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8E%E5%90%AF%E5%8A%A8"><span class="toc-text">安装与启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%A5%E5%A6%82%E4%BD%95%E2%80%A6"><span class="toc-text">该如何…</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#st%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96"><span class="toc-text">st体验优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dmenu%E7%9A%84%E6%83%B3%E8%B1%A1%E5%8A%9B"><span class="toc-text">dmenu的想象力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dwm%E7%8A%B6%E6%80%81%E6%A0%8F"><span class="toc-text">dwm状态栏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What%E2%80%99s-Next"><span class="toc-text">What’s Next</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>看DistroTube和Luke Smith的Linux视频时被他们高效简洁而炫酷的桌面与窗口操作惊到了，经过一些小小的研究了解到了Tiling Window Manager以及Suckless系列软件。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20210930011909.gif"></p>
+<p>本文描述了如何安装Suckless系列软件，以及如何在其dwm窗口管理器下基本生存🪵</p>
+<span id="more"></span>
+
+<h2 id="Suckless"><a href="#Suckless" class="headerlink" title="Suckless"></a>Suckless</h2><p><a target="_blank" rel="noopener" href="https://suckless.org/">suckless.org</a>是一个社区，我喜欢称之为“没毛病组织”😂，他们的极简主义哲学是：</p>
+<blockquote>
+<p>软件应该简单、清晰、最小化、可用。</p>
+</blockquote>
+<p>简单是Linux的哲学的核心，该组织认为当今的众多软件过于复杂和缓慢，于是开发了一系列的软件来证实这种普遍现象并不是必须的。这些软件主要面向有一定经验的进阶用户，使每个用户都可以定制自己的实际工作场景workflow。</p>
+<p>主要包括以下几个作品：</p>
+<ul>
+<li>st(simple terminal)，X环境下的终端</li>
+<li>dwm，动态窗口管理器</li>
+<li>dmenu，用户自定义菜单，程序启动器</li>
+<li>surf，浏览器</li>
+<li>…</li>
+</ul>
+<h2 id="安装与启动"><a href="#安装与启动" class="headerlink" title="安装与启动"></a>安装与启动</h2><p>首先准备一个Linux发行版，本文以<a target="_blank" rel="noopener" href="https://garudalinux.org/downloads.html">Garuda KDE Dr460nized</a>演示：</p>
+<p><img src="https://garudalinux.org/images/garuda/download/dr460nized/garuda-dr460nized.webp"></p>
+<p>Garuda是一个基于Arch Linux的发行版，下文中提到的一些安装选项亦是基于pacman包管理器，在其他发行版下需要更换为相应的包管理器。</p>
+<p>下载几个软件源码到本地：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/suckless</span><br><span class="line"><span class="built_in">cd</span> ~/suckless</span><br><span class="line">git <span class="built_in">clone</span> https://git.suckless.com/dmenu</span><br><span class="line">git <span class="built_in">clone</span> https://git.suckless.com/st</span><br><span class="line">git <span class="built_in">clone</span> https://git.suckless.com/dwm</span><br></pre></td></tr></table></figure>
+
+<p>suckless软件的一个特点是只提供源码，需要用户自己使用编译安装。某些更轻量级的发行版可能会没有make命令，需要先手动安装相关依赖。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/suckless/st</span><br><span class="line">sudo make clean install</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> ~/suckless/dmenu</span><br><span class="line">sudo make clean install</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> ~/suckless/dwm</span><br><span class="line">sudo make clean install</span><br></pre></td></tr></table></figure>
+
+<p>三次make命令后几个软件便已成功安装到了系统中。st是dwm环境下的默认终端，dmenu是dwm下的程序启动器，进入dwm之前需要先安装st或dmenu，否则会在dwm中寸步难行。</p>
+<p>打开Garuda的默认终端konsole，输入dwm启动。会遭遇<code>dwm: another window manager is already running</code></p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162624.png"></p>
+<p>在<a href="https://guerbai.github.io/2021/10/22/linux-gui-wm/">Linux发行版与GUI介绍</a>中介绍了WM与DE的关系，这是由于当前处在Garuda的桌面环境中，KDE自己的WM已经在运行，无法打开dwm。</p>
+<p>这里需要为dwm编写启动选项，使得在登录时(login manager，Linux的一个软件)启动dwm而不启动KDE桌面环境。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[Desktop Entry]</span><br><span class="line">Encoding=UTF-8</span><br><span class="line">Name=dwm</span><br><span class="line">Comment=Dynamic Window Manager</span><br><span class="line">Exec=/usr/local/bin/dwm</span><br><span class="line">Icon=</span><br><span class="line">Type=Application</span><br></pre></td></tr></table></figure>
+
+<p>将上述内容命名为dwm.desktop保存到<code>/usr/share/xsessions</code>目录下，退出当前用户登录状态来到登录界面。左下角(其他发行版可能在其他位置)出现了选项，选择<strong>dwm</strong>后输入密码登录。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162642.png"></p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162656.png"></p>
+<p>于是便来到了“没毛病老哥们”提供的极简主义者的Linux世界。</p>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+------+----------------------------------+--------+</span><br><span class="line">| tags | title                            | status +</span><br><span class="line">+------+---------------------+------------+--------+</span><br><span class="line">|                            |                     |</span><br><span class="line">|                            |                     |</span><br><span class="line">|                            |                     |</span><br><span class="line">|                            |                     |</span><br><span class="line">|          master            |        stack        |</span><br><span class="line">|                            |                     |</span><br><span class="line">|                            |                     |</span><br><span class="line">|                            |                     |</span><br><span class="line">|                            |                     |</span><br><span class="line">+----------------------------+---------------------+</span><br></pre></td></tr></table></figure>
+
+<p>dwm的区域分为如上几块，上面是状态栏，包括tags、title以及status；屏幕主要区域分为master与stack区域新打开的窗口会占据master，之前的窗口以栈的方式上下排列在stack区。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162823.png"></p>
+<p>下面的列表一些dwm环境下的一些快捷键。</p>
+<table>
+<thead>
+<tr>
+<th>Keybinding</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SHIFT+ALT+ENTER</td>
+<td>打开st</td>
+</tr>
+<tr>
+<td>SHIFT+ALT+q</td>
+<td>退出dwm，回到login manager</td>
+</tr>
+<tr>
+<td>ALT+p</td>
+<td>打开dmenu，之后可以输入软件名比如firefox来启动软件</td>
+</tr>
+<tr>
+<td>ALT+j/k</td>
+<td>切换打开的多个window</td>
+</tr>
+<tr>
+<td>SHIFT+ALT+n(1-9)</td>
+<td>移动当前window至tag n(默认9个tags)</td>
+</tr>
+<tr>
+<td>SHIFT+ALT+c</td>
+<td>关闭当前window</td>
+</tr>
+<tr>
+<td>ALT+ENTER</td>
+<td>切换某当前window为master window</td>
+</tr>
+<tr>
+<td>ALT+m/t</td>
+<td>切换当前window为全屏/切换回来</td>
+</tr>
+<tr>
+<td>ALT+n(1-9)</td>
+<td>进入tag n</td>
+</tr>
+<tr>
+<td>CTRL+SHIFT+PAGEUP/PAGEDOWN</td>
+<td>zoom in/zoom out</td>
+</tr>
+<tr>
+<td>ALT+b</td>
+<td>toggle status bar</td>
+</tr>
+</tbody></table>
+<h2 id="该如何…"><a href="#该如何…" class="headerlink" title="该如何…"></a>该如何…</h2><p>dwm下鼠标几乎变得没有作用，在桌面环境中的点击音量按钮调节系统音量等操作变得不再可行，geek们的做法是使用命令行工具，本节给出一些具体场景下的一种可行操作方式。</p>
+<p><strong>浏览图片</strong></p>
+<p>命令行安装sxiv，进入图片所在文件夹，输入：<code>sxiv *</code>，可以使用鼠标点击左右切换当前展示图片。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162722.png"></p>
+<p><strong>设置壁纸</strong></p>
+<p>命令行安装xwallpeper，确定希望设置的图片路径，比如<code>~/.config/wall.png</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xwallpaper --zoom ~/.config/wall.png</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162909.png"></p>
+<p><strong>调节音量</strong></p>
+<p>命令行安装pauseaudio，下列命令是几种对音量可能会做的操作：</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pactl set-sink-volume 0 +20%</td>
+<td>音量增加20%</td>
+</tr>
+<tr>
+<td>pactl set-sink-volume 0 -20%</td>
+<td>音量减少20%</td>
+</tr>
+<tr>
+<td>pactl set-sink-mute 0 toggle</td>
+<td>静音切换</td>
+</tr>
+<tr>
+<td>pactl get-sink-volume 0</td>
+<td>获取当前音量值</td>
+</tr>
+</tbody></table>
+<p><strong>截图</strong></p>
+<p>命令行安装scrot，打开dmenu输入<code>scrotv</code>即可对当前桌面截图保存在当前文件夹。</p>
+<p>若想截图特定窗口，可以加<code>-s</code>参数后用鼠标点击想要的窗口。其他具体指令的使用说明见scrot文档。</p>
+<h2 id="st体验优化"><a href="#st体验优化" class="headerlink" title="st体验优化"></a>st体验优化</h2><p>st的实现只有2000多行C代码，自身的功能非常有限，以至于各种用户“习以为常”的能力它都没有，包括复制/粘贴、滚动等功能都是默认不支持的，毕竟”simple”。</p>
+<p>suckless的软件不提供配置文件，所有配置项均在其源码config.def.h中，修改后需要运行<code>sudo cp config.def.h config.h &amp;&amp; sudo make clean install</code>重新编译安装。</p>
+<p><strong>复制/粘贴</strong></p>
+<p>在<code>~/st/config.def.h</code>的ShortCut中新增两行：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123; MODKEY, XK_c, clipcopy,  &#123;.i=<span class="number">0</span>&#125;&#125;,</span><br><span class="line">&#123; MODKEY, XK_v, clippaste, &#123;.i=<span class="number">0</span>&#125;&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>重新安装，即可以在st中使用SHIFT+CTRL+c/v来实现复制/粘贴功能。</p>
+<p><strong>emoji</strong></p>
+<p>st自然也不支持emoji的显示，比如<a target="_blank" rel="noopener" href="https://github.com/guerbai/ohmyarch">ohmyarch</a>的README.md中有🤣，运行<code>cat README.md</code>会导致st直接crash掉，这里需要一个特定的依赖来解决此问题：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yay -S libxft-bgra</span><br></pre></td></tr></table></figure>
+
+<p><strong>透明化</strong></p>
+<p>设置了漂亮的壁纸后将终端做一定程度的透明化是一种视觉上的享受。</p>
+<p>命令行安装picom，配置文件写于~/.config/picom/picom.conf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">opacity-rule = [</span><br><span class="line">&quot;90:class_g = &#x27;st-256color&#x27;&quot;</span><br><span class="line">];</span><br><span class="line">wintypes:</span><br><span class="line">&#123;</span><br><span class="line">normal = &#123; blur-background = true; &#125;;</span><br><span class="line">splash = &#123; blur-background = false; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"># Fading</span><br><span class="line">fading = false;</span><br><span class="line">fade-in-step = 0.07;</span><br><span class="line">fade-out-step = 0.07;</span><br></pre></td></tr></table></figure>
+
+<p>然而st自身的源码不支持透明显示，suckless提供了一些patches来增强它的功能，类似于其他软件中的插件。</p>
+<p>复制<a target="_blank" rel="noopener" href="https://st.suckless.org/patches/alpha/st-alpha-0.8.2.diff">alpha patch diff</a>至st源码目录内，运行<code>patch &lt; st-alpha-0.8.2.diff</code>后依然是重新编译安装。然后运行<code>picom -b</code>即可实现透明效果。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106162939.png"></p>
+<p>除了alpha外，suckless还提供了其他许多的<a target="_blank" rel="noopener" href="https://st.suckless.org/patches/">patches</a>来扩充功能，感兴趣可以继续探索。</p>
+<h2 id="dmenu的想象力"><a href="#dmenu的想象力" class="headerlink" title="dmenu的想象力"></a>dmenu的想象力</h2><p>在path下的可执行文件均可被dmenu找到并运行，用户可以自行编写shell脚本置于<code>/usr/local/bin</code>文件夹下由dmenu执行。</p>
+<p>比如实现一个关机/重启选项的简单例子：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">choices=<span class="string">&quot;shutdown\nreboot&quot;</span></span><br><span class="line"></span><br><span class="line">chosen=$(<span class="built_in">echo</span> -e <span class="string">&quot;<span class="variable">$choices</span>&quot;</span> | dmenu -i -p <span class="string">&quot;Operation:&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$chosen</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">    shutdown) shutdown;;</span><br><span class="line">    reboot) reboot;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+
+<p>将该文件保存为sysop.sh置于PATH路径中，即可在dmenu中选择sysop这个选项并进行下一步选择。</p>
+<p>这个脚本本身没有太多实际意义，然而有了这样的机制，其实可以实现非常非常多的功能，比如调节音量、浏览切换壁纸、快速打开浏览器标签页等等，笔者认为其定制能力与想象力要比MacOS下的Alfred要更为丰富。</p>
+<h2 id="dwm状态栏"><a href="#dwm状态栏" class="headerlink" title="dwm状态栏"></a>dwm状态栏</h2><p>默认的dwm状态栏非常朴素，status部分只显示了<code>dwm-6.2</code>，“没毛病老哥”们提供了一个基础的改变status显示内容的机制，比如想要把<code>dwm-6.2</code>改变为hello world那么需要运行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xsetroot -name <span class="string">&quot;hello world&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>有了这个简单的机制，便可以通过其他软件比如pauseaudio拿到当前音量信息并展示到status bar；通过date软件拿到当前时间信息并展示。</p>
+<p>suckless官网列出了一些他人配置好的<a target="_blank" rel="noopener" href="https://dwm.suckless.org/status_monitor/">dwm状态栏列表</a>，可以参考选用。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/20211106160407.png"></p>
+<h2 id="What’s-Next"><a href="#What’s-Next" class="headerlink" title="What’s Next"></a>What’s Next</h2><p>许多有经验的Linux用户都有自己的suckless软件版本，开箱即用，可以尝试使用一下他们的成熟配置进一步感觉suckless软件的魅力：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/guerbai/ohmyarch">ohmyarch</a></li>
+<li><a target="_blank" rel="noopener" href="https://gitlab.com/users/dwt1/projects">DistroTube</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/LukeSmithxyz">Luke Smith</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/theniceboy">TheNiceBoy</a></li>
+</ul>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2021/11/06/suckless/">http://guerbai.github.io/2021/11/06/suckless/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%BD%AF%E4%BB%B6/">软件</a>
+            <a href="/tags/%E6%8A%98%E8%85%BE/">折腾</a>
+            </div>
+        
+        <nav class="post-nav"><a class="next" href="/2021/10/22/linux-gui-wm/">
+        <span class="next-text nav-default">Linux发行版与GUI介绍</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

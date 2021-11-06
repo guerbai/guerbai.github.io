@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="几种宏的描述与展示"/><meta name="keywords" content="折腾, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/07/22/many-macro/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>几种宏的描述与展示 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">几种宏的描述与展示
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-07-22
+        </span><span class="post-visits"
+             data-url="/2018/07/22/many-macro/"
+             data-title="几种宏的描述与展示">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8F%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">宏是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%AF%B9%E5%AE%8F%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-text">编程语言对宏的支持</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#C%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%AE%8F"><span class="toc-text">C语言中的宏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scheme%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%AE%8F"><span class="toc-text">Scheme语言中的宏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SweetJS"><span class="toc-text">SweetJS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E5%99%A8%E5%AE%8F"><span class="toc-text">编辑器宏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Word%E4%B8%AD%E7%9A%84%E5%AE%8F"><span class="toc-text">Word中的宏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vim"><span class="toc-text">Vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Emacs%E4%B8%AD%E7%9A%84%E5%AE%8F"><span class="toc-text">Emacs中的宏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8F%E7%97%85%E6%AF%92"><span class="toc-text">宏病毒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F%E4%B8%AD%E7%9A%84%E5%AE%8F"><span class="toc-text">游戏中的宏</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><p>作为一名编程人员，或者是一个游戏玩家，再或者是一个大学生在上大一计算机课的时候，可能会有不少人像我一样会(可能并非出于本愿)接触到“宏”这个东西，然后感觉一脸茫然，觉得它属于高阶知识，不好理解，不知所然。<br>就单看这个字，宏，给人感觉上就是比较抽象的太过于技术化，不像“一致性”这样的技术圈词语，有其自解释性。同时，由于它在不同的领域出现并且发挥着不同的作用，便更加让人一头雾水。</p>
+<span id="more"></span>
+
+<p>这篇相当于一个总结和笔记，记录我所遇到过的宏，并进行一些展示，希望对“宏”这个“高阶功能”有一个全局的认识和把握。</p>
+<h2 id="宏是什么"><a href="#宏是什么" class="headerlink" title="宏是什么"></a>宏是什么</h2><p>Wiki百科中说，宏是一种批量处理的称谓，是一种抽象，这种机制通常暗示着将<em>小命令或动作</em>(name of a macro)转化为一系列指令。<br>它的用途在于自动化频繁使用的序列或者是获得一种更强大的抽象能力。</p>
+<p>这种描述很容易让人联想起<em>函数</em>，在这一点上，我认为宏与函数在抽象、可复用的思想上是相似的，但却绝不是同一种东西，而这种不同，由于各编程语言对宏的支持程度差别很大，那么这个答案在各情景下也是不同的。<br>在下面的各种语言中，我会分别解释这两种事物的差异。</p>
+<h2 id="编程语言对宏的支持"><a href="#编程语言对宏的支持" class="headerlink" title="编程语言对宏的支持"></a>编程语言对宏的支持</h2><h3 id="C语言中的宏"><a href="#C语言中的宏" class="headerlink" title="C语言中的宏"></a>C语言中的宏</h3><p>在C语言与C++中可以使用宏(在大一上C语言课程时应该都接触过)，但这种支持只是很浅而片面的，使用方式很有限。</p>
+<p>在Gnu文档里有一个解释得比较清晰而简单的关于C语言中宏的定义：</p>
+<blockquote>
+<p>A macro is a fragment of code which has been given a name. Whenever the name is used, it is replaced by the contents of the macro. </p>
+</blockquote>
+<p>给一块儿代码起一个名字，当这个名字被调用时，这个名字会被替换为之前定义的那一块儿代码。</p>
+<p>那么，在C语言中，宏与函数有何不同呢？<br>首先，函数的使用方式称为<em>调用</em>，是基于调用栈运行的；而如上描述，宏则是基于一种<em>字符串的替换</em>。<br>宏往往是在编译时会被处理，而函数则是在运行时。</p>
+<p>在C中，使用<code>#define</code>来定义一个宏，如<code>#define TWO 2</code>，即用TWO来代替2。那么，C的预处理器会将代码中所有独立的TWO替换为2，这种替换文本的过程称为<em>宏展开</em>，这种展开不进行计算，它只是按照指令进行文字替换操作。</p>
+<p>上面这种定义常量的方式称为Object-like macros，使用它就像使用一个数据对象，此外，C中还有另一种常见的宏，像函数一样被使用的function-like macros，这种区分主要是基于使用场景上的。</p>
+<p>比如可以定义一个求平方的宏<code>#define SQUARE (X) (X) * (X) </code>，在写程序时可以在需要求平方的地方像使用函数一样使用它<code>SQUARE(a)</code>。<br>这一堆奇怪的括号也说明了它的使用方式是替换，若不加括号，在替换过程中可能会出现一些意想不到的情况，比如使用<code>SQUARE(x+2)</code>，则会变成<code>x+2*x+2</code>，又根据运算符的优先级问题，肯定得不到原本想要的结果。</p>
+<p>此外，C语言还规定，#define一个宏不能超过一行，可以说这种支持真的是很有限，无法让人感到宏的强大与乐趣。</p>
+<h3 id="Scheme语言中的宏"><a href="#Scheme语言中的宏" class="headerlink" title="Scheme语言中的宏"></a>Scheme语言中的宏</h3><p>不像C语言对宏的唯唯诺诺、施展不开拳脚的支持，Scheme作为Lisp的一个著名方言，可以说是对宏支持得最全面、彻底的语言(之一？)了。<br>有人说正是宏的存在，使得Lisp是另一种语言(其他所有的算另一种)，这不禁让人想起了才高八斗的形容。</p>
+<p>在Scheme中，宏不再仅仅是一种简单的预处理阶段的文本替换(现在看起来多捞哦)，在这里它可以做到很神奇的事情，玩出很多花来，从而给lisp提供了生成语法、对代码进行元编程的能力。</p>
+<p>lisp语言中数据与代码都是s-expression，宏与函数在scheme中的区别也在于此，首先，宏不会像函数一样，会展开它收到的参数表达式，只有在这种前提下，宏才能完成它的功能，返回一个s-expression(即动态生成代码)，而该表达式会被解释器立即执行，这相比之下，函数则是直接返回一个值，两者相去甚远，显然宏的抽象级别更高一些。</p>
+<p>Wiki中对Scheme的宏系统有如下一段较为晦涩的描述：</p>
+<blockquote>
+<p>…宏的行为如同是函数对自身程序文本的变形，并且可以应用全部语言来表达这种变形。一个C宏可以定义一段语法的替换，然而一个Lisp的宏却可以控制一节代码的计算。<br>…<br>获得了控制代码的执行顺序（见<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%83%B0%E6%80%A7%E8%AE%A1%E7%AE%97" title="惰性计算">惰性计算</a>和<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/w/index.php?title=%E9%9D%9E%E9%99%90%E5%88%B6%E5%87%BD%E6%95%B0&action=edit&redlink=1" title="非限制函数（页面不存在）">非限制函数</a>）的能力，使得新创建的语法结构与语言内建的语法结构不可区分。例如，一种Lisp方言有cond而没有if，就可以使用宏由前者定义后者。</p>
+</blockquote>
+<p>在这里介绍一下，如何用macro给Scheme自定义语法。</p>
+<p>我们知道python有个可以同时迭代两个list的函数为zip，使用方法为：</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/c6840e9b2f8118f17cc3f744ed1461b6.jpg"></p>
+<p>python zip展示</p>
+</div>
+
+<p>而Scheme本身是没有zip这种语法的：</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/18c69b41e19d3fc877c86781d3bd9ab3.jpg"></p>
+<p>Scheme无zip</p>
+</div>
+
+<p>那现在我们定义一个zip的宏，来实现这个语法并且试用一下：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define-syntax</span></span> zip</span><br><span class="line">  (<span class="name"><span class="builtin-name">syntax-rules</span></span> ()</span><br><span class="line">    ((<span class="name">_</span> ((<span class="name">variables</span> lists) ...)</span><br><span class="line">        body ...)</span><br><span class="line">     (<span class="name"><span class="builtin-name">for-each</span></span> (<span class="name"><span class="builtin-name">lambda</span></span> (variables ...) body ...) lists ...))))</span><br></pre></td></tr></table></figure>
+<p>上面define-syntax显然是一个关键字，zip表示这个宏的名字，body为使用宏时传入的参数，for-each为Scheme中可以对list进行迭代的函数。</p>
+<p>效果如下：</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/8e9fa91fde6af8efe62e6dc4250d198b.jpg"></p>
+<p>zip效果</p>
+</div>
+
+<h3 id="SweetJS"><a href="#SweetJS" class="headerlink" title="SweetJS"></a>SweetJS</h3><p>对，你没有看错，JS也可以通过某种方式来实现对宏的支持，这又一次证实了Atwood’s Law(any application that can be written in JavaScript, will eventually be written in JavaScript.)，想象力真是无限的。</p>
+<p>有一个包叫<a target="_blank" rel="noopener" href="https://www.sweetjs.org/">Sweet.js</a>，它给JS提供了如上所示的像Scheme一样定义语法的功能。<br>它的hello world是这样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">syntax hi = <span class="function"><span class="keyword">function</span> (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> #<span class="string">`console.log(&#x27;hello, world!&#x27;)`</span>;</span><br><span class="line">&#125;;</span><br><span class="line">hi</span><br></pre></td></tr></table></figure>
+<p>它需要经过特殊的编译，不能直接使用node运行，需要先编译，再用node运行：<br>sjs hello.js后输出为console.log(‘hello, world!’)，这是编译后成生的js代码，再用node去运行它就行了。</p>
+<p>这里就很明显了，并不是简单定义了一个函数一样的东西，因为使用它时，hi后面并没有括号，而的确是定义了自己的语法。</p>
+<p>我们还可以用它来实现一个自己的let语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">syntax mylet = function (ctx) &#123;</span><br><span class="line">  let ident = ctx.next().value;</span><br><span class="line">  ctx.next(); // eat `=`</span><br><span class="line">  let init = ctx.expand(&#x27;expr&#x27;).value;</span><br><span class="line">  return #`</span><br><span class="line">    (function ($&#123;ident&#125;) &#123;</span><br><span class="line">      $&#123;ctx&#125; // &lt;2&gt;</span><br><span class="line">    &#125;($&#123;init&#125;))</span><br><span class="line">  `</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">mylet bb8 = 233;</span><br><span class="line">console.log(bb8);</span><br></pre></td></tr></table></figure>
+<p>运行sjs mylet.js &gt; my_let.js，将编译后生成的代码存入另一个文件，另一个文件内容为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">bb8_5</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(bb8_5);</span><br><span class="line">&#125;)(<span class="number">233</span>);</span><br></pre></td></tr></table></figure>
+<p>此时，再用node my_let.js来运行，即可得到233这个结果，可以说是够神奇了吧。</p>
+<h2 id="编辑器宏"><a href="#编辑器宏" class="headerlink" title="编辑器宏"></a>编辑器宏</h2><p>编辑器宏与上面的在感观上是迥然不同的，它是对你的操作进行记录，然后将一系列动作进行重放。</p>
+<h3 id="Word中的宏"><a href="#Word中的宏" class="headerlink" title="Word中的宏"></a>Word中的宏</h3><p>假设，在word中经常要键入自己的邮箱，并改变字体大小、颜色，现将这个操作使用宏记录下来，可以对自己的一连串操作进行复用。</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/ad9a5b355732bd3a5768d35bf18b6fcb.gif"></p>
+<p>使用Word录制宏</p>
+</div>
+
+<h3 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h3><p>做为一个写代码的，Vim最起码要知道怎么退出吧。<br>作为编辑器之神，它当然也提供了宏的支持，使用它常常可以使编辑效率大增，而我在实际工作中，便常常使用它的宏录制功能，来帮我完成一些无聊的批量处理工作。</p>
+<p>这里举两个例子，其一是生成数字1到100，每个一行，当然不是每行每行输入了，接下来是表演时间：</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/fefe0b5da6035820185d1cf035877094.gif"></p>
+<p>生成1-100的数字</p>
+</div>
+
+<p>那现在，需要将它们转为python的list，且每个都变为字符串格式，操作如下：</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/f34cc94517f5cdbd1cfd1fa8a0b6498c.gif"></p>
+<p>生成num_list</p>
+</div>
+
+<p>在vim normal模式下，按qa开始录制宏，表示把宏录到a这个寄存器里，一番操作之后，按q结束。<br>第一次调用宏要使用@a，可触发，之后使用@@可以触发上次运行的宏，在前面加数字98表示运行98次，这样整个下来操作就会有丶厉害了。</p>
+<h3 id="Emacs中的宏"><a href="#Emacs中的宏" class="headerlink" title="Emacs中的宏"></a>Emacs中的宏</h3><p>刚说过了编辑器之神，现在是神的编辑器了。<br>Emacs不仅可以像上面Vim那样录制宏，现场操作，还可以将录制的宏生成一段elisp函数，存放在配置里，这样不用每次用的时候都去录制。</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/4c1b170e851fb4609d8515f37c735d91.gif"></p>
+<p>使用Emacs定义宏，并生成elisp配置代码</p>
+</div>
+
+<p>全是通过elisp函数来操作的，使用Emacs与Vim还是有着很大的区别的。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="宏病毒"><a href="#宏病毒" class="headerlink" title="宏病毒"></a>宏病毒</h3><p>宏病毒常见于微软的Office产品中，上面介绍了在Word中录制宏，其实它的本质是生成一段VBA代码，这相当于提供了VBA的编程接口，那么，在这段代码中编入恶意代码运行，便成为病毒。</p>
+<div align=center>
+
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/c6b6f85a60bcefe9bea27371f8dc2c08.jpg"></p>
+<p>生成的VB代码</p>
+</div>
+
+<p>此外，同样是微软的Outlook由于拥有scripting特性，更是成为了宏病毒的重灾区。<br>该特性使得宏病毒能够获得Outlook用户地址簿中存储的联系人地址，通过向这些地址发送E-mail将病毒体广泛传播。</p>
+<p>关于宏病毒的判断、防范与清除在长时间的实践中积累了一定的经验，具体的可以进一步去网上冲浪获取。</p>
+<h3 id="游戏中的宏"><a href="#游戏中的宏" class="headerlink" title="游戏中的宏"></a>游戏中的宏</h3><p>在去年大热了很久的吃鸡游戏中，外挂、鼠标宏等不公平游戏行为，被广大玩家深恶痛绝。那么鼠标宏是什么呢？<br>我们知道在游戏中，有些操作是有一定难度的，比如盲僧的回旋踢，不一定是每次都能秀到的(有时候会把自己秀到…)，那么设想一下，把这段操作操作一次记录到鼠标和键盘中，每次Q中人，按一个按键触发之前录制好的这一系统操作，成功率就会大大提高。<br>同样，比如打lol要挂机，但站在泉水里一动不动，会被系统发现并惩罚，那么可以将鼠标来来回回点的操作录制成一个宏，然后肯定还有方式让它一直触发，这样，就可以利用鼠标宏挂机而躲过系统惩罚。</p>
+<p>甚至，在wow这样的游戏中，由于有些操作太过于复杂，游戏本身提供了操作控制的宏录制功能(看到这个点我真的是惊了！)，例如同时激活2种以上的法术，施法的同时用游戏中的聊天系统发送信息等等，有很大的发挥空间。</p>
+<p><strong>但是</strong>，这些都是歪门邪道，&lt;头号玩家&gt;告诉我们，玩儿游戏过程中那种最纯粹的投入与快乐才是最真实最重要的，利用鼠标宏、键盘宏进行不公平游戏无疑很严重地毁掉了这种纯粹，即使可能获得一时的心里上的不健康的愉悦，但最终毁掉的还是自己的、队友的、对方的很多人的游戏体验，更是毁掉你喜爱的游戏的生存时间与社区生态。</p>
+<hr>
+<p>总结，以及回顾各种语言及软件的用法耗费了我比较大的精力，但限于自己水平及阅历的有限，我知道自己的表述并没有展露出神奇的宏的全貌以及全部的典型用法。<br>希望多多交流和指正。</p>
+<p><strong>参考</strong><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B7%A8%E9%9B%86">维基百科：宏</a><br><a target="_blank" rel="noopener" href="https://emacs.stackexchange.com/questions/70/how-to-save-a-keyboard-macro-as-a-lisp-function">How to save a keyboard macro as a Lisp function?</a><br><a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/Scheme_Programming/Looping">Scheme Programming/Looping</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/50712432">鼠标宏是什么</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/07/22/many-macro/">http://guerbai.github.io/2018/07/22/many-macro/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%8A%98%E8%85%BE/">折腾</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/08/05/just-kids/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Patti与他们相遇</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/07/13/org-mode-gtd/">
+        <span class="next-text nav-default">使用Emacs做GTD软件</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

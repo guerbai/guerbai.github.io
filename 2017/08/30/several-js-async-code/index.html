@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="JS异步的几种写法"/><meta name="keywords" content="javascript, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2017/08/30/several-js-async-code/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>JS异步的几种写法 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">JS异步的几种写法
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-08-30
+        </span><span class="post-visits"
+             data-url="/2017/08/30/several-js-async-code/"
+             data-title="JS异步的几种写法">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-text">实例</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E5%86%99%E6%B3%95"><span class="toc-text">回调函数写法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="toc-text">事件发布订阅模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Promise"><span class="toc-text">Promise</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#async%E5%BA%93"><span class="toc-text">async库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#generator"><span class="toc-text">generator</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#async-await"><span class="toc-text">async&#x2F;await</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>JavaScript的单线程决定了其解决并发问题的异步特性。</p>
+<p>最直接的回调写法，会造成难以维护的callback hell，JS的发展一直在追寻着以”程序员写起来更容易”为目标的异步写法。<br>解决方案有好几个，因为多，功能又一样，还能混杂在一起，就会乱。</p>
+<p>这里以一个实例为线索，来探究各写法的异同与思想。</p>
+<span id="more"></span>
+
+
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>写一个函数，读文件file1.txt于字符串str1, 拿到file1之后读文件file2.txt于字符串str2，拿到str1+str2后，传给最终处理函数。</p>
+<h1 id="回调函数写法"><a href="#回调函数写法" class="headerlink" title="回调函数写法"></a>回调函数写法</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> log = <span class="built_in">console</span>.log.bind(<span class="built_in">console</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// callback hell</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">two_str_callback</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    fs.readFile(<span class="string">&#x27;file1.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> str1 = data.toString()</span><br><span class="line">    fs.readFile(<span class="string">&#x27;file2.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data2</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(err)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> str2 = data2.toString()</span><br><span class="line">        callback(str1+str2)</span><br><span class="line"></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">two_str_callback(log)</span><br></pre></td></tr></table></figure>
+
+<h1 id="事件发布订阅模式"><a href="#事件发布订阅模式" class="headerlink" title="事件发布订阅模式"></a>事件发布订阅模式</h1><p>此处使用<a target="_blank" rel="noopener" href="https://github.com/JacksonTian/eventproxy">eventproxy库</a>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> eventproxy = <span class="built_in">require</span>(<span class="string">&#x27;eventproxy&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> log = <span class="built_in">console</span>.log.bind(<span class="built_in">console</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">two_str_eventproxy</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ep = <span class="keyword">new</span> eventproxy()</span><br><span class="line">    ep.all(<span class="string">&#x27;data1_event&#x27;</span>, <span class="string">&#x27;data2_event&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data1, data2</span>) </span>&#123;</span><br><span class="line">        callback(data1+data2)</span><br><span class="line">    &#125;)</span><br><span class="line">    fs.readFile(<span class="string">&#x27;file1.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            log(err)</span><br><span class="line">        &#125;</span><br><span class="line">        ep.emit(<span class="string">&#x27;data1_event&#x27;</span>, data.toString())</span><br><span class="line">    &#125;)</span><br><span class="line">    fs.readFile(<span class="string">&#x27;file2.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            log(err)</span><br><span class="line">        &#125;</span><br><span class="line">        ep.emit(<span class="string">&#x27;data2_event&#x27;</span>, data.toString())</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">two_str_eventproxy(log)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这种写法避免了fs里再套一层fs，阻止了代码横向发展。<br>但此种写法代码运行是跳跃的，emit ‘data2_event’后，控制会调回ep.all()处，会让人想起goto这个坏东西，在维护与调试上仍有一些难度。</p>
+<h1 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> log = <span class="built_in">console</span>.log.bind(<span class="built_in">console</span>)</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">&#x27;bluebird&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">two_str_promise</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> err_log = <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">        log(<span class="string">&#x27;err_log:&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">console</span>.log.bind(<span class="built_in">console</span>)(value)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> concat_str = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        fs.readFile(<span class="string">&#x27;file1.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                reject(<span class="string">&#x27;err happen in file1&#x27;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                resolve(data.toString())</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">    concat_str.then(<span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">            fs.readFile(<span class="string">&#x27;file2.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                    reject(<span class="string">&#x27;err happen in file2&#x27;</span>)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    resolve(value+data.toString())</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;).then(log).catch(err_log)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">two_str_promise(log)</span><br></pre></td></tr></table></figure>
+<p>使用Promise写法，代码是根据正常思维向下发展，并且没有引入像eventproxy那样的跳跃代码。<br>缺点也很明显，这么写感觉上实在是太麻烦了。</p>
+<h1 id="async库"><a href="#async库" class="headerlink" title="async库"></a>async库</h1><p>注意，这里的<a target="_blank" rel="noopener" href="https://github.com/caolan/async">async库</a>与下面将要提到的async语法糖所指并不是一个东西。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> async_lib = <span class="built_in">require</span>(<span class="string">&#x27;async&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">two_str_async_lib</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    async_lib.waterfall(</span><br><span class="line">        [</span><br><span class="line">            <span class="function"><span class="keyword">function</span> (<span class="params">done</span>) </span>&#123;</span><br><span class="line">                fs.readFile(<span class="string">&#x27;file1.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                        log(err)</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        done(<span class="literal">null</span>, data.toString())</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="function"><span class="keyword">function</span> (<span class="params">result, done</span>) </span>&#123;</span><br><span class="line">                fs.readFile(<span class="string">&#x27;file2.txt&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                        log(err)</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        done(<span class="literal">null</span>, result+data.toString())</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">        ], <span class="function"><span class="keyword">function</span> (<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                log(err)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                callback(result)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">two_str_async_lib(log)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这种写法嘛~，就比较写意了，api的名字也很有趣儿。<br>该库还提供了很多处理各种异步情景的api。</p>
+<h1 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> log = <span class="built_in">console</span>.log.bind(<span class="built_in">console</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readfile</span>(<span class="params">file_name</span>) </span>&#123;</span><br><span class="line">    fs.readFile(file_name, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">        it.next(data.toString())</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">two_str_generator</span> (<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> str1 = <span class="keyword">yield</span> readfile(<span class="string">&#x27;file1.txt&#x27;</span>)</span><br><span class="line">    <span class="keyword">var</span> str2 = <span class="keyword">yield</span> readfile(<span class="string">&#x27;file2.txt&#x27;</span>)</span><br><span class="line">    callback(str1+str2)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> it = two_str_generator(log)</span><br><span class="line"></span><br><span class="line">it.next()</span><br></pre></td></tr></table></figure>
+<p>使用generator的写法的意义在于two_str_generator函数中可以用<strong>同步的思路</strong>清楚地表达思路，即先拿str1, 再拿str2，之后加和这样一个逻辑。</p>
+<p>关键点在于readfile函数中直接调用it，函数作用域及变量提升的关系，在它被调用时，它知道it是一个generator。传入读到的数据后传给next作为参数即可被str1,str2得到。</p>
+<p>缺点是two_str_generator的调用者，被分散开来，一个是从最外层发起，另一个则是处于readfile这么一个函数中。</p>
+<p>为了解决这个执行器调度的问题，tj写了<a target="_blank" rel="noopener" href="https://github.com/tj/co">co</a>模块来提供了一个方案。</p>
+<h1 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h1><p>该写法就是generator的语法糖。除此之外，还对其进行了一些规范与改进。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> log = <span class="built_in">console</span>.log.bind(<span class="built_in">console</span>)</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">&#x27;bluebird&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">readfile_new</span>(<span class="params">file_name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">        fs.readFile(file_name, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                log(err)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                resolve(data.toString())</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> two_str_async = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> str1 = <span class="keyword">await</span> readfile_new(<span class="string">&#x27;file1.txt&#x27;</span>)</span><br><span class="line">    <span class="keyword">var</span> str2 = <span class="keyword">await</span> readfile_new(<span class="string">&#x27;file2.txt&#x27;</span>)</span><br><span class="line">    callback(str1+str2)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">two_str_async(log)</span><br></pre></td></tr></table></figure>
+
+<p>与上一个例子相比，不需要使用next调用，亦没有使用co模块，其内置了执行器。<br>将await的函数返回一个promise对象，其便可自动执行。<br>此时的await相当于promise的then操作，在这个层面上，async/await又是promise的语法糖。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2017/08/30/several-js-async-code/">http://guerbai.github.io/2017/08/30/several-js-async-code/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/javascript/">javascript</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/01/05/solve-cross-origin-code/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">解决跨域问题代码示例</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2017/08/03/read-records-source-code/">
+        <span class="next-text nav-default">records库源码阅读</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="使用 Karabiner 改善 Poker 键盘体验"/><meta name="keywords" content="软件, 折腾, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/10/23/anli-karabiner/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>使用 Karabiner 改善 Poker 键盘体验 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">使用 Karabiner 改善 Poker 键盘体验
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-10-23
+        </span><span class="post-visits"
+             data-url="/2018/10/23/anli-karabiner/"
+             data-title="使用 Karabiner 改善 Poker 键盘体验">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E9%94%AE%E7%9A%84%E8%B0%83%E6%95%B4"><span class="toc-text">功能键的调整</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%B7%A6-Ctrl-%E4%B8%8E%E5%B7%A6-Command"><span class="toc-text">调整左 Ctrl 与左 Command</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86-Capslock-%E6%94%B9%E4%B8%BA%E5%B7%A6-Option"><span class="toc-text">将 Capslock 改为左 Option</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E8%AE%BE%E7%BD%AE"><span class="toc-text">进阶设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E5%90%91%E9%94%AE%E7%9A%84%E6%94%B9%E8%BF%9B"><span class="toc-text">方向键的改进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Backspace-%E4%B8%8E-Enter"><span class="toc-text">Backspace 与 Enter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A6%E5%8F%B3%E5%88%87%E6%8D%A2%E5%85%A8%E5%B1%8F%E7%A8%8B%E5%BA%8F"><span class="toc-text">左右切换全屏程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-text">最后</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>Poker 键盘以其小巧、精致、可编程深受广大用户的喜爱，更关键的是，它颜值还很高。时常作为 Mac 的外接键盘日常使用。  </p>
+<p><img src="https://cdn.sspai.com/2018/10/25/3a6b07ce1f3f2a8b3928fa269958cd01.png"></p>
+<span id="more"></span>
+
+<p>然而往往小巧与极客的事物便意味着会有一些操作方式让使用者不够习惯，因而会产生一些痛点，比如没有直接的方向键等等。  </p>
+<p>网上有一些文章介绍了 Poker 底部开关的设置，以及 Mac 基本的几个功能键修改功能，笔者进行过尝试，然而其修改过于基础，依然不够好用。  </p>
+<p>本篇介绍了笔者使用 Mac 上的改键软件 <a target="_blank" rel="noopener" href="https://pqrs.org/osx/karabiner/">Karabiner</a> 对 Poker 键盘进行自定义化设置，从而优化其作为 Mac 外接键盘体验的具体实施方案。  </p>
+<p>通过本文所举的 case，掌握了 Karabiner 的使用方法之后，便可以对任意键盘进行任意程度的自定义设置了，可谓一通百通，解放你的手指，在 Mac 上驰骋，效率提升一个数量级。</p>
+<h2 id="功能键的调整"><a href="#功能键的调整" class="headerlink" title="功能键的调整"></a>功能键的调整</h2><p>功能键一般要左手去按，Poker 左下角的功能键布局如图所示：  </p>
+<p><img src="https://cdn.sspai.com/2018/10/25/0778e093a41654521ba52d87351b1950.png"></p>
+<h3 id="调整左-Ctrl-与左-Command"><a href="#调整左-Ctrl-与左-Command" class="headerlink" title="调整左 Ctrl 与左 Command"></a>调整左 Ctrl 与左 Command</h3><p>位于键盘最左下角的键按键方式是使用 <strong>左手掌外侧</strong> 按下，这样不需要移动扭曲小指或是移动手在键盘上的位置，可减少对手指的伤害，非常自然。  </p>
+<p>然而，Poker 最左下角的键是 Ctrl，而在 Mac 系统上，最常用的 <em>保存、复制、粘贴</em> 三个操作的按键却是 <code>⌘Command + S \ C \ V</code> 来实现的。  </p>
+<p>左 Command 键位于左 Ctrl 右边，依然使用左手掌外侧来按，但这就不那么自然了，需要左手下部往右侧稍稍移动一个键位来够到。  </p>
+<p>根据频次来讲，在 Mac 上，使用 <code>Ctrl + Key</code> 组合键的常用操作不能说没有，但远比不上上述保存、复制、粘贴三兄弟，因此，果断将二者调换位置。  </p>
+<h3 id="将-Capslock-改为左-Option"><a href="#将-Capslock-改为左-Option" class="headerlink" title="将 Capslock 改为左 Option"></a>将 Capslock 改为左 Option</h3><p>笔者没有使用 Capslock 的需求，大写字母通过 <code>⇧Shift + A</code> 这样的方式来实现，完全可以将它替换为更常用的按键。  </p>
+<p>在 Mac 上，使用 Option 的频次较多的操作主要有两个，唤起 Alfred 用 <code>⌥Option + Space</code> 的快捷键，以及在 Emacs 中运行函数用 <code>⌥Option + X</code> 的快捷键。  </p>
+<p>而在 Poker 上左 Option 位于左 Command 的右侧，左手掌移一个键已经够难受了，移两个键更是不可取，若使用大拇指去往里勾，笔者认为和使用小指去勾 Ctrl 一样，长久而言对手指有损伤，故果断将 Capslock 改为左 Option，这样对于上述所提到的两个操作都方便与自然了许多，使用小指从 A 移到 Capslock 是很轻松的事。  </p>
+<p><img src="https://cdn.sspai.com/2018/10/25/fdd15e5d930ef73ccb8bc62515ac2e23.png"></p>
+<h2 id="进阶设置"><a href="#进阶设置" class="headerlink" title="进阶设置"></a>进阶设置</h2><h3 id="方向键的改进"><a href="#方向键的改进" class="headerlink" title="方向键的改进"></a>方向键的改进</h3><p>Poker 并无自带的方向键，然而就算自带方向键，将右手抬起来去按这个操作还是蛮糟心的，况且还容易按错。  </p>
+<p>Poker的原生方案是 <code>Fn + W \ A \ S \ D</code>，这当然很极客了，然而这却也是笔者使用 Karabiner 的直接原因。  </p>
+<p>问题在于这个操作需要两个手，而通过自定义 Karabiner 的 Complex Modifications，可以将 <code>Fn + W \ A \ S \ D</code> 这种方案改为 <code>⌥Option + W \ A \ S \ D</code>，加上之前将 Capslock 改为了 Option，则仅使用左手便可以使用方向键。  </p>
+<p>Complex Modifications 是 Karabiner 的一个进阶功能，通过 json 配置的方式，可以实现任意的键盘行为方式的自定义，绝对超出你的想象。  </p>
+<p>官方提供了 <a target="_blank" rel="noopener" href="https://pqrs.org/osx/karabiner/complex_modifications/">一些例子</a>，比如将 Capslock 进行修改，当它与其他键一起使用时发挥 Ctrl 的功能，当它单独被按下时，发挥 Esc 的功能。  </p>
+<p>这些例子中并没有更改 Poker 方向键的 case，然而通过参考其例子的 json 配置方式，完全可以实现自己想要的任何行为。  </p>
+<p>其配置文件在 <code>~/.config/karabiner/assets/complex_modifications</code> 目录，新建<code>guerbai-keymap.json</code> 文件，内容如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;poker arrow keys&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;rules&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;holing left alt and asdw use arrow keys.&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;manipulators&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;basic&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;from&quot;</span>: &#123;</span><br><span class="line">                        <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;a&quot;</span>,</span><br><span class="line">                        <span class="attr">&quot;modifiers&quot;</span>: &#123;</span><br><span class="line">                            <span class="attr">&quot;mandatory&quot;</span>: [<span class="string">&quot;left_Option&quot;</span>]</span><br><span class="line">                        &#125;,</span><br><span class="line">                        <span class="attr">&quot;Optional&quot;</span>: [<span class="string">&quot;any&quot;</span>]</span><br><span class="line">                    &#125;,</span><br><span class="line">                    <span class="attr">&quot;to&quot;</span>: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;left_arrow&quot;</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>以上只举了将 <code>⌥Option + A</code> 改为左方向键的配置，配置的 key 是自解释的，即当 A 被按下时，若此时 Option 也是被按下的，则实现 <code>left_arrow</code> 的行为，很易懂就不再多解释，同样的格式在 rules 里来四份分别对应 <code>W \ A \ S \ D</code> 到四个方向键即可。</p>
+<h3 id="Backspace-与-Enter"><a href="#Backspace-与-Enter" class="headerlink" title="Backspace 与 Enter"></a>Backspace 与 Enter</h3><p>在使用 Evernote 等软件编辑文字或浏览网页时，通常是右手握鼠标，左手在键盘，这个过程中通常会遇到要按 Backspace 或 Enter 的情况，这时便不得不将右手从鼠标拿开，去按退格或回车，再放回到鼠标上，极其不爽。  </p>
+<p>在上述姿势下，自然可以想到若是左手可以直接按到 Backspace 与 Enter 的话便会方便许多。  </p>
+<p>这里的配置与方向键的改进很像，笔者采取的策略是，当 Option（已被改到 Capslock）被单独按下时，呈现出 Backspace 的作用，而 <code>Command（已被改为左 Ctrl）+ Space</code> 则呈现为 Enter。配置如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;poker arrow keys&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;rules&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;basic&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;from&quot;</span>: &#123;</span><br><span class="line">                <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;spacebar&quot;</span>,</span><br><span class="line">                <span class="attr">&quot;modifiers&quot;</span>: &#123;</span><br><span class="line">                    <span class="attr">&quot;mandatory&quot;</span>: [<span class="string">&quot;left_Command&quot;</span>]</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">&quot;Optional&quot;</span>: [<span class="string">&quot;any&quot;</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;to&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;return_or_Enter&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;basic&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;from&quot;</span>: &#123;</span><br><span class="line">                <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;left_Option&quot;</span>,</span><br><span class="line">                <span class="attr">&quot;modifiers&quot;</span>: &#123;</span><br><span class="line">                    <span class="attr">&quot;Optional&quot;</span>: [<span class="string">&quot;any&quot;</span>]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">&quot;to&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;left_Option&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">&quot;to_if_alone&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;delete_or_Backspace&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="左右切换全屏程序"><a href="#左右切换全屏程序" class="headerlink" title="左右切换全屏程序"></a>左右切换全屏程序</h2><p>Mac 触控板的四指横扫是切换全屏程序的利器，而外接键盘却并不那么方便。<code>⌘Command + Tab</code> 自然是一种方案，然而却不够精确，同时要反向切 <code>⌘Command + ⇧Shift + Tab</code> 是极难按的，笔者通常更喜欢使用 <code>⌘Command + 方向键</code> 来进行切换。  </p>
+<p>在未改造方向键时，这个操作在Poker上简直麻烦，需要左手掌外侧压住 Command，右手掌外侧压住 Fn，左手指按 A 或 D，然而上述改方向键的方案并不能直接与 Command 配合来进行切换，因为它仅指定了 mandatory 为 Command，还需要进一步改造。  </p>
+<p>笔者的设计是将这个操作改为左手一只手可以进行，使用 <code>⌘Command + ⌥Option + A \ D</code>  来进行切换，这样比如在网页上看到一段话，可以右手用鼠标进行复制，左手切到旁边的 Evernote，右手鼠标点击选择笔记，左手粘贴，不需要做任何大幅度的移动。  </p>
+<p>在上述 Karabiner 配置文件夹下再建一个文件命名为 <code>guerbai-change-application.json</code>，内容输入：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;change application&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;rules&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;change application use poker&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;manipulators&quot;</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;basic&quot;</span>,</span><br><span class="line">                    <span class="attr">&quot;from&quot;</span>: &#123;</span><br><span class="line">                        <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;a&quot;</span>,</span><br><span class="line">                        <span class="attr">&quot;modifiers&quot;</span>: &#123;</span><br><span class="line">                            <span class="attr">&quot;mandatory&quot;</span>: [</span><br><span class="line">                                <span class="string">&quot;left_Option&quot;</span>,</span><br><span class="line">                                <span class="string">&quot;left_Command&quot;</span></span><br><span class="line">                            ]</span><br><span class="line">                        &#125;,</span><br><span class="line">                        <span class="attr">&quot;Optional&quot;</span>: [</span><br><span class="line">                            <span class="string">&quot;any&quot;</span></span><br><span class="line">                        ]</span><br><span class="line">                    &#125;,</span><br><span class="line">                    <span class="attr">&quot;to&quot;</span>: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="attr">&quot;key_code&quot;</span>: <span class="string">&quot;left_arrow&quot;</span>,</span><br><span class="line">                            <span class="attr">&quot;modifiers&quot;</span>: [</span><br><span class="line">                                <span class="string">&quot;left_Command&quot;</span></span><br><span class="line">                            ]</span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>可以注意到将 mandatory 改为 Option 和 Command，这样就可以仅使用左手方便地切换程序了。</p>
+<p>设置界面如下图：</p>
+<p><img src="https://cdn.sspai.com/2018/10/25/e0b3cf4c91b4d3abbe1195eb981dad5e.png"></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>相信经过上述示例，已经可以体会到 Karabiner 的强大了，通过简单而又强大的 json 配置，来实现任意键盘上任意自己想要的行为，简直不要太爽。  </p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/guerbai/2d3d98f6409452d5951ac4aa0e735b2f">这里</a> 是上述配置的完整版，放到配置文件夹下后，使用 Complex Modifications 的 「Add rule」 添加文件使其生效即可。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/10/23/anli-karabiner/">http://guerbai.github.io/2018/10/23/anli-karabiner/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%BD%AF%E4%BB%B6/">软件</a>
+            <a href="/tags/%E6%8A%98%E8%85%BE/">折腾</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/02/13/music-dataset/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">音乐数据集汇总</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/10/23/java-singleton/">
+        <span class="next-text nav-default">关于Java单例模式需要知道的</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

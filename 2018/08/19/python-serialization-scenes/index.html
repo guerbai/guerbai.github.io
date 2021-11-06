@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="谈下python微服务中的序列化场景"/><meta name="keywords" content="python, 微服务, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2018/08/19/python-serialization-scenes/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>谈下python微服务中的序列化场景 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">谈下python微服务中的序列化场景
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-08-19
+        </span><span class="post-visits"
+             data-url="/2018/08/19/python-serialization-scenes/"
+             data-title="谈下python微服务中的序列化场景">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#gateway"><span class="toc-text">gateway</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#service"><span class="toc-text">service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E4%B8%AD%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">网络通信中的序列化</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>在<a href="https://guerbai.github.io/2018/08/19/check-param/">上一篇文章</a>中说到了验参，现在接着说另一个微服务中的工程性问题，序列化。<br>作为编写业务的程序员，常被戏称为CRUD程序员，会增删改查，给个if else给个for就能混碗饭吃。此话倒不假。<br>在微服务体系下，工作中有时会接触多个项目，各个service与各个gateway，由于维护人员的不同，虽然都是做CRUD的工作，但项目结构与写法却不尽相同。</p>
+<span id="more"></span>
+
+<p>这让我回想起刚参加工作时加入一家很小的创业公司，一个简单的单体应用，只有一层，flask的http request进来直接去操作DB，操作sqlalchemy的session，没有任何的抽象，可以说没有任何可以复用的业务代码，每个函数进来都是全新的世界，要开始重新探索，极其丑陋。（甚至可以开玩笑地说，这样有了bug可以将bug只控制在那一个函数以内，不会存在迁一发而动全身的风险。。。）</p>
+<p>所以我觉得，将Python微服务中的常见业务代码做到规范化并且尽可能的优雅其实是并不容易的，Python灵活归灵活，但太灵活却容易写出太飘的代码，无法与Java的工程性相提并论。</p>
+<p>代码结构层面其实也不用多说，上篇文章中提到过，handler，service，model三层结构，handler进行验参后调service，service可以调service和model，model不可以互相调，验参也是一个比较重要的环节。<br>这篇来说一下序列化问题，总结一下一个最简单的由前端发起的http请求到gateway再由thrift rpc到service再到db总共要经历多少次序列化和反序列化，以及对Python序列化库marshmallow的应用实践，搞清楚一个简单的CRUD的请求中间到底经过了多少层的转换以及每一次的转换是为了什么。</p>
+<hr>
+<p>其实就序列化这个描述本身而言，并没有说清楚从哪种类型到哪种类型是序列化，从而在各种场景下都会用到这个词，常常会让人感到混淆。<br>比如，Python有个pickle库，众所周知是用于将任意Python对象以文件的形式存入磁盘，它有的序列化函数dump是将Python对象转化为写到磁盘上的二进制文件。<br>json是Python的内置处理json的包，用于序列化json。但这又是什么意思呢？此时的序列化是说将Python的dict类型转化为符合json规范的字符串类型。<br>而marshmallow的序列化，却是将业务对象转化为Python的dict结构，这就很容易搞乱了，在json的语境来说dict是序列化的输入，而在这里却成了输出。<br>这就一度搞得我很乱，一度我只能通过dump与记忆来区分各个序列化场景。但不知为什么在某层的某个节点要这样转一下。</p>
+<p>在定义不清的时候，去查维基的标准定义往往会很有用。</p>
+<blockquote>
+<p>序列化（serialization）在计算机科学的资料处理中，是指将数据结构或物件状态转换成可取用格式（例如存成档案，存于缓冲，或经由网络中传送），以留待后续在相同或另一台计算机环境中，能恢复原先状态的过程。</p>
+</blockquote>
+<p>所以，一个序列化过程，并不确定它的输入方与输出方究竟是什么类型，而是要根据情况而定。我的感受是，越接近业务本身，越接近Python语言本身，离序列化的输入方就越近；越与业务无关、与语言无关，更接近某协议本身表示的，离序列化的输出方向就越近。</p>
+<p>下面还是上篇文章的简单场景，前端以http调gateway，gateway以thrift rpc调service，来分别看一个在这个请求链路中，对gateway与service来说，分别经历了几次序列化。</p>
+<h2 id="gateway"><a href="#gateway" class="headerlink" title="gateway"></a>gateway</h2><p>在gateway中，比如一个flask应用，我总结序列化与反序列化通常有以下几个过程。</p>
+<ol>
+<li>由http请求而来的参数转化为Python的dict，使用flask-restful+webargs(其使用了marshmallw)，将gunicorn或是nginx过来的http协议内的数据反序列化为Python的dict结构；</li>
+<li>gateway要向service发thrift rpc请求，需要将dict结构反序列化为thrift生成的client代码中对应idl中定义的request对象，这里可以抽出一个方法在抽象层面上做同样结构的dict到相应request的序列化，调用方法可能为<code>request = wrap_struct(user_info_dict, NewUserRequest)</code>；</li>
+<li>在请求发出后，拿到rpc的response，得到的依然是由thrift生成的代码中由idl定义的response对象，此时可能需要一个序列化的方法将thrift的response对象序列化为dict结构，<code>create_res = dump_struct(createResponse)</code>；<br>当然，上面的两步也可以使用marshmallow来做，但在gateway层再写一堆schema用来做这个事情真的是有些冗余了，一个更好的办法是使用更加抽象的方式，在反序列化时给定一个dict与相应的已经由thrift生成的request类来生成相应object，同时，可以直接由thrift response生成相同层级结构的dict。</li>
+<li>gateway拿到数据后要给前端http的response，这是一层序列化，flask提供了jsonify将dict转化为相应的结构返回，flask-restful更进了一步，直接在resource函数中返回json，它会自动做这层序列化；<br>在工作中还见到过一些在这一层使用marshmallow，用来做什么呢？设想，当你调用一个service取回一些数据，比如同样是用户的姓名这个字段，在thrift接口中定义为name，调用其他团队的服务，这个不依赖于你，而同时，之前跟前端定的接口中返回用户名为username，相信各位有一定实践经验的同学都有这种字段名转换的经历，在代码中手动处理这种转换真的有些恶心，此时使用marshmallow的dump_to参数来做就会显得比较优雅。<br>若不是这种复杂的情况，直接使用dump_struct回来的数据直接返回给前端即可。</li>
+</ol>
+<h2 id="service"><a href="#service" class="headerlink" title="service"></a>service</h2><p>现在来说一下基础服务层的各个序列化阶段，与gateway还是有着明显的不同的。<br>1- 拿到thrift过来的请求，使用上面提到的dump_struct将thrift response反序列化为dict，方便进行验参等进一步操作；<br>2- 在数据库插入记录前，使用marshmallow的load()方法反序列化，检查各个字段是否符合规则，还见到过一种处理是直接在load()之后插入记录，方法是使用@post_load装饰器，在验参成功后，直接在model中插入记录，并返回给load的调用者，使用起来很自然；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> marshmallow <span class="keyword">import</span> Schema, fields, validate, validates</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserSchema</span>(<span class="params">Schema</span>):</span></span><br><span class="line">    name = fields.Str(required=<span class="literal">True</span>, validate=<span class="keyword">lambda</span> n: n)</span><br><span class="line">    age = fields.Decimal(required=<span class="literal">True</span>, validate=<span class="keyword">lambda</span> n: n &gt; <span class="number">18</span>)</span><br><span class="line">    location = fields.Str(required=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @post_load</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">make_object</span>(<span class="params">self, data</span>):</span></span><br><span class="line">        <span class="keyword">from</span> model.user <span class="keyword">import</span> User</span><br><span class="line">        <span class="keyword">return</span> User(**data)</span><br></pre></td></tr></table></figure>
+<p>3- service调model执行查询，对外要先吐出一层json格式的数据，见过一些不够clean的方式是在model的class中定义to_json()方法(其实是返回dict对象)，将model的各个字段填入dict的key与value，大致长下面这个样子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_json</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&#x27;name&#x27;</span>: self.name,</span><br><span class="line">        <span class="string">&#x27;age&#x27;</span>: self.age,</span><br><span class="line">        <span class="string">&#x27;location&#x27;</span>: self.location</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>但这个转换用marshmallow来处理明显会更好一些，直接调用<code>UserSchema().dump(record).data</code>即可得到dict对象，这个UserSchema与request进来时load的时候是可以复用的，可以减少编写上面那样不怎么样的代码。同时，上面也提到过，可以使用dump_to来进行model与dict字段的转换，很好用；</p>
+<p>4- service得到的dict对象返回给handler，handler使用<code>wrap_struct(result, UserResponse)</code>来进行反序列化，生成thrift response对象，最终给到thrift去处理。</p>
+<h2 id="网络通信中的序列化"><a href="#网络通信中的序列化" class="headerlink" title="网络通信中的序列化"></a>网络通信中的序列化</h2><p>上面提到的都是往往都是需要开发自己去处理的，但在这个过程中，还有一些显然存在的序列化过程，这里简单提一下。</p>
+<p><strong>uwsgi协议</strong><br>正常情况下，python服务都不可能是裸奔的，它前面往往还有一层uwsgi(或gunicorn)与nginx。<br>uwsgi有它自己的二进制协议，nginx配置后，将http请求序列化为uwsgi协议的传输二进制给到uwsgi服务，uwsgi再将此二进制反序列化为Python对象交给你的flask应用。</p>
+<p><strong>thrift中的序列化</strong><br>上面有很多的地方都提到将request对象交给thrift，然后呢？<br>作为知名的开源rpc框架，它提供了多种序列化机制。支持xml，json等文本协议，亦可使用thrift或是google Protobuf协议，在可读性与性能方面，用户可以自由选择。<br>拿到request的Python对象后，根据不同的序列化协议生成相应格式，最终还是要交给socket来进行数据传输处理。<br>再由socket拿出来后进行反序列化为thrift response。</p>
+<hr>
+<p>上面提到的thrift中很重要的一点(思想)是，thrift的这些处理都是通过idl为基础，使用代码生成器来生成的，开发人员只需要编写idl文件，就可以得到各种语言的直接可以使用的代码。</p>
+<p>由上所述，各种转化真的还蛮多的，难免会有各种重复的字段定义等会出现在项目的各处(在http文档中，在idl中，在marshmallow schema中，在db model中)，参考【<a href="https://guerbai.github.io/2018/08/12/pragmatic-programmer-note/">程序员修炼之道</a>】中的安利，再借鉴thrift的实践构想，我认为在总结清楚这些常见的调用、序列化、验参等规划与比较好的具体实践、代码编写方式后，可以开发一个代码生成器，由一个类似idl的语言，来生成各阶段的本来要由程序员去手动编写的代码，从而大幅提高整体编码效率与代码质量。<br>这肯定是可以实现的，因为thrift已经实现了它。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2018/08/19/python-serialization-scenes/">http://guerbai.github.io/2018/08/19/python-serialization-scenes/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2018/10/19/python-gil-exist/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">你见过Python的GIL吗</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2018/08/19/check-param/">
+        <span class="next-text nav-default">说一下Python项目中的验参</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

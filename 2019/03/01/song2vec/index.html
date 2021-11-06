@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Song2vec"/><meta name="keywords" content="摇滚乐, 推荐系统, 算法, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2019/03/01/song2vec/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>Song2vec - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Song2vec
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-03-01
+        </span><span class="post-visits"
+             data-url="/2019/03/01/song2vec/"
+             data-title="Song2vec">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Word2vec%E4%B8%8E%E9%9F%B3%E4%B9%90%E6%8E%A8%E8%8D%90"><span class="toc-text">Word2vec与音乐推荐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="toc-text">加载数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90sentences%E6%96%87%E4%BB%B6"><span class="toc-text">生成sentences文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90embedding"><span class="toc-text">训练模型生成embedding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8embedding"><span class="toc-text">利用embedding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>摇滚乐经过几十年的发展，风格流派众多，从blues，到brit invasion，之后是punk，disco，indie rock等等。发展历程大致是这样的：</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/b440dee638955292589841f11340f1f3.jpg" alt="history of rock"></p>
+<span id="more"></span>
+
+<p>摇滚乐的听众，总是能体会到发现宝藏的快乐，可能突然就会邂逅某支自己不曾接触过的歌曲、乐队、风格，感觉好听得不行，以前怎么从来不知道，接下来的一段时间便会沉浸于此，每天都在听该风格的主要乐队和专辑。用户收听音乐在一段时间内可能是有着某个“主题”的，这个主题可能是地理上的(俄罗斯的摇滚乐队)，可能是时间上的(2000年后优秀的专辑)，还可能是某流派、甚至是都被某影视作品用作BGM。之前很少听国内摇滚的笔者，在去年听了刺猬、P.K.14、重塑雕像的权利、新裤子、海朋森等一些国内乐队的很多作品后，才知道原来在老崔、窦唯、万青、老谢之外还有这么多优秀的国产摇滚乐。</p>
+<p>这种“在某一时间会被用户放到一起听”的co-occurrence歌曲列表在音乐软件里的形态是playlist或radio，由editor或用户编辑生成，当然，还有”专辑“这个很强的联系，特别是像《The Dark Side of the Moon》这样的专辑。然而在<a href="https://guerbai.github.io/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">前几篇文章</a>提到的内容中，最为核心的数据结构是用户物品关系矩阵，这里面并没有包含”一段时间“这个信息。这段时间可以称为session，在其他领域的实际应用中，这个session可能是一篇研究石墨烯的论文，可能是一个Airbnb用户某天在30分钟内寻找夏威夷租房信息的点击情况。把session内的co-occurrence关系考虑进去，可以为用户做出更符合其当下所处情境的推荐结果。</p>
+<p>这篇文章使用Word2vec处理<a target="_blank" rel="noopener" href="https://www.dtic.upf.edu/~ocelma/MusicRecommendationDataset/lastfm-1K.html">Last.fm 1K数据集</a>，来完成这种纳入session信息的歌曲co-occurrence关系的建立。</p>
+<h2 id="Word2vec与音乐推荐"><a href="#Word2vec与音乐推荐" class="headerlink" title="Word2vec与音乐推荐"></a>Word2vec与音乐推荐</h2><p>Word2vec最初被提出是为了在自然语言处理(NLP)中用一个低维稠密向量来表示一个word(该向量称为embedding)，并进一步根据embedding来研究词语之间的关系。它使用一个仅包含一层隐藏层的神经网络来训练被分成许多句子的数据，来学习词汇之间的co-occurrence关系，其中训练时分为CBOW(Continuous Bag-of-Words)与Skip-gram两种方式，这里简单说一下使用Skip-gram获取embedding的过程。</p>
+<p>假设拿到了一些句子作为数据集，要为该神经网络生成训练样本，这里要定义一个窗口大小比如为2，则对”shine on you crazy diamond”这句话来讲，将窗口从左滑到右，按照下图方式生成一系列单词对儿，其中每个单词对儿即作为一个训练样本，单词对儿中的第一个单词为输入，第二个单词为label。</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/c733cb646818b27288d38832fb40f334.jpg"></p>
+<p>假设语料库中有10000个互不相同的word，首先将某个单词使用one-hot vector(10000维)来表示输入神经网络，输出同样为10000维的vector，每一维上的数字代表此位置为1所代表的one-hot vector所对应的word在输入word周围的可能性：</p>
+<p><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/6d901ec288931487c179e94d26387572.jpg"></p>
+<p>输入输出层的节点数为语料库word数，隐藏层的节点数则为表示每个单词的向量的维数。此模型每个输入层节点会与隐藏层的每个节点相连且都对应了一个权重，而对某输入节点来说，它与隐藏层相连的所有这些权重组成的向量即为该节点为1所代表的one-hot vector所对应的单词的embedding向量。</p>
+<p>但该模型其实并不了解语义，它拥有的只是统计学知识，那么既然可以根据one-hot vector来标识一个word，当然可以用这种形式来标识一首歌曲，一支乐队，一件商品，一间出租屋等等任何可以被推荐的东西，再把这些数据喂给模型，同样的训练过程，便可以获取到各种物品embedding，然后研究它们之间的关系，此谓Item2vec，万物皆可embedding。</p>
+<p>故Word2vec与音乐推荐的关系就是，把一个歌单或者某个user在一个下午连续收听的歌曲当作一句话(session)，把每首歌当作一个独立的word，然后把这样的数据交给此模型去训练即可获取每首歌的embedding向量，这里从歌单到一句话的抽象，即实现了上文中提到的考虑进去“一段时间”这个点。</p>
+<h2 id="加载数据"><a href="#加载数据" class="headerlink" title="加载数据"></a>加载数据</h2><p>该数据集包含了1K用户对960K歌曲的收听情况，文件1915万行，2.4G，每行记录了某用户在某时间播放了某歌曲的信息。依然是用pandas把数据加载进来，这次需要timestamp的信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> arrow</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.sparse <span class="keyword">import</span> csr_matrix, diags</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">file_path = <span class="string">&#x27;~/music-recommend/dataset/lastfm-dataset-1K/userid-timestamp-artid-artname-traid-traname.tsv&#x27;</span></span><br><span class="line">df = pd.read_csv(file_path, </span><br><span class="line">            sep = <span class="string">&#x27;\t&#x27;</span>,</span><br><span class="line">            header = <span class="literal">None</span>,                   </span><br><span class="line">            names = [<span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;timestamp&#x27;</span>, <span class="string">&#x27;artist_id&#x27;</span>, <span class="string">&#x27;artist_name&#x27;</span>, <span class="string">&#x27;track_id&#x27;</span>, <span class="string">&#x27;track_name&#x27;</span>],</span><br><span class="line">            usecols = [<span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;timestamp&#x27;</span>, <span class="string">&#x27;track_id&#x27;</span>, <span class="string">&#x27;artist_name&#x27;</span>, <span class="string">&#x27;track_name&#x27;</span>],</span><br><span class="line">           )</span><br><span class="line">df = df.dropna()</span><br><span class="line"><span class="built_in">print</span> (df.info())</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 16936136 entries, 10 to 19098861
+Data columns (total 5 columns):
+user_id        object
+timestamp      object
+artist_name    object
+track_id       object
+track_name     object
+dtypes: object(5)
+memory usage: 775.3+ MB
+</code></pre>
+<p>接下来做一些辅助的数据，为每个user、每首track都生成一个用于标识自己的index，建立从index到id，从id到index的双向查询dict。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;user_id&#x27;</span>] = df[<span class="string">&#x27;user_id&#x27;</span>].astype(<span class="string">&#x27;category&#x27;</span>)</span><br><span class="line">df[<span class="string">&#x27;track_id&#x27;</span>] = df[<span class="string">&#x27;track_id&#x27;</span>].astype(<span class="string">&#x27;category&#x27;</span>)</span><br><span class="line"></span><br><span class="line">user_index_to_user_id_dict = df[<span class="string">&#x27;user_id&#x27;</span>].cat.categories <span class="comment"># use it like a dict.</span></span><br><span class="line">user_id_to_user_index_dict = <span class="built_in">dict</span>()</span><br><span class="line"><span class="keyword">for</span> index, i <span class="keyword">in</span> <span class="built_in">enumerate</span>(df[<span class="string">&#x27;user_id&#x27;</span>].cat.categories):</span><br><span class="line">    user_id_to_user_index_dict[i] = index</span><br><span class="line">    </span><br><span class="line">track_index_to_track_id_dict = df[<span class="string">&#x27;track_id&#x27;</span>].cat.categories <span class="comment"># use it like a dict.</span></span><br><span class="line">track_id_to_track_index_dict = <span class="built_in">dict</span>()</span><br><span class="line"><span class="keyword">for</span> index, i <span class="keyword">in</span> <span class="built_in">enumerate</span>(df[<span class="string">&#x27;track_id&#x27;</span>].cat.categories):</span><br><span class="line">    track_id_to_track_index_dict[i] = index</span><br><span class="line">    </span><br><span class="line">song_info_df = df[[<span class="string">&#x27;artist_name&#x27;</span>, <span class="string">&#x27;track_name&#x27;</span>, <span class="string">&#x27;track_id&#x27;</span>]].drop_duplicates()</span><br></pre></td></tr></table></figure>
+
+<p>考虑到专辑翻唱、同名、专辑重新发行等情况，需要用track_id来作为一首歌的唯一标识，而当需要通过<code>artist_name</code>，<code>track_name</code>来定位到一首歌时，这里写了一个函数，采取的策略是找到被播放最多的那一个。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_hot_track_id_by_artist_name_and_track_name</span>(<span class="params">artist_name, track_name</span>):</span></span><br><span class="line">    track = song_info_df[(song_info_df[<span class="string">&#x27;artist_name&#x27;</span>] == artist_name) &amp; (song_info_df[<span class="string">&#x27;track_name&#x27;</span>] == track_name)]</span><br><span class="line">    max_listened = <span class="number">0</span></span><br><span class="line">    hotest_row_index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(track.shape[<span class="number">0</span>]):</span><br><span class="line">        row = track.iloc[i]</span><br><span class="line">        track_id = row[<span class="string">&#x27;track_id&#x27;</span>]</span><br><span class="line">        listened_count = df[df[<span class="string">&#x27;track_id&#x27;</span>] == track_id].shape[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> listened_count &gt; max_listened:</span><br><span class="line">            max_listened = listened_count</span><br><span class="line">            hotest_row_index = i</span><br><span class="line">    <span class="keyword">return</span> track.iloc[hotest_row_index][<span class="string">&#x27;track_id&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;wish you were here tracks:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (song_info_df[(song_info_df[<span class="string">&#x27;artist_name&#x27;</span>] == <span class="string">&#x27;Pink Floyd&#x27;</span>) &amp; (song_info_df[<span class="string">&#x27;track_name&#x27;</span>] == <span class="string">&#x27;Wish You Were Here&#x27;</span>)][[<span class="string">&#x27;track_id&#x27;</span>]])</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;--------&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;hotest one:&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (get_hot_track_id_by_artist_name_and_track_name(<span class="string">&#x27;Pink Floyd&#x27;</span>, <span class="string">&#x27;Wish You Were Here&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>wish you were here tracks:
+                                      track_id
+60969     feecff58-8ee2-4a7f-ac23-dc8ce7925286
+4401932   f479e316-56b4-4221-acd9-eed1a0711861
+17332322  2210ba38-79af-4881-97ae-4ce8f32322c3
+--------
+hotest one:
+feecff58-8ee2-4a7f-ac23-dc8ce7925286
+</code></pre>
+<h2 id="生成sentences文件"><a href="#生成sentences文件" class="headerlink" title="生成sentences文件"></a>生成sentences文件</h2><p>加载过数据后接下来要生成在科普环节提到的由歌名歌单生成句子，由于懒，没有去爬云音乐的歌单数据，这里粗暴地将每个用户每一天收听的所有歌曲作为一个session，使用上文生成的<code>track_index</code>来标识各歌曲，将生成的sentences写到磁盘上。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_sentence_file</span>(<span class="params">df</span>):</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;sentences.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> sentences:</span><br><span class="line">        <span class="keyword">for</span> user_index <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(user_index_to_user_id_dict))):</span><br><span class="line">            user_id = user_index_to_user_id_dict[user_index]</span><br><span class="line">            user_df = df[df[<span class="string">&#x27;user_id&#x27;</span>] == user_id].sort_values(<span class="string">&#x27;timestamp&#x27;</span>)</span><br><span class="line">            session = <span class="built_in">list</span>()</span><br><span class="line">            last_time = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> index, row <span class="keyword">in</span> user_df.iterrows():</span><br><span class="line">                this_time = row[<span class="string">&#x27;timestamp&#x27;</span>]</span><br><span class="line">                track_index = track_id_to_track_index_dict[row[<span class="string">&#x27;track_id&#x27;</span>]]</span><br><span class="line">                <span class="keyword">if</span> arrow.get(this_time).date() != arrow.get(last_time).date() <span class="keyword">and</span> last_time != <span class="literal">None</span>:</span><br><span class="line">                    sentences.write(<span class="string">&#x27; &#x27;</span>.join([<span class="built_in">str</span>(_<span class="built_in">id</span>) <span class="keyword">for</span> _<span class="built_in">id</span> <span class="keyword">in</span> session]) + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">                    session = <span class="built_in">list</span>()</span><br><span class="line">                session.append(track_index)</span><br><span class="line">                last_time = this_time</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">generate_sentence_file(df)</span><br></pre></td></tr></table></figure>
+
+<pre><code>100%|██████████| 992/992 [1:22:23&lt;00:00,  5.62s/it]
+</code></pre>
+<p>这个过程比较慢，在mac跑下来要快一个半小时。这里可以使用Spark来生成sentences.txt，若是在生产环境，可以利用大量机器资源，在单机上亦可以享受其将任务拆分成map、reduce来并行处理的便利，以如下Spark代码来生成Sentences.txt在mac上只需要10分钟：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyspark</span><br><span class="line"><span class="keyword">import</span> arrow</span><br><span class="line"></span><br><span class="line">sc = pyspark.SparkContext(appName=<span class="string">&quot;generate-song-sentences&quot;</span>)</span><br><span class="line">lines = sc.textFile(file_path)</span><br><span class="line">lines = lines.<span class="built_in">map</span>(<span class="keyword">lambda</span> l: l.split(<span class="string">&quot;\t&quot;</span>)) <span class="comment"># 按\t分隔为list.</span></span><br><span class="line">lines = lines.<span class="built_in">filter</span>(<span class="keyword">lambda</span> l: <span class="built_in">len</span>([item <span class="keyword">for</span> item <span class="keyword">in</span> l <span class="keyword">if</span> <span class="keyword">not</span> item]) == <span class="number">0</span>) <span class="comment"># 去掉数据不全的行.</span></span><br><span class="line">lines = lines.<span class="built_in">map</span>(<span class="keyword">lambda</span> line: ((line[<span class="number">0</span>], arrow.get(line[<span class="number">1</span>]).date()), <span class="built_in">str</span>(track_id_to_track_index_dict.get(line[<span class="number">4</span>], <span class="string">&#x27;&#x27;</span>)))) <span class="comment"># 以(user_id, date)为key，track_id为value的二元组.</span></span><br><span class="line">lines = lines.reduceByKey(<span class="keyword">lambda</span> a, b: a + <span class="string">&#x27; &#x27;</span> + b) <span class="comment"># reduce，将track_id拼为sentence.</span></span><br><span class="line">lines = lines.<span class="built_in">map</span>(<span class="keyword">lambda</span> line: line[<span class="number">1</span>]) <span class="comment"># 输出不再关心key.</span></span><br><span class="line">lines.repartition(<span class="number">1</span>).saveAsTextFile(<span class="string">&quot;./spark-generated-song-sentences&quot;</span>) <span class="comment"># 使Spark只写一份txt文件.</span></span><br></pre></td></tr></table></figure>
+
+<p>生成后的文件长这个样子：<br><img src="https://raw.githubusercontent.com/guerbai/scene/main/blog/2bb7a1295741acbdfc763f353f93576c.jpg"></p>
+<h2 id="训练模型生成embedding"><a href="#训练模型生成embedding" class="headerlink" title="训练模型生成embedding"></a>训练模型生成embedding</h2><p>有很多种方式可以获取、实现Word2vec的代码，可以用Tensorflow、Keras基于神经网络写一个，亦可以使用Google放到Google Code上的Word2vec实现，也可以在Github上找到<a target="_blank" rel="noopener" href="https://github.com/RaRe-Technologies/gensim">gensim</a>这个优秀的库使用其已经封装好的实现。</p>
+<p>下列代码使用<code>smart_open</code>来逐行读取之前生成的sentences.txt文件，对内存很是友好。这里使用50维的向量来代表一首歌曲，将收听总次数不到20次的冷门歌曲筛选出去，设窗口大小为5。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> smart_open <span class="keyword">import</span> smart_open</span><br><span class="line"><span class="keyword">from</span> gensim.models <span class="keyword">import</span> Word2Vec</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig()</span><br><span class="line">logging.getLogger().setLevel(logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LastfmSentences</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, file_location</span>):</span></span><br><span class="line">        self.file_location = file_location</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> smart_open(self.file_location, <span class="string">&#x27;r&#x27;</span>):</span><br><span class="line">            <span class="keyword">yield</span> line.split()</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">lastfm_sentences = LastfmSentences(<span class="string">&#x27;./sentences.txt&#x27;</span>)</span><br><span class="line">model = Word2Vec(lastfm_sentences, size=<span class="number">50</span>, min_count=<span class="number">20</span>, window=<span class="number">10</span>, hs=<span class="number">0</span>, negative=<span class="number">20</span>, workers=<span class="number">4</span>, sg=<span class="number">1</span>, sample=<span class="number">1e-5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>假如训练的数据集为歌单，一个歌单为一个句子，由于出现在同一个歌单内代表了其中歌曲的某种共性，那么会希望将所有item两两之间的关系都考虑进去，故window size的取值可以取<code>(所有歌单长度最大值-1)/2</code>，会取得更好的效果。这里由于是以用户和天做分割，暂且拍脑袋拍出一个10。<br>sample用于控制对热门词汇的采样比例，降低太过热门的词汇对整个模型的影响，比如Radiohead的creep，这里面还有个计算公式不再细说。<br>sg取0、1分别表示使用CBOW与Skip-gram算法，而hs取0、1分别表示使用hierarchical softmax与negative sampling。</p>
+<p>关于negative sampling值得多说两句，在神经网络的训练过程中需要根据梯度下降去调整节点之间的weight，可由于要调的weight数量巨大，在这个例子里为<code>2*50*960000</code>，效率会很低下，处理方法使用负采样，仅选取此训练样本的label为正例，其他随机选取5到20个(经验数值)单词为反例，仅调整与这几个word对应的weight，会使效率获取明显提升，并且效果也很良好。随机选取的反例的规则亦与单词出现频率有关，出现频次越多的单词，越有可能会被选中为反例。</p>
+<h2 id="利用embedding"><a href="#利用embedding" class="headerlink" title="利用embedding"></a>利用embedding</h2><p>现在已经用大量数据为各track生成了与自己对应的低维向量，比如Wish You Were Here这首歌，这个embedding可以作为该歌曲的标识用于其他机器学习任务比如learn to rank：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model.wv[<span class="built_in">str</span>(track_id_to_track_index_dict[</span><br><span class="line">    get_hot_track_id_by_artist_name_and_track_name(</span><br><span class="line">        <span class="string">&#x27;Pink Floyd&#x27;</span>, <span class="string">&#x27;Wish You Were Here&#x27;</span>)])]</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([-0.39100856,  0.28636533,  0.11853614, -0.41582254,  0.09754885,
+        0.59501815, -0.07997745, -0.28060785, -0.0384276 , -0.84899545,
+        0.03777567, -0.00727402,  0.6960302 ,  0.44756493, -0.13245133,
+       -0.38473454, -0.07809031,  0.34377965, -0.19210865, -0.33457756,
+       -0.36364776, -0.06028108,  0.17379969,  0.46617758, -0.04116876,
+        0.07322323,  0.11769405,  0.42464802,  0.25167897, -0.35790011,
+        0.01991512, -0.10950506,  0.26131895, -0.76148427,  0.48405901,
+        0.61935854, -0.59583783,  0.28353232, -0.14503367,  0.3232002 ,
+        1.00872386, -0.10348291, -0.0485305 ,  0.21677236, -1.33224928,
+        0.57913464, -0.06729769, -0.32185984, -0.02978219, -0.43034038], dtype=float32)
+</code></pre>
+<p>这些embedding vector之间的相似度可以表示两首歌出现在同一session内的可能性大小：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">shine_on_part_1 = <span class="built_in">str</span>(track_id_to_track_index_dict[</span><br><span class="line">    get_hot_track_id_by_artist_name_and_track_name(<span class="string">&#x27;Pink Floyd&#x27;</span>, <span class="string">&#x27;Shine On You Crazy Diamond (Parts I-V)&#x27;</span>)])</span><br><span class="line">shine_on_part_2 = <span class="built_in">str</span>(track_id_to_track_index_dict[</span><br><span class="line">    get_hot_track_id_by_artist_name_and_track_name(<span class="string">&#x27;Pink Floyd&#x27;</span>, <span class="string">&#x27;Shine On You Crazy Diamond (Parts Vi-Ix)&#x27;</span>)])</span><br><span class="line">good_times = <span class="built_in">str</span>(track_id_to_track_index_dict[</span><br><span class="line">    get_hot_track_id_by_artist_name_and_track_name(<span class="string">&#x27;Chic&#x27;</span>, <span class="string">&#x27;Good Times&#x27;</span>)])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;similarity between shine on part 1, 2:&#x27;</span>, model.wv.similarity(shine_on_part_1, shine_on_part_2))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;similarity between shine on part 1, good times:&#x27;</span>, model.wv.similarity(shine_on_part_1, good_times))</span><br></pre></td></tr></table></figure>
+
+<pre><code>similarity between shine on part 1, 2: 0.927217
+similarity between shine on part 1, good times: 0.425195
+</code></pre>
+<p>稍微看下源码便会发现上述similarity函数，gensim也是使用余弦相似度来计算的，同样可以根据该相似度，来生成一些推荐列表，当然不可能去遍历，gensim内部也是使用上篇文章提到的Annoy来构建索引来快速寻找近邻的。为了使用方便写了如下两个包装函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recommend_with_playlist</span>(<span class="params">playlist, topn=<span class="number">25</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(playlist, <span class="built_in">list</span>):</span><br><span class="line">        playlist = [playlist]</span><br><span class="line">    playlist_indexes = [<span class="built_in">str</span>(track_id_to_track_index_dict[track_id]) <span class="keyword">for</span> track_id <span class="keyword">in</span> playlist]</span><br><span class="line">    similar_song_indexes = model.wv.most_similar(positive=playlist_indexes, topn=topn)</span><br><span class="line">    <span class="keyword">return</span> [track_index_to_track_id_dict[<span class="built_in">int</span>(track[<span class="number">0</span>])] <span class="keyword">for</span> track <span class="keyword">in</span> similar_song_indexes]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">display_track_info</span>(<span class="params">track_ids</span>):</span></span><br><span class="line">    track_info = &#123;</span><br><span class="line">        <span class="string">&#x27;track_name&#x27;</span>: [],</span><br><span class="line">        <span class="string">&#x27;artist_name&#x27;</span>: [],</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> track_id <span class="keyword">in</span> track_ids:</span><br><span class="line">        track = song_info_df[song_info_df[<span class="string">&#x27;track_id&#x27;</span>] == track_id].iloc[<span class="number">0</span>]</span><br><span class="line">        track_info[<span class="string">&#x27;track_name&#x27;</span>].append(track[<span class="string">&#x27;track_name&#x27;</span>])</span><br><span class="line">        track_info[<span class="string">&#x27;artist_name&#x27;</span>].append(track[<span class="string">&#x27;artist_name&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span> (pd.DataFrame(track_info))</span><br></pre></td></tr></table></figure>
+
+<p>接下来假装自己在听后朋，提供几首歌曲，看看模型会给我们推荐什么：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># post punk.</span></span><br><span class="line"></span><br><span class="line">guerbai_playlist = [</span><br><span class="line">    (<span class="string">&#x27;Joy Division&#x27;</span>, <span class="string">&#x27;Disorder&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Echo &amp; The Bunnymen&#x27;</span>, <span class="string">&#x27;The Killing Moon&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;The Names&#x27;</span>, <span class="string">&#x27;Discovery&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;The Cure&#x27;</span>, <span class="string">&#x27;Lullaby&#x27;</span>),</span><br><span class="line">    </span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">display_track_info(recommend_with_playlist([</span><br><span class="line">    get_hot_track_id_by_artist_name_and_track_name(track[<span class="number">0</span>], track[<span class="number">1</span>]) </span><br><span class="line">    <span class="keyword">for</span> track <span class="keyword">in</span> guerbai_playlist], <span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>                   track_name          artist_name
+0               Miss The Girl        The Creatures
+1      Splintered In Her Head             The Cure
+2    Return Of The Roughnecks       The Chameleons
+3                P.S. Goodbye       The Chameleons
+4                Chelsea Girl         Simple Minds
+5    23 Minutes Over Brussels              Suicide
+6          Not Even Sometimes            The Prids
+7                     Windows  A Flock Of Seagulls
+8     Ride The Friendly Skies       Lightning Bolt
+9                Inmost Light      Double Leopards
+10              Thin Radiance             Sunroof!
+11        You As The Colorant            The Prids
+12    Love Will Tear Us Apart         Boy Division
+13                  Slip Away             Ultravox
+14                Street Dude           Black Dice
+15              Touch Defiles        Death In June
+16     All My Colours (Zimbo)  Echo &amp; The Bunnymen
+17                Summernight             The Cold
+18         Pornography (Live)             The Cure
+19  Me, I Disconnect From You           Gary Numan
+</code></pre>
+<p>好多乐队都没见过，wiki一下发现果然大都是后朋与新浪潮乐队的歌曲，搞笑的是Love Will Tear Us Apart竟然成了Boy Division的了，这数据集有毒。。    </p>
+<p>过了半年又沉浸在前卫摇滚的长篇里：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># long progressive</span></span><br><span class="line"></span><br><span class="line">guerbai_playlist = [</span><br><span class="line">    (<span class="string">&#x27;Rush&#x27;</span>, <span class="string">&#x27;2112: Ii. The Temples Of Syrinx&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Yes&#x27;</span>, <span class="string">&#x27;Roundabout&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Emerson, Lake &amp; Palmer&#x27;</span>, <span class="string">&#x27;Take A Pebble&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;Jethro Tull&#x27;</span>, <span class="string">&#x27;Aqualung&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">display_track_info(recommend_with_playlist([</span><br><span class="line">    get_hot_track_id_by_artist_name_and_track_name(track[<span class="number">0</span>], track[<span class="number">1</span>]) </span><br><span class="line">    <span class="keyword">for</span> track <span class="keyword">in</span> guerbai_playlist]))</span><br></pre></td></tr></table></figure>
+
+<pre><code>                            track_name             artist_name
+0                            Nutrocker  Emerson, Lake &amp; Palmer
+1                  Brain Salad Surgery  Emerson, Lake &amp; Palmer
+2                           Black Moon  Emerson, Lake &amp; Palmer
+3                            Parallels                     Yes
+4                      Working All Day            Gentle Giant
+5                            Musicatto                  Kansas
+6                    Farewell To Kings                    Rush
+7                    My Sunday Feeling             Jethro Tull
+8             Thick As A Brick, Part 1             Jethro Tull
+9                South Side Of The Sky                     Yes
+10                  Living In The Past             Jethro Tull
+11  The Fish (Schindleria Praematurus)                     Yes
+12                    Starship Trooper                     Yes
+13                                Tank  Emerson, Lake &amp; Palmer
+14              I Think I&#39;M Going Bald                    Rush
+15                          Here Again                    Rush
+16                           Lucky Man  Emerson, Lake &amp; Palmer
+17                      Cinderella Man                    Rush
+18                        Stick It Out                    Rush
+19                   The Speed Of Love                    Rush
+20                   New State Of Mind                     Yes
+21         Karn Evil 9: 2Nd Impression  Emerson, Lake &amp; Palmer
+22                           A Venture                     Yes
+23                          Cygnus X-1                    Rush
+24                         Sweet Dream             Jethro Tull
+</code></pre>
+<p>人是会变的，今天她喜欢听后朋，明天可能喜欢别的，但既然我们有数学与集体智慧，问题并不大。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://towardsdatascience.com/using-word2vec-for-music-recommendations-bb9649ac2484">Using Word2vec for Music Recommendations</a><br><a target="_blank" rel="noopener" href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/">Word2Vec Tutorial - The Skip-Gram Model</a></p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2019/03/01/song2vec/">http://guerbai.github.io/2019/03/01/song2vec/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E6%91%87%E6%BB%9A%E4%B9%90/">摇滚乐</a>
+            <a href="/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">推荐系统</a>
+            <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2019/03/07/restricted-boltzmann-machine/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">受限玻尔兹曼机的实现及其在推荐系统中的应用</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2019/02/24/matrix-factorization/">
+        <span class="next-text nav-default">为什么与Yes乐队最相似的歌手是Coda(小田和奏)？</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>

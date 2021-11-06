@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="june源码阅读"/><meta name="keywords" content="python, 源码阅读, Guerbai's Blog" /><link rel="alternate" href="/atom.xml" title="Guerbai's Blog" type="application/atom+xml"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.0" />
+<link rel="canonical" href="http://guerbai.github.io/2017/07/10/read-june-source-code/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.0" />
+
+<script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz",
+      appKey: "PtFdHndjQQFEbl5Bj2sSwfsV"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"LbSEYqzzRH642OpVEyAbwfgi-gzGzoHsz","app_key":"PtFdHndjQQFEbl5Bj2sSwfsV"},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+    <title>june源码阅读 - Guerbai's Blog</title>
+  <meta name="generator" content="Hexo 5.4.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Guerbai's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Guerbai's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">june源码阅读
+        </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-10
+        </span><span class="post-visits"
+             data-url="/2017/07/10/read-june-source-code/"
+             data-title="june源码阅读">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#werkzeug-cached-property"><span class="toc-text">werkzeug.cached_property</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%BA%E7%A1%80%E6%9F%A5%E8%AF%A2%E7%B1%BB"><span class="toc-text">自定义基础查询类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB-call-%E6%96%B9%E6%B3%95%E4%BD%9C%E4%B8%BA%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="toc-text">类__call__方法作为装饰器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#permanent%E5%AE%9E%E7%8E%B0"><span class="toc-text">permanent实现</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><p>之前在知乎上关于开源项目的答案中看到某答出提到了<a target="_blank" rel="noopener" href="https://github.com/lepture/june">该项目</a>，以及其中的一些精巧的实现。</p>
+<p>项目代码量并不大，然由于年代久远，各种库的版本变化大太，API有一些出入，已很难将项目跑起来。<br>我在阅读源码的过程中学到了一些东西，记录在此。</p>
+<span id="more"></span>
+
+<h1 id="werkzeug-cached-property"><a href="#werkzeug-cached-property" class="headerlink" title="werkzeug.cached_property"></a>werkzeug.cached_property</h1><p>做一个对象属性的缓存。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> werkzeug <span class="keyword">import</span> cached_property</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @cached_property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;in foo&#x27;</span></span><br><span class="line">        <span class="comment"># some cost time thing.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;ok&#x27;</span></span><br><span class="line"></span><br><span class="line">bar = Foo()</span><br><span class="line"><span class="built_in">print</span> bar.foo</span><br><span class="line"><span class="built_in">print</span> bar.foo</span><br></pre></td></tr></table></figure>
+<p>输入结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">in foo</span><br><span class="line">ok</span><br><span class="line">ok</span><br></pre></td></tr></table></figure>
+<p>可以得到两点结论：</p>
+<ol>
+<li>经cached_property装饰后，foo成为了Foo()的一个属性而不再是函数。</li>
+<li>仅在第一次被调用时会运行foo函数，之后的结果被缓存了起来，再次调foo属性，不会运行foo()函数。</li>
+</ol>
+<h1 id="自定义基础查询类"><a href="#自定义基础查询类" class="headerlink" title="自定义基础查询类"></a>自定义基础查询类</h1><p>在models/_base.py中，实现了一个JuneQuery类，继承了BaseQuery。增加了两个方法。</p>
+<p>可以看到flask-sqlalchemy库中Model类有一个query_class属性，默认便指向BaseQuery。<br>而在db声明中，使用<code>query_class=JuneQuery</code>，便可以做到了对此类进行查询时，使用JuneQuery而不是BaseQuery。</p>
+<p>这可以解决一个场景，比如可以重写get_or_404()方法，认为找不到记录是出了错误，要报警，便可由此法解决。</p>
+<p>此处是一个切入口。<br>亦可重写query，filter_by, filter，all等方法，或增加其他方法给Model实例使用。</p>
+<h1 id="类-call-方法作为装饰器"><a href="#类-call-方法作为装饰器" class="headerlink" title="类__call__方法作为装饰器"></a>类<code>__call__</code>方法作为装饰器</h1><p>当python的类实现了__call__方法时，其实例可像函数一样被调用。<br>如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, args</span>):</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;called with args: &#x27;</span> + args</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;ok&#x27;</span></span><br><span class="line"></span><br><span class="line">a = A()</span><br><span class="line">a(<span class="string">&#x27;are you &#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>项目中helpers.py中实现了两个这样的类，require_role与limit_request。<br>关注点在于，这两个类将__call__实现为了一个装饰器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">require_role</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, role</span>):</span></span><br><span class="line">        self.role = role</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span>(<span class="params">self, method</span>):</span></span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">method</span>)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args, **kwargs</span>):</span></span><br><span class="line">            <span class="keyword">if</span> g.user.role == <span class="string">&#x27;admin&#x27;</span>:</span><br><span class="line">                <span class="keyword">return</span> method(*args, **kwargs)</span><br><span class="line">            <span class="keyword">if</span> g.user.role != self.role:</span><br><span class="line">                <span class="keyword">return</span> abort(<span class="number">403</span>)</span><br><span class="line">            <span class="comment"># other situation long code.</span></span><br><span class="line">            <span class="keyword">return</span> method(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p>这样，由于类在实例化时，便可以传入参数，同时实例化之后，亦可以调用其他方法，做一些改变。<br>此时，这个实例，又可以作为一个装饰器，由此便获得了极大的灵活性。</p>
+<p>这与三层装饰器不同。<br>三层装饰器，在最外一层可以写一些代码逻辑，然而与这种方法相比，三层装饰器的最外层便相当于硬编码。<br>该方法操作一个类实例，可以根据不同情况被调用各种方法进行属性操作等，之后再作为装饰器使用，它的<strong>装饰效果是动态的</strong>。</p>
+<h1 id="permanent实现"><a href="#permanent实现" class="headerlink" title="permanent实现"></a>permanent实现</h1><p>登陆使用的是flask的session功能，session具有一个permanent属性，可将其设为True。<br>对于session的生命周期与使用，我写一个test，做了一些尝试。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, session</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.secret_key = <span class="string">&#x27;fyb&#x27;</span></span><br><span class="line"></span><br><span class="line">count = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    <span class="keyword">global</span> count</span><br><span class="line">    session[<span class="string">&#x27;id&#x27;</span>] = count</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;hello&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&quot;/test&quot;</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>():</span></span><br><span class="line">    <span class="built_in">print</span> session</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;session&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+<p>当使用curl来测试，先调’/‘路由，再调’/test’路由，打印的session结果为：</p>
+<blockquote>
+<p>SecureCookieSession {}</p>
+</blockquote>
+<p>而使用浏览器打开，同样的操作顺序，结果为：</p>
+<blockquote>
+<p>SecureCookieSession {u’id’: 2}</p>
+</blockquote>
+<p>可见，flask的session是浏览器相关的，并不会搞混掉。curl的操作中并没有提供像浏览器一样的上下文环境。<br>需要注意的是，要使用session功能，需要app的secret_key。</p>
+
+      </div>
+      <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="http://guerbai.github.io">Guerbai</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="http://guerbai.github.io/2017/07/10/read-june-source-code/">http://guerbai.github.io/2017/07/10/read-june-source-code/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+      <footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/python/">python</a>
+            <a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2017/08/03/read-records-source-code/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">records库源码阅读</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+        <a target="_blank" rel="noopener" href="https://github.com/ahonn" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2015 - 2021<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Guerbai</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.0"></script>
+</body>
+</html>
