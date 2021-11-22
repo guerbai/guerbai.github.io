@@ -103,7 +103,7 @@ theme: even
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: "https://github.com/guerbai/guerbai.github.io"
+  repo: "git@github.com:guerbai/guerbai.github.io.git"
   branch: master
 
 mathjax: true
